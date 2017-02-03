@@ -5,14 +5,14 @@
 
     <FrameLayout
         android:id="@+id/flSubBubbleContainer"
-        android:layout_width="500dp"
-        android:layout_height="500dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="gone" />
 
     <FrameLayout
         android:id="@+id/fmMasterBubble"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/master_bubble_size"
+        android:layout_height="@dimen/master_bubble_size"
         android:clickable="true"
         android:padding="2dp">
 

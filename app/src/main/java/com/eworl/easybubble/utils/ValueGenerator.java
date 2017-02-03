@@ -1,6 +1,9 @@
 package com.eworl.easybubble.utils;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.eworl.easybubble.R;
 
 /**
  * Created by root on 3/2/17.
@@ -9,25 +12,34 @@ import android.util.Log;
 public class ValueGenerator {
     private String TAG = ValueGenerator.class.getCanonicalName();
     private int count;
-    private Coordinate center;
     private double angleDifference;
-    private int radius = 200;
+    private int radius;
+    private int subBubbleWidth;
+    private Context context;
 
-    public ValueGenerator(Coordinate center, int width, int count) {
+    public ValueGenerator(Context context, int count) {
+        this.context = context;
         this.count = count;
-        this.center = center;
         angleDifference = 360 / count;
-        calculateRadius(width);
+
+        calculateRadius();
     }
 
-    private void calculateRadius(int width) {
-        radius = (int) ((count * width) / (3.14 * 1.3));
+    private void calculateRadius() {
+        subBubbleWidth = (int) context.getResources().getDimension(R.dimen.sub_bubble_size);
+        radius = (int) ((count * subBubbleWidth) / (3.14 * 1.3));
     }
 
     public Coordinate getCoordinatesFor(int index) {
+//        int centerX = subBubbleWidth / 2;
+//        int centerY = subBubbleWidth / 2;
+
+        int centerX = 0;
+        int centerY = 0;
+
         Coordinate coordinate = new Coordinate();
-        double x = center.getX() + radius * Math.cos(getAngleFor(index));
-        double y = center.getY() + radius * Math.sin(getAngleFor(index));
+        double x = centerX + radius * Math.cos(getAngleFor(index));
+        double y = centerY + radius * Math.sin(getAngleFor(index));
         coordinate.set(x, y);
         return coordinate;
     }
@@ -39,4 +51,8 @@ public class ValueGenerator {
         return angle;
     }
 
+
+    public int getRadius() {
+        return radius;
+    }
 }

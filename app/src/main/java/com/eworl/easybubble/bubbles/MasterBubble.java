@@ -2,9 +2,9 @@ package com.eworl.easybubble.bubbles;
 
 import android.animation.Animator;
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 
@@ -49,10 +49,7 @@ public class MasterBubble {
     }
 
     private void intializeValueGenerator() {
-        Coordinate center = new Coordinate();
-        center.set(366, 726);
-        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55, context.getResources().getDisplayMetrics());
-        valueGenerator = new ValueGenerator(center, px, 8);
+        valueGenerator = new ValueGenerator(context, 8);
     }
 
     private void intializeViews() {
@@ -62,6 +59,12 @@ public class MasterBubble {
         fmOpenView = (FrameLayout) fmMasterBubble.findViewById(R.id.fmOpenView);
         fmCloseView = (FrameLayout) fmMasterBubble.findViewById(R.id.fmCloseView);
         innerRing = fmMasterBubble.findViewById(R.id.innerRing);
+
+        ViewGroup.LayoutParams flSubBubbleContainerLayoutParams = flSubBubbleContainer.getLayoutParams();
+        flSubBubbleContainerLayoutParams.width = valueGenerator.getRadius() * 2;
+        flSubBubbleContainerLayoutParams.height = valueGenerator.getRadius() * 2;
+        flSubBubbleContainer.setLayoutParams(flSubBubbleContainerLayoutParams);
+
     }
 
     private void setListeners() {

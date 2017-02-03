@@ -5,8 +5,8 @@
 
     <FrameLayout
         android:id="@+id/fmSubBubbleView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/sub_bubble_size"
+        android:layout_height="@dimen/sub_bubble_size"
         android:background="@drawable/grey_circle"
         android:clickable="true">
 
@@ -14,7 +14,7 @@
             android:id="@+id/ivIcon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="12dp" />
+            android:layout_margin="13dp" />
 
     </FrameLayout>
 
