@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
         }
 
 
+
         viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
 
     }

@@ -9,8 +9,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 
 import com.eworl.easybubble.R;
-import com.eworl.easybubble.ViewManager;
-import com.eworl.easybubble.eventBus.CloseMasterBubbleEvent;
+import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
 
@@ -61,11 +60,16 @@ public class MasterBubble {
         fmCloseView = (FrameLayout) fmMasterBubble.findViewById(R.id.fmCloseView);
         innerRing = fmMasterBubble.findViewById(R.id.innerRing);
 
-        ViewGroup.LayoutParams flSubBubbleContainerLayoutParams = flSubBubbleContainer.getLayoutParams();
-        flSubBubbleContainerLayoutParams.width = valueGenerator.getRadius() * 2;
-        flSubBubbleContainerLayoutParams.height = valueGenerator.getRadius() * 2;
-        flSubBubbleContainer.setLayoutParams(flSubBubbleContainerLayoutParams);
 
+        setSubBubbleContainerDimentions();
+
+    }
+
+    private void setSubBubbleContainerDimentions() {
+        ViewGroup.LayoutParams flSubBubbleContainerLayoutParams = flSubBubbleContainer.getLayoutParams();
+        flSubBubbleContainerLayoutParams.width = valueGenerator.getRadius() * 2 + valueGenerator.getSubBubbleWidth();
+        flSubBubbleContainerLayoutParams.height = valueGenerator.getRadius() * 2 + valueGenerator.getSubBubbleWidth();
+        flSubBubbleContainer.setLayoutParams(flSubBubbleContainerLayoutParams);
     }
 
     private void setListeners() {
@@ -73,17 +77,24 @@ public class MasterBubble {
         fmMasterBubble.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isAnimationOngoing) return;
-
-                if (isOpen)
-                    close();
-                else
-                    open();
+                toggle();
             }
+
+
         });
 
         touchListener = new MasterBubbleTouchListener(this);
         fmMasterBubble.setOnTouchListener(touchListener);
+    }
+
+    private void toggle() {
+        if (isAnimationOngoing) return;
+
+        if (isOpen)
+            close();
+        else
+            open();
+
     }
 
     private void close() {
@@ -171,9 +182,8 @@ public class MasterBubble {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(CloseMasterBubbleEvent event) {
-        if (isOpen)
-            close();
+    public void onMessageEvent(ToggleMasterBubbleEvent event) {
+        toggle();
     }
 
     public Context getContext() {

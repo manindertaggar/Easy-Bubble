@@ -22,7 +22,6 @@ public class ValueGenerator {
         this.context = context;
         this.count = count;
         angleDifference = 360 / count;
-
         calculateRadius();
     }
 
@@ -32,19 +31,12 @@ public class ValueGenerator {
     }
 
     public Coordinate getCoordinatesFor(int index) {
-//        int centerX = subBubbleWidth / 2;
-//        int centerY = subBubbleWidth / 2;
-
-        int centerX = 0;
-        int centerY = 0;
-
         Coordinate coordinate = new Coordinate();
-        double x = centerX + radius * Math.cos(getAngleFor(index));
-        double y = centerY + radius * Math.sin(getAngleFor(index));
+        double x = radius + radius * Math.cos(getAngleFor(index));
+        double y = radius + radius * Math.sin(getAngleFor(index));
         coordinate.set(x, y);
         return coordinate;
     }
-
 
     private Double getAngleFor(int index) {
         Double angle = Math.toRadians(angleDifference * index);
@@ -54,5 +46,9 @@ public class ValueGenerator {
 
     public int getRadius() {
         return radius;
+    }
+
+    public int getSubBubbleWidth() {
+        return subBubbleWidth;
     }
 }

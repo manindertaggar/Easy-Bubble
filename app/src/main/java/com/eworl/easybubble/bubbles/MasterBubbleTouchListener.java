@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.eworl.easybubble.ViewManager;
-import com.eworl.easybubble.eventBus.CloseMasterBubbleEvent;
+import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -41,7 +41,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     }
 
     private void performeActionMove(MotionEvent motionEvent) {
-        EventBus.getDefault().post(new CloseMasterBubbleEvent());
+        EventBus.getDefault().post(new ToggleMasterBubbleEvent());
 
         float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
@@ -56,4 +56,6 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
 
     private void performeActionDown(MotionEvent motionEvent) {
     }
+
+
 }

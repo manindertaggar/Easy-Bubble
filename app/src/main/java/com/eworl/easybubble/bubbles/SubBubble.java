@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.eworl.easybubble.R;
-import com.eworl.easybubble.eventBus.CloseMasterBubbleEvent;
+import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
 import com.eworl.easybubble.utils.Coordinate;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,7 +48,7 @@ public class SubBubble {
     }
 
     private void closeMasterBubble() {
-        EventBus.getDefault().post(new CloseMasterBubbleEvent());
+        EventBus.getDefault().post(new ToggleMasterBubbleEvent());
     }
 
     private void performAction() {
