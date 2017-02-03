@@ -6,8 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.eventBus.CloseMasterBubbleEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by root on 3/2/17.
@@ -17,29 +23,30 @@ public class MasterBubble {
     private FrameLayout fmContentView, fmMasterBubble, fmOpenView, fmCloseView;
     private View innerRing;
     private Boolean isOpen = false;
+    private RelativeLayout rlSubBubbleContainer;
     private Context context;
     private boolean isAnimationOngoing = false;
     private final static int ANIMATION_DURATION = 300;
-    private final static float BUBBLE_CLOSE_SIZE = 0.8f;
-    private final static float BUBBLE_OPEN_SIZE = 1f;
+    private final static float BUBBLE_CLOSE_SIZE = 1f;
+    private final static float BUBBLE_OPEN_SIZE = .8f;
 
     public MasterBubble(Context context) {
         this.context = context;
 
         intializeViews();
         setListeners();
+        EventBus.getDefault().register(this);
 
     }
 
-
     private void intializeViews() {
         fmContentView = (FrameLayout) LayoutInflater.from(context).inflate(R.layout.layout_master_bubble, null);
+        rlSubBubbleContainer = (RelativeLayout) fmContentView.findViewById(R.id.rlSubBubbleContainer);
         fmMasterBubble = (FrameLayout) fmContentView.findViewById(R.id.fmMasterBubble);
         fmOpenView = (FrameLayout) fmMasterBubble.findViewById(R.id.fmOpenView);
         fmCloseView = (FrameLayout) fmMasterBubble.findViewById(R.id.fmCloseView);
         innerRing = fmMasterBubble.findViewById(R.id.innerRing);
     }
-
 
     private void setListeners() {
         fmMasterBubble.setOnClickListener(new View.OnClickListener() {
@@ -55,8 +62,6 @@ public class MasterBubble {
                 } else {
                     open();
                 }
-                isOpen = !isOpen;
-
             }
         });
     }
@@ -64,7 +69,7 @@ public class MasterBubble {
     private void close() {
         fmOpenView.clearAnimation();
         fmCloseView.clearAnimation();
-
+        rlSubBubbleContainer.setVisibility(View.GONE);
         isAnimationOngoing = true;
         fmCloseView.animate()
                 .setDuration(ANIMATION_DURATION)
@@ -92,13 +97,14 @@ public class MasterBubble {
 
                     }
                 }).rotation(0);
+        isOpen = false;
     }
-
 
     private void open() {
         fmOpenView.clearAnimation();
         fmCloseView.clearAnimation();
 
+        rlSubBubbleContainer.setVisibility(View.VISIBLE);
         fmOpenView.setVisibility(View.GONE);
         isAnimationOngoing = true;
         fmCloseView.animate().setDuration(ANIMATION_DURATION)
@@ -126,11 +132,24 @@ public class MasterBubble {
 
                     }
                 }).rotation(45);
-    }
 
+        isOpen = true;
+    }
 
     public View getView() {
         return fmContentView;
     }
+
+    public void addSubBubble(SubBubble subBubble) {
+        rlSubBubbleContainer.addView(subBubble.getView());
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(CloseMasterBubbleEvent event) {
+        if (isOpen)
+            close();
+    }
+
 }
 
