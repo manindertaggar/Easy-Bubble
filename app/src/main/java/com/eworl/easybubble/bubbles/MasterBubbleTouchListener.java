@@ -41,8 +41,6 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     }
 
     private void performeActionMove(MotionEvent motionEvent) {
-        EventBus.getDefault().post(new ToggleMasterBubbleEvent());
-
         float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) masterBubbleView.getLayoutParams();
@@ -55,6 +53,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     }
 
     private void performeActionDown(MotionEvent motionEvent) {
+        EventBus.getDefault().post(new ToggleMasterBubbleEvent());
     }
 
 
