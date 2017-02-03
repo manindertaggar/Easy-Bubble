@@ -8,15 +8,20 @@ import android.util.Log;
 
 public class ValueGenerator {
     private String TAG = ValueGenerator.class.getCanonicalName();
-    private int maxCount;
+    private int count;
     private Coordinate center;
     private double angleDifference;
     private int radius = 200;
 
-    public ValueGenerator(Coordinate center, int maxCount) {
-        this.maxCount = maxCount;
+    public ValueGenerator(Coordinate center, int width, int count) {
+        this.count = count;
         this.center = center;
-        angleDifference = 360 / maxCount;
+        angleDifference = 360 / count;
+        calculateRadius(width);
+    }
+
+    private void calculateRadius(int width) {
+        radius = (int) ((count * width) / (3.14 * 1.3));
     }
 
     public Coordinate getCoordinatesFor(int index) {

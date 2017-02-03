@@ -2,6 +2,7 @@ package com.eworl.easybubble.bubbles;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -50,7 +51,8 @@ public class MasterBubble {
     private void intializeValueGenerator() {
         Coordinate center = new Coordinate();
         center.set(366, 726);
-        valueGenerator = new ValueGenerator(center, 8);
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55, context.getResources().getDisplayMetrics());
+        valueGenerator = new ValueGenerator(center, px, 8);
     }
 
     private void intializeViews() {
