@@ -1,8 +1,11 @@
-package com.eworl.easybubble;
+package com.eworl.easybubble.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+
+import com.eworl.easybubble.R;
+import com.eworl.easybubble.bubbles.MasterBubble;
 
 public class MainActivity extends Activity {
 
