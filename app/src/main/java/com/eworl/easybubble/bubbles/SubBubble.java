@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.eventBus.CloseMasterBubbleEvent;
+import com.eworl.easybubble.utils.Coordinate;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -21,6 +22,7 @@ public class SubBubble {
     private ImageView ivIcon;
     private Context context;
     private int iconId;
+    private Coordinate coordinates;
 
     public SubBubble(Context context) {
         this.context = context;
@@ -60,5 +62,15 @@ public class SubBubble {
 
     public View getView() {
         return fmContentView;
+    }
+
+    public Coordinate getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Coordinate coordinates) {
+        fmContentView.setX((float) coordinates.getX());
+        fmContentView.setY((float) coordinates.getY());
+        this.coordinates = coordinates;
     }
 }
