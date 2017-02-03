@@ -9,6 +9,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.eventBus.CloseMasterBubbleEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;

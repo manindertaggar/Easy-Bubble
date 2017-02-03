@@ -17,6 +17,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ViewManager viewManager = ViewManager.init(this);
+
         PermissionManager.checkForOverlayPermission(this);
 
         MasterBubble masterBubble = new MasterBubble(this);
@@ -27,7 +29,6 @@ public class MainActivity extends Activity {
             masterBubble.addSubBubble(subBubble);
         }
 
-        ViewManager viewManager = new ViewManager(this);
 
         viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
 

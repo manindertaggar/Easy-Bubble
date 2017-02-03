@@ -16,8 +16,13 @@ public class ViewManager {
     private Display display;
     private Point size = new Point();
     private int screenHeight, screenWidth;
+    private static ViewManager runningInstance;
 
     public ViewManager(Context context) {
+        if (runningInstance != null)
+            return;
+
+        runningInstance = this;
         this.context = context;
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         calculateScreenDimentions();
@@ -60,5 +65,18 @@ public class ViewManager {
     public int screenWidthPercentage() {
         int screenWidthPercent = getScreenWidth() / 100;
         return screenWidthPercent;
+    }
+
+
+    public static ViewManager init(Context context) {
+        if (runningInstance != null)
+            return runningInstance;
+
+        return new ViewManager(context);
+
+    }
+
+    public static ViewManager getRunningInstance(){
+        return runningInstance;
     }
 }

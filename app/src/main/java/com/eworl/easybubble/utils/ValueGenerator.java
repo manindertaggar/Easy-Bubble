@@ -16,6 +16,7 @@ public class ValueGenerator {
     private int radius;
     private int subBubbleWidth;
     private Context context;
+    private float SEPRATION_FRACTION = 1.2f;
 
     public ValueGenerator(Context context, int count) {
         this.context = context;
@@ -27,7 +28,7 @@ public class ValueGenerator {
 
     private void calculateRadius() {
         subBubbleWidth = (int) context.getResources().getDimension(R.dimen.sub_bubble_size);
-        radius = (int) ((count * subBubbleWidth) / (3.14 * 1.3));
+        radius = (int) ((count * subBubbleWidth) / (3.14 * SEPRATION_FRACTION));
     }
 
     public Coordinate getCoordinatesFor(int index) {
@@ -50,7 +51,6 @@ public class ValueGenerator {
         Log.d(TAG, "getAngleFor: " + index + " is " + angle);
         return angle;
     }
-
 
     public int getRadius() {
         return radius;
