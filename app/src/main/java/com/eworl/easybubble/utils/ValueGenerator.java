@@ -27,6 +27,7 @@ public class ValueGenerator {
         return coordinate;
     }
 
+
     private Double getAngleFor(int index) {
         Double angle = Math.toRadians(angleDifference * index);
         Log.d(TAG, "getAngleFor: " + index + " is " + angle);

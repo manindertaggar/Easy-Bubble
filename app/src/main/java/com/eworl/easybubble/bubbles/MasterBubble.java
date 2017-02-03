@@ -35,9 +35,11 @@ public class MasterBubble {
     private final static float BUBBLE_OPEN_SIZE = .8f;
     private ValueGenerator valueGenerator;
     private ArrayList<SubBubble> subBubblesList = new ArrayList<>();
+    private MasterBubbleTouchListener touchListener;
 
     public MasterBubble(Context context) {
         this.context = context;
+
         intializeValueGenerator();
         intializeViews();
         setListeners();
@@ -61,21 +63,21 @@ public class MasterBubble {
     }
 
     private void setListeners() {
+
         fmMasterBubble.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isAnimationOngoing) return;
 
-                if (isAnimationOngoing) {
-                    return;
-                }
-
-                if (isOpen) {
+                if (isOpen)
                     close();
-                } else {
+                else
                     open();
-                }
             }
         });
+
+        touchListener = new MasterBubbleTouchListener(this);
+        fmMasterBubble.setOnTouchListener(touchListener);
     }
 
     private void close() {
@@ -166,6 +168,10 @@ public class MasterBubble {
     public void onMessageEvent(CloseMasterBubbleEvent event) {
         if (isOpen)
             close();
+    }
+
+    public Context getContext() {
+        return context;
     }
 
 }
