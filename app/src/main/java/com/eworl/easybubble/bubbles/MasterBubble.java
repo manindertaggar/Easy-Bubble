@@ -48,10 +48,13 @@ public class MasterBubble {
 
     }
 
-    private void intializeValueGenerator() {
+    public void intializeValueGenerator() {
         valueGenerator = new ValueGenerator(context, 8);
     }
 
+    public  ValueGenerator getValueGenerator(){
+        return  valueGenerator;
+    }
     private void intializeViews() {
         fmContentView = (FrameLayout) LayoutInflater.from(context).inflate(R.layout.layout_master_bubble, null);
         flSubBubbleContainer = (FrameLayout) fmContentView.findViewById(R.id.flSubBubbleContainer);
@@ -74,20 +77,11 @@ public class MasterBubble {
 
     private void setListeners() {
 
-        fmMasterBubble.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-
-
-        });
-
         touchListener = new MasterBubbleTouchListener(this);
         fmMasterBubble.setOnTouchListener(touchListener);
     }
 
-    private void toggle() {
+    public void toggle() {
         if (isAnimationOngoing) return;
 
         if (isOpen)
@@ -183,7 +177,7 @@ public class MasterBubble {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ToggleMasterBubbleEvent event) {
-        toggle();
+       // toggle();
     }
 
     public Context getContext() {

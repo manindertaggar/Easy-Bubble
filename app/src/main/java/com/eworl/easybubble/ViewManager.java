@@ -1,6 +1,7 @@
 package com.eworl.easybubble;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.View;
@@ -19,7 +20,7 @@ public class ViewManager {
     private static ViewManager runningInstance;
 
     public ViewManager(Context context) {
-        if (runningInstance != null)
+             if (runningInstance != null)
             return;
 
         runningInstance = this;
@@ -67,6 +68,14 @@ public class ViewManager {
         return screenWidthPercent;
     }
 
+//    public int getStatusBarHeight(){
+//        int statusBarHeight = 0;
+//        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+//        if (resourceId > 0) {
+//            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+//        }
+//        return statusBarHeight;
+//    }
 
     public static ViewManager init(Context context) {
         if (runningInstance != null)
@@ -79,4 +88,5 @@ public class ViewManager {
     public static ViewManager getRunningInstance(){
         return runningInstance;
     }
+
 }
