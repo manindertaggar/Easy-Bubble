@@ -2,11 +2,14 @@ package com.eworl.easybubble.bubbles;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
@@ -27,7 +30,7 @@ public class MasterBubble {
     private static final String TAG = MasterBubble.class.getCanonicalName();
     private FrameLayout fmContentView, fmMasterBubble, fmOpenView, fmCloseView;
     private View innerRing;
-    private Boolean isOpen = false;
+     Boolean isOpen = false;
     private FrameLayout flSubBubbleContainer;
     private Context context;
     private boolean isAnimationOngoing = false;
@@ -52,9 +55,10 @@ public class MasterBubble {
         valueGenerator = new ValueGenerator(context, 8);
     }
 
-    public  ValueGenerator getValueGenerator(){
-        return  valueGenerator;
+    public ValueGenerator getValueGenerator() {
+        return valueGenerator;
     }
+
     private void intializeViews() {
         fmContentView = (FrameLayout) LayoutInflater.from(context).inflate(R.layout.layout_master_bubble, null);
         flSubBubbleContainer = (FrameLayout) fmContentView.findViewById(R.id.flSubBubbleContainer);
@@ -91,7 +95,7 @@ public class MasterBubble {
 
     }
 
-    private void close() {
+    void close() {
         fmOpenView.clearAnimation();
         fmCloseView.clearAnimation();
         flSubBubbleContainer.setVisibility(View.GONE);
@@ -125,7 +129,7 @@ public class MasterBubble {
         isOpen = false;
     }
 
-    private void open() {
+    void open() {
         fmOpenView.clearAnimation();
         fmCloseView.clearAnimation();
 
@@ -177,12 +181,19 @@ public class MasterBubble {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ToggleMasterBubbleEvent event) {
-       // toggle();
+        // toggle();
     }
 
     public Context getContext() {
         return context;
     }
 
+    protected void init() {
+        int a = fmContentView.getHeight();
+        int b = fmContentView.getWidth();
+        Toast.makeText(context, "" + a + " " + b, Toast.LENGTH_SHORT).show();
+    }
+
 }
+
 

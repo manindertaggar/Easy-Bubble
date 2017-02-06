@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,10 +23,11 @@ import org.greenrobot.eventbus.EventBus;
 public class MasterBubbleTouchListener implements View.OnTouchListener {
     private static final String TAG = MasterBubbleTouchListener.class.getCanonicalName();
     private MasterBubble masterBubble;
-    private View masterBubbleView;
+    private View fmContentViewLayout;
     private ViewManager viewManager = ViewManager.getRunningInstance();
     private long startTime, endTime;
     private int statusBarHeight = 48;
+    private  int tempRadius = 40;
     private WindowManager.LayoutParams fmContentViewParams;
     private float pointerX, pointerY;
     private int radius, screenWidth, screenHeight;
@@ -33,10 +35,11 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
 
     public MasterBubbleTouchListener(MasterBubble masterBubble) {
         this.masterBubble = masterBubble;
-        masterBubbleView = masterBubble.getView();
-        fmContentViewParams = (WindowManager.LayoutParams) masterBubbleView.getLayoutParams();
+        fmContentViewLayout = masterBubble.getView();
+        fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
         ValueGenerator valueGenerator = masterBubble.getValueGenerator();
-                radius = valueGenerator.getRadius();
+        radius = valueGenerator.getRadius();
+        Log.d(TAG, "masterBubbleRadius: "+radius);
         ViewManager viewManager = ViewManager.getRunningInstance();
         screenWidth = viewManager.getScreenWidth();
         screenHeight = viewManager.getScreenHeight();
@@ -62,12 +65,16 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     }
 
     private void performeActionMove(MotionEvent motionEvent) {
+        if(masterBubble.isOpen){
+            masterBubble.close();
+        }
+
         pointerX = motionEvent.getRawX();
         pointerY = motionEvent.getRawY();
-        WindowManager.LayoutParams  fmContentViewParams = (WindowManager.LayoutParams) masterBubbleView.getLayoutParams();
-        fmContentViewParams.x = (int) pointerX -20;
-        fmContentViewParams.y = (int) pointerY - statusBarHeight-20 ;
-        viewManager.updateViewLayout(masterBubbleView, fmContentViewParams);
+        WindowManager.LayoutParams  fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
+        fmContentViewParams.x = (int) pointerX -tempRadius;
+        fmContentViewParams.y = (int) pointerY - statusBarHeight-tempRadius;
+        viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
     }
 
     private void performeActionDown(MotionEvent motionEvent) {
@@ -80,7 +87,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     private void performeActionUp(MotionEvent motionEvent) {
         endTime = System.currentTimeMillis();
 
-        if (endTime - startTime < 100) {
+        if (endTime - startTime < 200) {
             masterBubbleClickListener();
         }
 
