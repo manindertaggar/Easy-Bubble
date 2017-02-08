@@ -1,7 +1,9 @@
 package com.eworl.easybubble.bubbles;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -23,6 +25,7 @@ public class SubBubble {
     private Context context;
     private int iconId;
     private Coordinate coordinates;
+    private long startTime, endTime;
 
     public SubBubble(Context context) {
         this.context = context;
@@ -38,17 +41,55 @@ public class SubBubble {
     }
 
     private void setListeners() {
-        fmSubBubbleView.setOnClickListener(new View.OnClickListener() {
+        fmSubBubbleView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                closeMasterBubble();
-                performAction();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+
+                        performeActionDown(motionEvent);
+
+                        break;
+                    case MotionEvent.ACTION_UP:
+
+                        performActionUp(motionEvent);
+
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+
+                        performActionMove(motionEvent);
+
+                        break;
+                }
+                return false;
             }
         });
+
+
+    }
+
+    private void performActionMove(MotionEvent motionEvent) {
+    }
+
+    private void performActionUp(MotionEvent motionEvent) {
+        endTime = System.currentTimeMillis();
+        if (endTime - startTime < 200) {
+            fmSubBubbleViewOnClick();
+        }
+    }
+
+    private void performeActionDown(MotionEvent motionEvent) {
+        startTime = System.currentTimeMillis();
+    }
+
+    private void fmSubBubbleViewOnClick() {
+        closeMasterBubble();
+        performAction();
+
     }
 
     private void closeMasterBubble() {
-        EventBus.getDefault().post(new ToggleMasterBubbleEvent());
+        //   EventBus.getDefault().post(new ToggleMasterBubbleEvent());
     }
 
     private void performAction() {

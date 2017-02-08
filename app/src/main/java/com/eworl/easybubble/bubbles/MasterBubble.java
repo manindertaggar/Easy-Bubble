@@ -43,7 +43,7 @@ public class MasterBubble {
     private ArrayList<SubBubble> subBubblesList = new ArrayList<>();
     private MasterBubbleTouchListener touchListener;
     private ViewGroup.LayoutParams flSubBubbleContainerLayoutParams;
-    private final static int TEMP_RADIUS = 260;
+    private final static int TEMP_RADIUS = 235;
     private int screenWidth, screenHeight;
     private final static int STATUS_BAR_HEIGHT = 48;
     private ViewManager viewManager = ViewManager.getRunningInstance();
@@ -113,7 +113,7 @@ public class MasterBubble {
     void close() {
         fmOpenView.clearAnimation();
         fmCloseView.clearAnimation();
-        flSubBubbleContainer.setVisibility(View.GONE);
+        flSubBubbleContainer.setVisibility(View.INVISIBLE);
         isAnimationOngoing = true;
         fmCloseView.animate()
                 .setDuration(ANIMATION_DURATION)
@@ -152,7 +152,7 @@ public class MasterBubble {
         fmCloseView.clearAnimation();
 
         flSubBubbleContainer.setVisibility(View.VISIBLE);
-        fmOpenView.setVisibility(View.GONE);
+        fmOpenView.setVisibility(View.VISIBLE);
         isAnimationOngoing = true;
         fmCloseView.animate().setDuration(ANIMATION_DURATION)
                 .setInterpolator(new OvershootInterpolator())
