@@ -17,6 +17,7 @@ public class ValueGenerator {
     private int subBubbleWidth;
     private Context context;
     private float SEPRATION_FRACTION = 1.2f;
+    private int masterBubbleWidth;
 
     public ValueGenerator(Context context, int count) {
         this.context = context;
@@ -27,6 +28,7 @@ public class ValueGenerator {
 
     private void calculateRadius() {
         subBubbleWidth = (int) context.getResources().getDimension(R.dimen.sub_bubble_size);
+        masterBubbleWidth = (int) context.getResources().getDimension(R.dimen.master_bubble_size);
         radius = (int) ((count * subBubbleWidth) / (3.14 * SEPRATION_FRACTION));
     }
 
@@ -50,5 +52,9 @@ public class ValueGenerator {
 
     public int getSubBubbleWidth() {
         return subBubbleWidth;
+    }
+
+    public int getMasterBubbleWidth() {
+        return masterBubbleWidth;
     }
 }

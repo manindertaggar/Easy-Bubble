@@ -29,9 +29,8 @@ public class MainActivity extends Activity {
             masterBubble.addSubBubble(subBubble);
         }
 
-
-
         viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
+
 
     }
 

@@ -6,12 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
@@ -30,16 +31,23 @@ public class MasterBubble {
     private static final String TAG = MasterBubble.class.getCanonicalName();
     private FrameLayout fmContentView, fmMasterBubble, fmOpenView, fmCloseView;
     private View innerRing;
-     Boolean isOpen = false;
+    Boolean isOpen = false;
     private FrameLayout flSubBubbleContainer;
     private Context context;
     private boolean isAnimationOngoing = false;
     private final static int ANIMATION_DURATION = 300;
+    //    private final static int ANIMATION_DURATION = 0;
     private final static float BUBBLE_CLOSE_SIZE = 1f;
     private final static float BUBBLE_OPEN_SIZE = .8f;
     private ValueGenerator valueGenerator;
     private ArrayList<SubBubble> subBubblesList = new ArrayList<>();
     private MasterBubbleTouchListener touchListener;
+    private ViewGroup.LayoutParams flSubBubbleContainerLayoutParams;
+    private final static int TEMP_RADIUS = 260;
+    private int screenWidth, screenHeight;
+    private final static int STATUS_BAR_HEIGHT = 48;
+    private ViewManager viewManager = ViewManager.getRunningInstance();
+
 
     public MasterBubble(Context context) {
         this.context = context;
@@ -48,6 +56,9 @@ public class MasterBubble {
         intializeViews();
         setListeners();
         EventBus.getDefault().register(this);
+        ViewManager viewManager = ViewManager.getRunningInstance();
+        screenWidth = viewManager.getScreenWidth();
+        screenHeight = viewManager.getScreenHeight();
 
     }
 
@@ -73,11 +84,16 @@ public class MasterBubble {
     }
 
     private void setSubBubbleContainerDimentions() {
-        ViewGroup.LayoutParams flSubBubbleContainerLayoutParams = flSubBubbleContainer.getLayoutParams();
+        flSubBubbleContainerLayoutParams = flSubBubbleContainer.getLayoutParams();
         flSubBubbleContainerLayoutParams.width = valueGenerator.getRadius() * 2 + valueGenerator.getSubBubbleWidth();
         flSubBubbleContainerLayoutParams.height = valueGenerator.getRadius() * 2 + valueGenerator.getSubBubbleWidth();
         flSubBubbleContainer.setLayoutParams(flSubBubbleContainerLayoutParams);
     }
+
+//    private void setFmContentViewDimentions() {
+//        WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentView.getLayoutParams();
+//        fmContentViewParams.x =;
+//    }
 
     private void setListeners() {
 
@@ -92,7 +108,6 @@ public class MasterBubble {
             close();
         else
             open();
-
     }
 
     void close() {
@@ -125,8 +140,11 @@ public class MasterBubble {
                     public void onAnimationRepeat(Animator animator) {
 
                     }
-                }).rotation(0);
+                })
+                .rotation(0);
         isOpen = false;
+        setContentViewCoordinates();
+
     }
 
     void open() {
@@ -149,6 +167,7 @@ public class MasterBubble {
                     @Override
                     public void onAnimationEnd(Animator animator) {
                         isAnimationOngoing = false;
+
                     }
 
                     @Override
@@ -163,6 +182,41 @@ public class MasterBubble {
                 }).rotation(45);
 
         isOpen = true;
+        setContentViewCoordinates();
+    }
+
+    private void setContentViewCoordinates() {
+
+        WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentView.getLayoutParams();
+        if (isOpen) {
+            if (touchListener.getLatestPointerX() < (screenWidth / 2)) {
+                fmContentViewParams.x = -TEMP_RADIUS+valueGenerator.getMasterBubbleWidth()/2;
+            } else {
+                fmContentViewParams.x = screenWidth - TEMP_RADIUS-valueGenerator.getMasterBubbleWidth()/2;
+            }
+            fmContentViewParams.y = touchListener.getLatestPointerY() - TEMP_RADIUS;
+        } else {
+            if (touchListener.getLatestPointerX() < (screenWidth / 2)) {
+                fmContentViewParams.x = 0;
+            } else {
+                fmContentViewParams.x = screenWidth-valueGenerator.getMasterBubbleWidth()/2;
+            }
+            fmContentViewParams.y = touchListener.getLatestPointerY();
+        }
+        viewManager.updateViewLayout(fmContentView, fmContentViewParams);
+
+        Log.d(TAG, "setContentViewCoordinates: " + fmContentViewParams.x + " " + fmContentViewParams.y);
+//        Log.d(TAG, "setContentViewCoordinatesY: " + fmContentViewParams.y);
+//
+//
+//        if (touchListener.getLatestPointerX() < (screenWidth / 2)) {
+//            fmContentViewParams.x = -TEMP_RADIUS;
+//        } else {
+//            fmContentViewParams.x = screenWidth - TEMP_RADIUS;
+//        }
+//        Log.d(TAG, "setContentViewCoordinatesXright: " + fmContentViewParams.x+", "+fmContentViewParams.y);
+//
+
     }
 
     public View getView() {
@@ -181,7 +235,7 @@ public class MasterBubble {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ToggleMasterBubbleEvent event) {
-        // toggle();
+        toggle();
     }
 
     public Context getContext() {
