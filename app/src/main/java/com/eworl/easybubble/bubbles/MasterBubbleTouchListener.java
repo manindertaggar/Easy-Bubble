@@ -2,6 +2,7 @@ package com.eworl.easybubble.bubbles;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,7 +25,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     private ViewManager viewManager = ViewManager.getRunningInstance();
     private long startTime, endTime;
     private static final int STATUS_BAR_HEIGHT = 48;
-    private static final int TEMP_RADIUS = 40;
+    private static final int TEMP_RADIUS = 50;
 //    private final WindowManager.LayoutParams fmContentViewParams;
     private float pointerX, pointerY;
     private int radius, screenWidth, screenHeight;
@@ -90,13 +91,15 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
         pointerX = motionEvent.getRawX();
         pointerY = motionEvent.getRawY();
         WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
-        fmContentViewParams.x = (int) pointerX - TEMP_RADIUS-radius;
-        fmContentViewParams.y = (int) pointerY - STATUS_BAR_HEIGHT - TEMP_RADIUS-radius;
+        fmContentViewParams.x = (int) pointerX - 50-radius;
+        fmContentViewParams.y = (int) pointerY - STATUS_BAR_HEIGHT - TEMP_RADIUS-radius-10;
         viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
+
     }
 
     private void performeActionDown(MotionEvent motionEvent) {
         startTime = System.currentTimeMillis();
+
     }
 
     private void performeActionUp(MotionEvent motionEvent) {
@@ -104,17 +107,17 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
         endTime = System.currentTimeMillis();
         if ((endTime - startTime) < 200) {
             masterBubbleClickListener();
-            return;
+
         }
+
 
         final WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
         if (pointerX < (screenWidth / 2)) {
 
             ObjectAnimator objectAnimator = new ObjectAnimator();
-            objectAnimator.setDuration(1000);
-            float init = pointerX-radius;
+            objectAnimator.setDuration(500);
+            float init = pointerX-radius-TEMP_RADIUS;
             objectAnimator.setFloatValues(init, 0-radius);
-            objectAnimator.setInterpolator(new OvershootInterpolator());
             objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -128,11 +131,11 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
             objectAnimator.start();
         } else {
             ObjectAnimator objectAnimator = new ObjectAnimator();
-            objectAnimator.setDuration(1000);
-            float initial = pointerX-radius;
-            float finalV = (float) (screenWidth - ((2 * TEMP_RADIUS)+17)-radius);
+            objectAnimator.setDuration(500);
+            float initial = pointerX-radius-TEMP_RADIUS;
+            float finalV = (float) (screenWidth - ((2 * TEMP_RADIUS))-radius);
             objectAnimator.setFloatValues(initial, finalV);
-            objectAnimator.setInterpolator(new OvershootInterpolator());
+//            objectAnimator.setInterpolator(new OvershootInterpolator());
             objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -150,8 +153,16 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
 
     }
 
-    private void masterBubbleClickListener() {
 
+    private void masterBubbleClickListener() {
+//        final WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
+//        if (pointerX < (screenWidth / 2)) {
+//            fmContentViewParams.x = 0 - radius;
+//        } else{
+//            fmContentViewParams.x = (screenWidth - ((2 * TEMP_RADIUS))-radius);
+//        }
+//        fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS)-radius);
+//        viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
         masterBubble.toggle();
     }
 

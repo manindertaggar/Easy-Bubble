@@ -43,7 +43,7 @@ public class MasterBubble {
     private ArrayList<SubBubble> subBubblesList = new ArrayList<>();
     private MasterBubbleTouchListener touchListener;
     private ViewGroup.LayoutParams flSubBubbleContainerLayoutParams;
-    private final static int TEMP_RADIUS = 235;
+    private int fmContentViewRadius;
     private int screenWidth, screenHeight;
     private final static int STATUS_BAR_HEIGHT = 48;
     private ViewManager viewManager = ViewManager.getRunningInstance();
@@ -60,10 +60,12 @@ public class MasterBubble {
         screenWidth = viewManager.getScreenWidth();
         screenHeight = viewManager.getScreenHeight();
 
+
     }
 
     public void intializeValueGenerator() {
         valueGenerator = new ValueGenerator(context, 8);
+        fmContentViewRadius = valueGenerator.getRadius();
     }
 
     public ValueGenerator getValueGenerator() {
@@ -90,10 +92,6 @@ public class MasterBubble {
         flSubBubbleContainer.setLayoutParams(flSubBubbleContainerLayoutParams);
     }
 
-//    private void setFmContentViewDimentions() {
-//        WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentView.getLayoutParams();
-//        fmContentViewParams.x =;
-//    }
 
     private void setListeners() {
 
@@ -143,7 +141,7 @@ public class MasterBubble {
                 })
                 .rotation(0);
         isOpen = false;
-        setContentViewCoordinates();
+//        setContentViewCoordinates();
 
     }
 
@@ -182,42 +180,28 @@ public class MasterBubble {
                 }).rotation(45);
 
         isOpen = true;
-        setContentViewCoordinates();
+//        setContentViewCoordinates();
     }
 
     private void setContentViewCoordinates() {
 
         WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentView.getLayoutParams();
-        if (isOpen) {
+//        if (isOpen) {
             if (touchListener.getLatestPointerX() < (screenWidth / 2)) {
-                fmContentViewParams.x = -TEMP_RADIUS+valueGenerator.getMasterBubbleWidth()/2;
+
+                fmContentViewParams.x = 0-fmContentViewRadius;
+
             } else {
-                fmContentViewParams.x = screenWidth - TEMP_RADIUS-valueGenerator.getMasterBubbleWidth()/2;
+                fmContentViewParams.x = screenWidth - fmContentViewRadius-100;
             }
-            fmContentViewParams.y = touchListener.getLatestPointerY() - TEMP_RADIUS;
-        } else {
-            if (touchListener.getLatestPointerX() < (screenWidth / 2)) {
-                fmContentViewParams.x = 0;
-            } else {
-                fmContentViewParams.x = screenWidth-valueGenerator.getMasterBubbleWidth()/2;
-            }
-            fmContentViewParams.y = touchListener.getLatestPointerY();
+                fmContentViewParams.y = touchListener.getLatestPointerY()-fmContentViewRadius-100;
+
+            viewManager.updateViewLayout(fmContentView, fmContentViewParams);
+
+            Log.d(TAG, "setContentViewCoordinates: " + fmContentViewParams.x + " " + fmContentViewParams.y);
         }
-        viewManager.updateViewLayout(fmContentView, fmContentViewParams);
 
-        Log.d(TAG, "setContentViewCoordinates: " + fmContentViewParams.x + " " + fmContentViewParams.y);
-//        Log.d(TAG, "setContentViewCoordinatesY: " + fmContentViewParams.y);
-//
-//
-//        if (touchListener.getLatestPointerX() < (screenWidth / 2)) {
-//            fmContentViewParams.x = -TEMP_RADIUS;
-//        } else {
-//            fmContentViewParams.x = screenWidth - TEMP_RADIUS;
-//        }
-//        Log.d(TAG, "setContentViewCoordinatesXright: " + fmContentViewParams.x+", "+fmContentViewParams.y);
-//
 
-    }
 
     public View getView() {
         return fmContentView;
@@ -247,6 +231,7 @@ public class MasterBubble {
         int b = fmContentView.getWidth();
         Toast.makeText(context, "" + a + " " + b, Toast.LENGTH_SHORT).show();
     }
+
 
 }
 

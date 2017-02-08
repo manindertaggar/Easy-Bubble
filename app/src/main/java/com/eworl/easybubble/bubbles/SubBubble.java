@@ -26,6 +26,8 @@ public class SubBubble {
     private int iconId;
     private Coordinate coordinates;
     private long startTime, endTime;
+    private View fmContentViewLayout;
+    private MasterBubble masterBubble;
 
     public SubBubble(Context context) {
         this.context = context;
@@ -69,6 +71,8 @@ public class SubBubble {
     }
 
     private void performActionMove(MotionEvent motionEvent) {
+
+
     }
 
     private void performActionUp(MotionEvent motionEvent) {
@@ -84,6 +88,9 @@ public class SubBubble {
 
     private void fmSubBubbleViewOnClick() {
         closeMasterBubble();
+        masterBubble = new MasterBubble(context);
+        fmContentViewLayout = masterBubble.getView();
+        fmContentViewLayout.animate().rotation(10).setDuration(500);
         performAction();
 
     }
