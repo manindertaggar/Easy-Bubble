@@ -2,6 +2,7 @@ package com.eworl.easybubble.bubbles;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.animation.OvershootInterpolator;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
 import com.eworl.easybubble.utils.ValueGenerator;
+
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -24,17 +26,17 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     private ViewManager viewManager = ViewManager.getRunningInstance();
     private long startTime, endTime;
     private static final int STATUS_BAR_HEIGHT = 48;
-    private static final int TEMP_RADIUS = 40;
-//    private final WindowManager.LayoutParams fmContentViewParams;
+    private static final int TEMP_RADIUS = 50;
+    //    private final WindowManager.LayoutParams fmContentViewParams;
     private float pointerX, pointerY;
     private int radius, screenWidth, screenHeight;
-    private int latestPointerX,latestPointerY;
-
+    private int latestPointerX, latestPointerY;
+    Context context;
 
     public MasterBubbleTouchListener(MasterBubble masterBubble) {
         this.masterBubble = masterBubble;
         fmContentViewLayout = masterBubble.getView();
-
+        this.context = masterBubble.getContext();
 //        fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
         ValueGenerator valueGenerator = masterBubble.getValueGenerator();
         radius = valueGenerator.getRadius();
@@ -71,14 +73,14 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     }
 
     private void setLatestPointerX(MotionEvent motievent) {
-        latestPointerX= (int) motievent.getRawX();
+        latestPointerX = (int) motievent.getRawX();
     }
 
-    public int getLatestPointerX(){
+    public int getLatestPointerX() {
         return latestPointerX;
     }
 
-    public int getLatestPointerY(){
+    public int getLatestPointerY() {
         return latestPointerY;
     }
 
@@ -90,10 +92,12 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
         pointerX = motionEvent.getRawX();
         pointerY = motionEvent.getRawY();
         WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
-        fmContentViewParams.x = (int) pointerX - TEMP_RADIUS;
-        fmContentViewParams.y = (int) pointerY - STATUS_BAR_HEIGHT - TEMP_RADIUS;
+        fmContentViewParams.x = (int) pointerX - 50 - radius;
+        fmContentViewParams.y = (int) pointerY - STATUS_BAR_HEIGHT - TEMP_RADIUS - radius - 10;
         viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
     }
+
+
 
     private void performeActionDown(MotionEvent motionEvent) {
         startTime = System.currentTimeMillis();
@@ -104,7 +108,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
         endTime = System.currentTimeMillis();
         if ((endTime - startTime) < 200) {
             masterBubbleClickListener();
-            return;
+
         }
 
         final WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
@@ -112,16 +116,15 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
 
             ObjectAnimator objectAnimator = new ObjectAnimator();
             objectAnimator.setDuration(500);
-            float init = motionEvent.getRawX();
-            objectAnimator.setFloatValues(init, 0f);
-            objectAnimator.setInterpolator(new OvershootInterpolator());
+            float init = pointerX - radius - TEMP_RADIUS;
+            objectAnimator.setFloatValues(init, 0 - radius);
             objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float value = (float) animation.getAnimatedValue();
                     float current = (int) value;
                     fmContentViewParams.x = (int) current;
-                    fmContentViewParams.y = (int) (pointerY - STATUS_BAR_HEIGHT - TEMP_RADIUS);
+                    fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius);
                     viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
                 }
             });
@@ -129,17 +132,17 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
         } else {
             ObjectAnimator objectAnimator = new ObjectAnimator();
             objectAnimator.setDuration(500);
-            float initial = motionEvent.getRawX();
-            float finalV = (float) (screenWidth - ((2 * TEMP_RADIUS)+17));
+            float initial = pointerX - radius - TEMP_RADIUS;
+            float finalV = (float) (screenWidth - ((2 * TEMP_RADIUS)) - radius);
             objectAnimator.setFloatValues(initial, finalV);
-            objectAnimator.setInterpolator(new OvershootInterpolator());
+//            objectAnimator.setInterpolator(new OvershootInterpolator());
             objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float value = (float) animation.getAnimatedValue();
                     float current = (int) value;
                     fmContentViewParams.x = (int) current;
-                    fmContentViewParams.y = (int) (pointerY - STATUS_BAR_HEIGHT - TEMP_RADIUS);
+                    fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius);
                     viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
 
                 }

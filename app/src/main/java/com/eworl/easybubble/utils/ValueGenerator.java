@@ -34,8 +34,8 @@ public class ValueGenerator {
 
     public Coordinate getCoordinatesFor(int index) {
         Coordinate coordinate = new Coordinate();
-        double x = radius + radius * Math.cos(getAngleFor(index));
-        double y = radius + radius * Math.sin(getAngleFor(index));
+        double x = 50+radius + radius * Math.cos(getAngleFor(index));
+        double y = 50+radius + radius * Math.sin(getAngleFor(index));
         coordinate.set(x, y);
         return coordinate;
     }
