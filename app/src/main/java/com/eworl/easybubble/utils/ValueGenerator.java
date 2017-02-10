@@ -18,7 +18,7 @@ public class ValueGenerator {
     private Context context;
     private float SEPRATION_FRACTION = 1.2f;
     private int masterBubbleWidth;
-
+    public Double angle;
     public ValueGenerator(Context context, int count) {
         this.context = context;
         this.count = count;
@@ -34,14 +34,14 @@ public class ValueGenerator {
 
     public Coordinate getCoordinatesFor(int index) {
         Coordinate coordinate = new Coordinate();
-        double x = 50+radius + radius * Math.cos(getAngleFor(index));
-        double y = 50+radius + radius * Math.sin(getAngleFor(index));
+        double x = radius + radius * Math.cos(getAngleFor(index));
+        double y = radius + radius * Math.sin(getAngleFor(index));
         coordinate.set(x, y);
         return coordinate;
     }
 
     private Double getAngleFor(int index) {
-        Double angle = Math.toRadians(angleDifference * index);
+         angle = Math.toRadians((angleDifference * index));
         Log.d(TAG, "getAngleFor: " + index + " is " + angle);
         return angle;
     }

@@ -46,6 +46,7 @@ public class ViewManager {
     }
 
     public void updateViewLayout(View view, WindowManager.LayoutParams layoutParams) {
+
         windowManager.updateViewLayout(view, layoutParams);
     }
 
@@ -60,7 +61,6 @@ public class ViewManager {
     public int screenHeightPercentage() {
         int screenHeightPercent = getScreenHeight() / 100;
         return screenHeightPercent;
-
     }
 
     public int screenWidthPercentage() {

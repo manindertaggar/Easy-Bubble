@@ -11,6 +11,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.eworl.easybubble.LayoutParamGenerator;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
@@ -57,6 +58,7 @@ public class MasterBubble {
         setListeners();
         EventBus.getDefault().register(this);
         ViewManager viewManager = ViewManager.getRunningInstance();
+
         screenWidth = viewManager.getScreenWidth();
         screenHeight = viewManager.getScreenHeight();
 
@@ -219,6 +221,16 @@ public class MasterBubble {
         flSubBubbleContainer.addView(subBubble.getView());
         subBubblesList.add(subBubble);
     }
+
+//    public void updateSubBubble(SubBubble subBubble) {
+//        FrameLayout fmSubBubbleView = subBubble.getLayout();
+//        FrameLayout.LayoutParams fmSubBubbleLayoutParams = (FrameLayout.LayoutParams) fmSubBubbleView.getLayoutParams();
+//
+//        fmSubBubbleLayoutParams.x = (int) (fmContentViewRadius + fmContentViewRadius * Math.cos(60));
+//        fmSubBubbleLayoutParams.y = (int) (fmContentViewRadius + fmContentViewRadius * Math.sin(60));
+//
+//        fmSubBubbleView.updateViewLayout(fmSubBubbleView, fmSubBubbleLayoutParams);
+//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ToggleMasterBubbleEvent event) {
