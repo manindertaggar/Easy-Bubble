@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.eworl.easybubble.LayoutParamGenerator;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
+import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
@@ -40,7 +41,6 @@ public class SubBubble {
     private int radius;
     private float diffY;
     private FrameLayout.LayoutParams fmContentViewParams;
-
 
 
     public SubBubble(Context context) {
@@ -85,7 +85,7 @@ public class SubBubble {
     }
 
     private void performeActionMove(MotionEvent motionEvent) {
-        float x =  motionEvent.getRawX();
+        float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
         diffY = pointerDownY - y;
         Log.d(TAG, "diffX: " + diffY / 10);
@@ -95,7 +95,7 @@ public class SubBubble {
 
     private void performeActionUp(MotionEvent motionEvent) {
         endTime = System.currentTimeMillis();
-        if(endTime-startTime<200){
+        if (endTime - startTime < 200) {
             fmSubBubbleViewOnClick();
         }
     }
@@ -103,7 +103,7 @@ public class SubBubble {
     private void fmSubBubbleViewOnClick() {
 
 //        closeMasterBubble();
-                performAction();
+        performAction();
     }
 
     private void performeActionDown(MotionEvent motionEvent) {
@@ -115,17 +115,16 @@ public class SubBubble {
 
     private void closeMasterBubble() {
         EventBus.getDefault().post(new ToggleMasterBubbleEvent());
+        EventBus.getDefault().post(50);
     }
 
     private void performAction() {
 
-        updateSubBubble();
+//              updateSubBubbles();
+        masterBubble.updateSubBubble(this);
         Toast.makeText(context, "Action Performed", Toast.LENGTH_SHORT).show();
     }
 
-    private void updateSubBubble() {
-//        masterBubble.updateSubBubble(this);
-    }
 
     public void setIcon(int iconId) {
         this.iconId = iconId;
@@ -141,9 +140,9 @@ public class SubBubble {
     }
 
 
-    public ViewGroup.LayoutParams getParams(){
+    public ViewGroup.LayoutParams getParams() {
 
-     return fmContentViewParams;
+        return fmContentViewParams;
     }
 
     public Coordinate getCoordinates() {
@@ -155,7 +154,6 @@ public class SubBubble {
         fmContentView.setY((float) coordinates.getY());
         this.coordinates = coordinates;
     }
-
 
 
 }

@@ -215,11 +215,21 @@ public class MasterBubble {
     public void addSubBubble(SubBubble subBubble) {
 
         int index = subBubblesList.size();
+        Log.d(TAG, "index in master: "+index);
         Coordinate coordinate = valueGenerator.getCoordinatesFor(index);
         subBubble.setCoordinates(coordinate);
-
         flSubBubbleContainer.addView(subBubble.getView());
         subBubblesList.add(subBubble);
+    }
+
+    public void updateSubBubble(SubBubble subBubble) {
+        for (int i = 1; i <= 8; i++) {
+            Log.d(TAG, "value of i: "+i);
+            Coordinate coordinate = valueGenerator.getUpdatedCoordinatesFor(i);
+            subBubble.setCoordinates(coordinate);
+
+        }
+
     }
 
 //    public void updateSubBubble(SubBubble subBubble) {
@@ -237,6 +247,10 @@ public class MasterBubble {
         toggle();
     }
 
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onMessageEvent(ToggleMasterBubbleEvent event) {
+//        toggle();
+//    }
     public Context getContext() {
         return context;
     }

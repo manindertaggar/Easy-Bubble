@@ -36,13 +36,29 @@ public class ValueGenerator {
         Coordinate coordinate = new Coordinate();
         double x = radius + radius * Math.cos(getAngleFor(index));
         double y = radius + radius * Math.sin(getAngleFor(index));
+        Log.d("double x"+x, "double y "+y);
+        coordinate.set(x, y);
+        return coordinate;
+    }
+    public Coordinate getUpdatedCoordinatesFor(int i) {
+        Coordinate coordinate = new Coordinate();
+        double x = radius + radius * Math.cos(updatedAngleFor(i));
+        double y = radius + radius * Math.sin(updatedAngleFor(i));
+        Log.d("double updatedx"+x, "double updatedy "+y);
         coordinate.set(x, y);
         return coordinate;
     }
 
+
     private Double getAngleFor(int index) {
          angle = Math.toRadians((angleDifference * index));
         Log.d(TAG, "getAngleFor: " + index + " is " + angle);
+        return angle;
+    }
+
+    private Double updatedAngleFor(int i) {
+        angle = Math.toRadians((angleDifference+15)*i);
+        Log.d(TAG, "getAngleFor: " + " is " + angle);
         return angle;
     }
 
