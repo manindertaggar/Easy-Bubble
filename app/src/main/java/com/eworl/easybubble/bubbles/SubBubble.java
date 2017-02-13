@@ -99,7 +99,7 @@ public class SubBubble {
         if (endTime - startTime < 200) {
             fmSubBubbleViewOnClick();
         }
-        staticSubBubbleCoordinates();
+//        staticSubBubbleCoordinates();
     }
 
     private void staticSubBubbleCoordinates() {
@@ -157,5 +157,6 @@ public class SubBubble {
         fmContentView.setY((float) coordinates.getY());
         this.coordinates = coordinates;
     }
+
 
 }

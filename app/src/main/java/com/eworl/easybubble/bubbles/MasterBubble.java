@@ -48,6 +48,7 @@ public class MasterBubble {
     private int screenWidth, screenHeight;
     private final static int STATUS_BAR_HEIGHT = 48;
     private ViewManager viewManager = ViewManager.getRunningInstance();
+    private int index;
 
 
     public MasterBubble(Context context) {
@@ -213,7 +214,7 @@ public class MasterBubble {
     }
 
     public void addSubBubble(SubBubble subBubble) {
-        int index = subBubblesList.size();
+        index = subBubblesList.size();
         Log.d(TAG, "listIndex: " + index);
         Coordinate coordinate = valueGenerator.getCoordinatesFor(index);
         subBubble.setCoordinates(coordinate);
@@ -222,7 +223,7 @@ public class MasterBubble {
     }
 
     public void updateSubBubble() {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i <= index; i++) {
             int listSize = subBubblesList.size();
             Log.d(TAG, "listSize: " + listSize);
             Log.d(TAG, "value of i: " + i);
@@ -232,18 +233,18 @@ public class MasterBubble {
             subBubble.setCoordinates(coordinate);
         }
         }
-    public void staticSubBubbleCoordinates() {
-        for (int i = 0; i < 8; i++) {
-            int listSize = subBubblesList.size();
-            Log.d(TAG, "listSize: " + listSize);
-            Log.d(TAG, "value of i: " + i);
-            Coordinate coordinate = valueGenerator.getStaticSubBubbleCoordinatesFor(i);
-            Log.d(TAG, "coordinate: " + coordinate);
-            SubBubble  subBubble = subBubblesList.get(i);
-            subBubble.setCoordinates(coordinate);
-
-        }
-    }
+//    public void staticSubBubbleCoordinates() {
+//        for (int i = 0; i < 8; i++) {
+//            int listSize = subBubblesList.size();
+//            Log.d(TAG, "listSize: " + listSize);
+//            Log.d(TAG, "value of i: " + i);
+//            Coordinate coordinate = valueGenerator.getStaticSubBubbleCoordinatesFor(i);
+//            Log.d(TAG, "coordinate: " + coordinate);
+//            SubBubble  subBubble = subBubblesList.get(i);
+//            subBubble.setCoordinates(coordinate);
+//
+//        }
+//    }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -251,11 +252,11 @@ public class MasterBubble {
 
         updateSubBubble();
     }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(StaticSubBubbleCoordinatesEvent event) {
-
-        staticSubBubbleCoordinates();
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onMessageEvent(StaticSubBubbleCoordinatesEvent event) {
+//
+//        staticSubBubbleCoordinates();
+//    }
 
 //    @Subscribe(threadMode = ThreadMode.MAIN)
 //    public void onMessageEvent(RotateSubBubbleEvent event) {
