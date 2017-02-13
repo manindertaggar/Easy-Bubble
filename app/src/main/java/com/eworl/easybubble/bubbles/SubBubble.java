@@ -14,6 +14,7 @@ import com.eworl.easybubble.R;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
 import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
 import com.eworl.easybubble.utils.Coordinate;
+import com.eworl.easybubble.utils.CoordinateY;
 import com.eworl.easybubble.utils.ValueGenerator;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,13 +38,14 @@ public class SubBubble {
     private int radius;
     private float diffY;
     private FrameLayout.LayoutParams fmContentViewParams;
-
+    private CoordinateY coordinateY;
 
     public SubBubble(Context context) {
         this.context = context;
         masterBubble = new MasterBubble(context);
         valueGenerator = masterBubble.getValueGenerator();
         radius = valueGenerator.getRadius();
+        coordinateY = new CoordinateY();
 //        fmContentViewParams = (FrameLayout.LayoutParams) fmContentView.getLayoutParams();
         intializeViews();
         setListeners();
@@ -84,31 +86,26 @@ public class SubBubble {
         float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
         diffY = pointerDownY - y;
-        getDiffY();
+        setDiffY(coordinateY);
+        rotateSubBubble();
         Log.d(TAG, "diffX: " + diffY / 10);
-//        rotateSubBubbles();
-
 
     }
 
-    public float getDiffY() {
-        return diffY;
+    private void setDiffY(CoordinateY coordinateY) {
+        coordinateY.setDiffY(diffY);
     }
 
-    private void rotateSubBubbles() {
-        EventBus.getDefault().post(new RotateSubBubbleEvent());
-    }
 
     private void performeActionUp(MotionEvent motionEvent) {
         endTime = System.currentTimeMillis();
         if (endTime - startTime < 200) {
-            fmSubBubbleViewOnClick();
+//            fmSubBubbleViewOnClick();
         }
     }
 
     private void fmSubBubbleViewOnClick() {
 
-       closeMasterBubble();
 //        performAction();
     }
 
@@ -119,8 +116,8 @@ public class SubBubble {
 
     }
 
-    private void closeMasterBubble() {
-        EventBus.getDefault().post(new ToggleMasterBubbleEvent());
+    private void rotateSubBubble() {
+        EventBus.getDefault().post(new RotateSubBubbleEvent());
 
     }
 
@@ -160,6 +157,5 @@ public class SubBubble {
         fmContentView.setY((float) coordinates.getY());
         this.coordinates = coordinates;
     }
-
 
 }

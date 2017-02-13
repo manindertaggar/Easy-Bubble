@@ -238,7 +238,7 @@ public class MasterBubble {
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(ToggleMasterBubbleEvent event) {
+    public void onMessageEvent(RotateSubBubbleEvent event) {
 
         updateSubBubble();
     }

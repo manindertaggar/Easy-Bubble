@@ -2,6 +2,7 @@ package com.eworl.easybubble.utils;
 
 import android.content.Context;
 import android.util.Log;
+import android.webkit.CookieManager;
 
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.bubbles.SubBubble;
@@ -65,7 +66,8 @@ public class ValueGenerator {
     }
 
     private Double updatedAngleFor(int i) {
-        angle = Math.toRadians((angleDifference*i)-15);
+        CoordinateY coordinateY = new CoordinateY();
+        angle = Math.toRadians((angleDifference*i)-30);
         Log.d(TAG, "getAngleFor: " + " is " + angle);
         return angle;
     }
