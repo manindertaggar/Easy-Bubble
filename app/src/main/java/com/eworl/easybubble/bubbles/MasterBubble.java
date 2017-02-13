@@ -229,11 +229,21 @@ public class MasterBubble {
             Log.d(TAG, "value of i: " + i);
             Coordinate coordinate = valueGenerator.getUpdatedCoordinatesFor(i);
             Log.d(TAG, "coordinate: " + coordinate);
-          SubBubble  subBubble = subBubblesList.get(i);
+            SubBubble subBubble = subBubblesList.get(i);
+            subBubble.setCoordinates(coordinate);
+        }
+        }
+    public void staticSubBubbleCoordinates() {
+        for (int i = 0; i < 8; i++) {
+            int listSize = subBubblesList.size();
+            Log.d(TAG, "listSize: " + listSize);
+            Log.d(TAG, "value of i: " + i);
+            Coordinate coordinate = valueGenerator.getStaticSubBubbleCoordinatesFor(i);
+            Log.d(TAG, "coordinate: " + coordinate);
+            SubBubble  subBubble = subBubblesList.get(i);
             subBubble.setCoordinates(coordinate);
 
         }
-
     }
 
 
@@ -241,6 +251,11 @@ public class MasterBubble {
     public void onMessageEvent(RotateSubBubbleEvent event) {
 
         updateSubBubble();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StaticSubBubbleCoordinatesEvent event) {
+
+        staticSubBubbleCoordinates();
     }
 
 //    @Subscribe(threadMode = ThreadMode.MAIN)

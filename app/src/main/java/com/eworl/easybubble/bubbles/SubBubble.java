@@ -12,9 +12,7 @@ import android.widget.Toast;
 
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
-import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
 import com.eworl.easybubble.utils.Coordinate;
-import com.eworl.easybubble.utils.CoordinateY;
 import com.eworl.easybubble.utils.ValueGenerator;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,14 +36,12 @@ public class SubBubble {
     private int radius;
     private float diffY;
     private FrameLayout.LayoutParams fmContentViewParams;
-    private CoordinateY coordinateY;
 
     public SubBubble(Context context) {
         this.context = context;
         masterBubble = new MasterBubble(context);
         valueGenerator = masterBubble.getValueGenerator();
         radius = valueGenerator.getRadius();
-        coordinateY = new CoordinateY();
 //        fmContentViewParams = (FrameLayout.LayoutParams) fmContentView.getLayoutParams();
         intializeViews();
         setListeners();
@@ -86,27 +82,28 @@ public class SubBubble {
         float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
         diffY = pointerDownY - y;
-        setDiffY(coordinateY);
         rotateSubBubble();
         Log.d(TAG, "diffX: " + diffY / 10);
 
     }
 
-    private void setDiffY(CoordinateY coordinateY) {
-        coordinateY.setDiffY(diffY);
-    }
-
 
     private void performeActionUp(MotionEvent motionEvent) {
         endTime = System.currentTimeMillis();
+
         if (endTime - startTime < 200) {
-//            fmSubBubbleViewOnClick();
+            fmSubBubbleViewOnClick();
         }
+        staticSubBubbleCoordinates();
+    }
+
+    private void staticSubBubbleCoordinates() {
+        EventBus.getDefault().post(new StaticSubBubbleCoordinatesEvent());
     }
 
     private void fmSubBubbleViewOnClick() {
 
-//        performAction();
+        performAction();
     }
 
     private void performeActionDown(MotionEvent motionEvent) {
@@ -123,8 +120,6 @@ public class SubBubble {
 
     private void performAction() {
 
-//              updateSubBubbles();
-//        masterBubble.updateSubBubble(this);
         Toast.makeText(context, "Action Performed", Toast.LENGTH_SHORT).show();
     }
 

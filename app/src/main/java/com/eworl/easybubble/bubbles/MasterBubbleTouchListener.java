@@ -7,10 +7,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.OvershootInterpolator;
 
 import com.eworl.easybubble.ViewManager;
-import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
+import com.eworl.easybubble.eventBus.MasterBubbleInRight;
 import com.eworl.easybubble.utils.ValueGenerator;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,6 +31,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     private int radius, screenWidth, screenHeight;
     private int latestPointerX, latestPointerY;
     Context context;
+    WindowManager.LayoutParams fmContentViewParams;
 
     public MasterBubbleTouchListener(MasterBubble masterBubble) {
         this.masterBubble = masterBubble;
@@ -91,12 +91,11 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
 
         pointerX = motionEvent.getRawX();
         pointerY = motionEvent.getRawY();
-        WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
+        fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
         fmContentViewParams.x = (int) pointerX - 50 - radius;
         fmContentViewParams.y = (int) pointerY - STATUS_BAR_HEIGHT - TEMP_RADIUS - radius - 10;
         viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
     }
-
 
 
     private void performeActionDown(MotionEvent motionEvent) {
@@ -125,11 +124,19 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
                     float current = (int) value;
                     fmContentViewParams.x = (int) current;
                     fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius);
+                    if(pointerY<(2*TEMP_RADIUS)){
+                        fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius+(2*TEMP_RADIUS));
+                    }
+
+                    if(pointerY>(screenHeight-TEMP_RADIUS)){
+                        fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius-TEMP_RADIUS);
+                    }
                     viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
                 }
             });
             objectAnimator.start();
         } else {
+            masterBubbleInRight();
             ObjectAnimator objectAnimator = new ObjectAnimator();
             objectAnimator.setDuration(500);
             float initial = pointerX - radius - TEMP_RADIUS;
@@ -143,6 +150,12 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
                     float current = (int) value;
                     fmContentViewParams.x = (int) current;
                     fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius);
+                    if(pointerY<(2*TEMP_RADIUS)){
+                        fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius+(2*TEMP_RADIUS));
+                    }
+                    if(pointerY>(screenHeight-TEMP_RADIUS)){
+                        fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius-TEMP_RADIUS);
+                    }
                     viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
 
                 }
@@ -151,6 +164,10 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
             objectAnimator.start();
         }
 
+    }
+
+    private void masterBubbleInRight() {
+        EventBus.getDefault().post(new MasterBubbleInRight());
     }
 
     private void masterBubbleClickListener() {

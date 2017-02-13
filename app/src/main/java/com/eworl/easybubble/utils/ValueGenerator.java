@@ -6,6 +6,7 @@ import android.webkit.CookieManager;
 
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.bubbles.SubBubble;
+import com.eworl.easybubble.eventBus.MasterBubbleInRight;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,6 +28,7 @@ public class ValueGenerator {
     private int masterBubbleWidth;
     public Double angle;
     private  float diffY;
+    private boolean masterBubbleIsInRight = false;
     public ValueGenerator(Context context, int count) {
         this.context = context;
         this.count = count;
@@ -57,14 +59,16 @@ public class ValueGenerator {
         coordinate.set(x, y);
         return coordinate;
     }
-//    public Coordinate getRotationCoordinatesFor(int i) {
-//        Coordinate coordinate = new Coordinate();
-//        double x = radius + radius * Math.cos(rotationAngleFor(i));
-//        double y = radius + radius * Math.sin(rotationAngleFor(i));
-//        Log.d("double updatedx"+x, "double updatedy "+y);
-//        coordinate.set(x, y);
-//        return coordinate;
-//    }
+
+    public Coordinate getStaticSubBubbleCoordinatesFor(int i) {
+        Coordinate coordinate = new Coordinate();
+        double x = radius + radius * Math.cos(staticAngleFor(i));
+        double y = radius + radius * Math.sin(staticAngleFor(i));
+        Log.d("double updatedx"+x, "double updatedy "+y);
+        coordinate.set(x, y);
+        return coordinate;
+    }
+
 
     private Double getAngleFor(int index) {
          angle = Math.toRadians((angleDifference * index));
@@ -74,13 +78,31 @@ public class ValueGenerator {
 
     private Double updatedAngleFor(int i) {
 
-        angle = Math.toRadians((angleDifference*i)-diffY);
+        angle = Math.toRadians((angleDifference * i) - diffY);
+        if(masterBubbleIsInRight){
+            angle = Math.toRadians((angleDifference * i) + diffY);
+            masterBubbleIsInRight = false;
+        }
         Log.d(TAG, "getAngleFor: " + " is " + angle);
         return angle;
+    }
+
+    private Double staticAngleFor(int i) {
+
+        angle = Math.toRadians((angleDifference*i));
+        Log.d(TAG, "getAngleFor: " + " is " + angle);
+        return angle;
+
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(RotateSubBubbleEvent event) {
       diffY =   event.diffY();
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MasterBubbleInRight event) {
+        masterBubbleIsInRight = true;
 
     }
 
