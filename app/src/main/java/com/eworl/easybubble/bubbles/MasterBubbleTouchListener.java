@@ -30,8 +30,9 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
     private float pointerX, pointerY;
     private int radius, screenWidth, screenHeight;
     private int latestPointerX, latestPointerY;
-    Context context;
-    WindowManager.LayoutParams fmContentViewParams;
+    private Context context;
+    private WindowManager.LayoutParams fmContentViewParams;
+
 
     public MasterBubbleTouchListener(MasterBubble masterBubble) {
         this.masterBubble = masterBubble;
@@ -112,7 +113,6 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
 
         final WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
         if (pointerX < (screenWidth / 2)) {
-
             ObjectAnimator objectAnimator = new ObjectAnimator();
             objectAnimator.setDuration(500);
             float init = pointerX - radius - TEMP_RADIUS;
@@ -136,7 +136,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
             });
             objectAnimator.start();
         } else {
-            masterBubbleInRight();
+//            masterBubbleInRight();
             ObjectAnimator objectAnimator = new ObjectAnimator();
             objectAnimator.setDuration(500);
             float initial = pointerX - radius - TEMP_RADIUS;

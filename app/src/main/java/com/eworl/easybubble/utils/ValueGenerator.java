@@ -79,10 +79,11 @@ public class ValueGenerator {
     private Double updatedAngleFor(int i) {
 
         angle = Math.toRadians((angleDifference * i) - diffY);
-        if(masterBubbleIsInRight){
-            angle = Math.toRadians((angleDifference * i) + diffY);
-            masterBubbleIsInRight = false;
-        }
+//        if(masterBubbleIsInRight){
+//            Log.d(TAG, "masterBubbleIsInRight: "+masterBubbleIsInRight);
+//            angle = Math.toRadians((angleDifference * i) + diffY);
+//            masterBubbleIsInRight = false;
+//        }
         Log.d(TAG, "getAngleFor: " + " is " + angle);
         return angle;
     }

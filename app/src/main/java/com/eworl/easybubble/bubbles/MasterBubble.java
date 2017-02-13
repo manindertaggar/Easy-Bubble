@@ -11,11 +11,10 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.eworl.easybubble.LayoutParamGenerator;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
-import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
+import com.eworl.easybubble.eventBus.StaticSubBubbleCoordinatesEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
 

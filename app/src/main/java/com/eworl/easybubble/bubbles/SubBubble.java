@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
+import com.eworl.easybubble.eventBus.StaticSubBubbleCoordinatesEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
 
@@ -82,6 +83,10 @@ public class SubBubble {
         float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
         diffY = pointerDownY - y;
+        if(x>350){
+            diffY = -(pointerDownY - y);
+        }
+
         rotateSubBubble();
         Log.d(TAG, "diffX: " + diffY / 10);
 
