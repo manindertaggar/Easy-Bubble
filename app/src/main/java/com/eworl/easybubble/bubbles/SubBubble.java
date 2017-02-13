@@ -117,7 +117,7 @@ public class SubBubble {
     }
 
     private void rotateSubBubble() {
-        EventBus.getDefault().post(new RotateSubBubbleEvent());
+        EventBus.getDefault().post(new RotateSubBubbleEvent(context,diffY));
 
     }
 

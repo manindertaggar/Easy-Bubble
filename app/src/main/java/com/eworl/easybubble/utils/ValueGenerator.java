@@ -6,6 +6,11 @@ import android.webkit.CookieManager;
 
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.bubbles.SubBubble;
+import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by root on 3/2/17.
@@ -21,11 +26,13 @@ public class ValueGenerator {
     private float SEPRATION_FRACTION = 1.2f;
     private int masterBubbleWidth;
     public Double angle;
+    private  float diffY;
     public ValueGenerator(Context context, int count) {
         this.context = context;
         this.count = count;
         angleDifference = 360 / count;
         calculateRadius();
+        EventBus.getDefault().register(this);
     }
 
     private void calculateRadius() {
@@ -66,10 +73,15 @@ public class ValueGenerator {
     }
 
     private Double updatedAngleFor(int i) {
-        CoordinateY coordinateY = new CoordinateY();
-        angle = Math.toRadians((angleDifference*i)-30);
+
+        angle = Math.toRadians((angleDifference*i)-diffY);
         Log.d(TAG, "getAngleFor: " + " is " + angle);
         return angle;
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(RotateSubBubbleEvent event) {
+      diffY =   event.diffY();
+
     }
 
 //    private Double rotationAngleFor(int i) {
