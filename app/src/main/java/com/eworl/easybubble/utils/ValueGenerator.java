@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.bubbles.SubBubble;
 
 /**
  * Created by root on 3/2/17.
@@ -48,7 +49,14 @@ public class ValueGenerator {
         coordinate.set(x, y);
         return coordinate;
     }
-
+//    public Coordinate getRotationCoordinatesFor(int i) {
+//        Coordinate coordinate = new Coordinate();
+//        double x = radius + radius * Math.cos(rotationAngleFor(i));
+//        double y = radius + radius * Math.sin(rotationAngleFor(i));
+//        Log.d("double updatedx"+x, "double updatedy "+y);
+//        coordinate.set(x, y);
+//        return coordinate;
+//    }
 
     private Double getAngleFor(int index) {
          angle = Math.toRadians((angleDifference * index));
@@ -57,10 +65,16 @@ public class ValueGenerator {
     }
 
     private Double updatedAngleFor(int i) {
-        angle = Math.toRadians((angleDifference+15)*i);
+        angle = Math.toRadians((angleDifference*i)-15);
         Log.d(TAG, "getAngleFor: " + " is " + angle);
         return angle;
     }
+
+//    private Double rotationAngleFor(int i) {
+//        angle = Math.toRadians((angleDifference*i)+subBubble.getDiffY());
+//        Log.d(TAG, "getAngleFor: " + " is " + angle);
+//        return angle;
+//    }
 
     public int getRadius() {
         return radius;

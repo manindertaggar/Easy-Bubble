@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.eworl.easybubble.LayoutParamGenerator;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
+import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
 import com.eworl.easybubble.eventBus.ToggleMasterBubbleEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
@@ -213,41 +214,53 @@ public class MasterBubble {
     }
 
     public void addSubBubble(SubBubble subBubble) {
-
         int index = subBubblesList.size();
-        Log.d(TAG, "index in master: "+index);
+        Log.d(TAG, "listIndex: " + index);
         Coordinate coordinate = valueGenerator.getCoordinatesFor(index);
         subBubble.setCoordinates(coordinate);
         flSubBubbleContainer.addView(subBubble.getView());
         subBubblesList.add(subBubble);
     }
 
-    public void updateSubBubble(SubBubble subBubble) {
-        for (int i = 1; i <= 8; i++) {
-            Log.d(TAG, "value of i: "+i);
+    public void updateSubBubble() {
+        for (int i = 0; i < 8; i++) {
+            int listSize = subBubblesList.size();
+            Log.d(TAG, "listSize: " + listSize);
+            Log.d(TAG, "value of i: " + i);
             Coordinate coordinate = valueGenerator.getUpdatedCoordinatesFor(i);
+            Log.d(TAG, "coordinate: " + coordinate);
+          SubBubble  subBubble = subBubblesList.get(i);
             subBubble.setCoordinates(coordinate);
 
         }
 
     }
 
-//    public void updateSubBubble(SubBubble subBubble) {
-//        FrameLayout fmSubBubbleView = subBubble.getLayout();
-//        FrameLayout.LayoutParams fmSubBubbleLayoutParams = (FrameLayout.LayoutParams) fmSubBubbleView.getLayoutParams();
-//
-//        fmSubBubbleLayoutParams.x = (int) (fmContentViewRadius + fmContentViewRadius * Math.cos(60));
-//        fmSubBubbleLayoutParams.y = (int) (fmContentViewRadius + fmContentViewRadius * Math.sin(60));
-//
-//        fmSubBubbleView.updateViewLayout(fmSubBubbleView, fmSubBubbleLayoutParams);
-//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ToggleMasterBubbleEvent event) {
-        toggle();
+
+        updateSubBubble();
     }
 
 //    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onMessageEvent(RotateSubBubbleEvent event) {
+//
+//        rotateSubBuble();
+//    }
+
+//    private void rotateSubBuble() {
+//        for (int i = 0; i < 8; i++) {
+//            int listSize = subBubblesList.size();
+//            Log.d(TAG, "listSize: " + listSize);
+//            Log.d(TAG, "value of i: " + i);
+//            Coordinate coordinate = valueGenerator.getRotationCoordinatesFor(i);
+//            Log.d(TAG, "coordinate: " + coordinate);
+//            SubBubble subBubble = subBubblesList.get(i);
+//            subBubble.setCoordinates(coordinate);
+//        }
+//    }
+    //    @Subscribe(threadMode = ThreadMode.MAIN)
 //    public void onMessageEvent(ToggleMasterBubbleEvent event) {
 //        toggle();
 //    }
