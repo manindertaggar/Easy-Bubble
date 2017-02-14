@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
+import com.eworl.easybubble.eventBus.StaticAngleDiff;
 import com.eworl.easybubble.eventBus.StaticSubBubbleCoordinatesEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
@@ -49,6 +49,7 @@ public class MasterBubble {
     private final static int STATUS_BAR_HEIGHT = 48;
     private ViewManager viewManager = ViewManager.getRunningInstance();
     private int index;
+    double istSubBubbleX,istSubBubbleY;
 
 
     public MasterBubble(Context context) {
@@ -147,8 +148,6 @@ public class MasterBubble {
                 })
                 .rotation(0);
         isOpen = false;
-//        setContentViewCoordinates();
-
     }
 
     void open() {
@@ -186,26 +185,6 @@ public class MasterBubble {
                 }).rotation(45);
 
         isOpen = true;
-//        setContentViewCoordinates();
-    }
-
-    private void setContentViewCoordinates() {
-
-        WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentView.getLayoutParams();
-        if (isOpen) {
-            if (touchListener.getLatestPointerX() < (screenWidth / 2)) {
-
-                fmContentViewParams.x = 0 - fmContentViewRadius;
-
-            } else {
-                fmContentViewParams.x = screenWidth - fmContentViewRadius - 100;
-            }
-            fmContentViewParams.y = touchListener.getLatestPointerY() - fmContentViewRadius - 100;
-
-            viewManager.updateViewLayout(fmContentView, fmContentViewParams);
-
-            Log.d(TAG, "setContentViewCoordinates: " + fmContentViewParams.x + " " + fmContentViewParams.y);
-        }
     }
 
 
@@ -220,6 +199,11 @@ public class MasterBubble {
         subBubble.setCoordinates(coordinate);
         flSubBubbleContainer.addView(subBubble.getView());
         subBubblesList.add(subBubble);
+        SubBubble subBubble1st = subBubblesList.get(0);
+        Coordinate coordinate1st = subBubble1st.getCoordinates();
+        istSubBubbleX =coordinate1st.getX();
+        istSubBubbleY =coordinate1st.getY();
+        Log.d("istSubBubbleY: "+istSubBubbleY, "istSubBubbleX: "+istSubBubbleX);
     }
 
     public void updateSubBubble() {
@@ -232,9 +216,39 @@ public class MasterBubble {
             SubBubble subBubble = subBubblesList.get(i);
             subBubble.setCoordinates(coordinate);
         }
+
         }
+    public void staticSubBubbleCoordinates() {
+        SubBubble subBubble1st = subBubblesList.get(0);
+        Coordinate coordinate1st = subBubble1st.getCoordinates();
+        double x2 =coordinate1st.getX();
+        double y2 =coordinate1st.getY();
+        Log.d("coordinateX "+x2,"coordinateY "+y2);
+        double angle =1 / Math.tan(Math.toRadians(y2-istSubBubbleY)/(x2-istSubBubbleX));
+        staticAngleDiff(angle);
+        Log.d(TAG, "angleeeeee "+angle);
+
+        for (int i = 0; i <=index; i++) {
+            int listSize = subBubblesList.size();
+            Log.d(TAG, "listSize: " + listSize);
+            Log.d(TAG, "value of i: " + i);
+            Coordinate coordinate = valueGenerator.getStaticSubBubbleCoordinatesFor(i);
+            Log.d(TAG, "coordinate: " + coordinate);
+            SubBubble  subBubble = subBubblesList.get(i);
+            subBubble.setCoordinates(coordinate);
+
+        }
+
+    }
+
+    private void staticAngleDiff(double angle) {
+        EventBus.getDefault().post(new StaticAngleDiff(context,angle));
+
+    }
+
+
 //    public void staticSubBubbleCoordinates() {
-//        for (int i = 0; i < 8; i++) {
+//        for (int i = 0; i <=index; i++) {
 //            int listSize = subBubblesList.size();
 //            Log.d(TAG, "listSize: " + listSize);
 //            Log.d(TAG, "value of i: " + i);
@@ -252,11 +266,11 @@ public class MasterBubble {
 
         updateSubBubble();
     }
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onMessageEvent(StaticSubBubbleCoordinatesEvent event) {
-//
-//        staticSubBubbleCoordinates();
-//    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StaticSubBubbleCoordinatesEvent event) {
+
+        staticSubBubbleCoordinates();
+    }
 
 //    @Subscribe(threadMode = ThreadMode.MAIN)
 //    public void onMessageEvent(RotateSubBubbleEvent event) {

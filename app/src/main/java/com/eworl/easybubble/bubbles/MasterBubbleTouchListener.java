@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.eworl.easybubble.ViewManager;
+import com.eworl.easybubble.eventBus.MasterBubbleInLeft;
 import com.eworl.easybubble.eventBus.MasterBubbleInRight;
 import com.eworl.easybubble.utils.ValueGenerator;
 
@@ -113,6 +114,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
 
         final WindowManager.LayoutParams fmContentViewParams = (WindowManager.LayoutParams) fmContentViewLayout.getLayoutParams();
         if (pointerX < (screenWidth / 2)) {
+            masterBubbleInLeft();
             ObjectAnimator objectAnimator = new ObjectAnimator();
             objectAnimator.setDuration(500);
             float init = pointerX - radius - TEMP_RADIUS;
@@ -136,7 +138,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
             });
             objectAnimator.start();
         } else {
-//            masterBubbleInRight();
+            masterBubbleInRight();
             ObjectAnimator objectAnimator = new ObjectAnimator();
             objectAnimator.setDuration(500);
             float initial = pointerX - radius - TEMP_RADIUS;
@@ -168,6 +170,9 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
 
     private void masterBubbleInRight() {
         EventBus.getDefault().post(new MasterBubbleInRight());
+    }
+    private void masterBubbleInLeft() {
+        EventBus.getDefault().post(new MasterBubbleInLeft());
     }
 
     private void masterBubbleClickListener() {

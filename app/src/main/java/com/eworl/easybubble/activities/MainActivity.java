@@ -27,12 +27,12 @@ ArrayList<Integer> imageIcons = new ArrayList<>();
          masterBubble = new MasterBubble(this);
         imageIcons.add(R.drawable.camera);
         imageIcons.add(R.drawable.locked);
-        imageIcons.add(R.drawable.mail);
+        imageIcons.add(R.drawable.plus);
         imageIcons.add(R.drawable.whatsapp);
         imageIcons.add(R.drawable.back);
         imageIcons.add(R.drawable.locked);
         imageIcons.add(R.drawable.whatsapp);
-        imageIcons.add(R.drawable.plus);
+        imageIcons.add(R.drawable.mail);
 
         for (int i = 0; i < 8; i++) {
             SubBubble subBubble = new SubBubble(this);

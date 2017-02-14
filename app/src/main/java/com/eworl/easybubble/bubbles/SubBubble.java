@@ -11,12 +11,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.eventBus.MasterBubbleInLeft;
+import com.eworl.easybubble.eventBus.MasterBubbleInRight;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
 import com.eworl.easybubble.eventBus.StaticSubBubbleCoordinatesEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import static android.content.ContentValues.TAG;
 
@@ -37,12 +41,15 @@ public class SubBubble {
     private int radius;
     private float diffY;
     private FrameLayout.LayoutParams fmContentViewParams;
+    private boolean masterBubbleInRight = false;
 
     public SubBubble(Context context) {
         this.context = context;
         masterBubble = new MasterBubble(context);
         valueGenerator = masterBubble.getValueGenerator();
         radius = valueGenerator.getRadius();
+        EventBus.getDefault().register(this);
+
 //        fmContentViewParams = (FrameLayout.LayoutParams) fmContentView.getLayoutParams();
         intializeViews();
         setListeners();
@@ -83,7 +90,7 @@ public class SubBubble {
         float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
         diffY = pointerDownY - y;
-        if(x>350){
+        if(masterBubbleInRight){
             diffY = -(pointerDownY - y);
         }
 
@@ -99,7 +106,7 @@ public class SubBubble {
         if (endTime - startTime < 200) {
             fmSubBubbleViewOnClick();
         }
-//        staticSubBubbleCoordinates();
+//       staticSubBubbleCoordinates();
     }
 
     private void staticSubBubbleCoordinates() {
@@ -126,6 +133,7 @@ public class SubBubble {
     private void performAction() {
 
         Toast.makeText(context, "Action Performed", Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -146,6 +154,17 @@ public class SubBubble {
     public ViewGroup.LayoutParams getParams() {
 
         return fmContentViewParams;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MasterBubbleInRight event) {
+        masterBubbleInRight  = true;
+
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MasterBubbleInLeft event) {
+        masterBubbleInRight  = false;
+
     }
 
     public Coordinate getCoordinates() {
