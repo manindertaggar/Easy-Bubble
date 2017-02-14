@@ -26,7 +26,7 @@ public class ValueGenerator {
     private int masterBubbleWidth;
     public Double angle;
     private  float diffY;
-    private double angleDiff;
+    private double updatedAngle;
     public ValueGenerator(Context context, int count) {
         this.context = context;
         this.count = count;
@@ -82,7 +82,7 @@ public class ValueGenerator {
     }
 
     private Double staticAngleFor(int i) {
-        double count = (int) ((angleDiff/45));
+        double count = (int) ((updatedAngle /angleDifference));
         Log.d(TAG, "staticAngleFor: "+count);
 //        int newAngle = count*45;
 //        angle = Math.toRadians((angleDifference*i)-diffY+newAngle);
@@ -96,14 +96,14 @@ public class ValueGenerator {
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(StaticAngleDiff event) {
-        angleDiff=  event.angleDiff();
+        updatedAngle =  event.angleDiff();
     }
 
 
 //    private Double rotationAngleFor(int i) {
-//        angleDiff = Math.toRadians((angleDifference*i)+subBubble.getDiffY());
-//        Log.d(TAG, "getAngleFor: " + " is " + angleDiff);
-//        return angleDiff;
+//        updatedAngle = Math.toRadians((angleDifference*i)+subBubble.getDiffY());
+//        Log.d(TAG, "getAngleFor: " + " is " + updatedAngle);
+//        return updatedAngle;
 //    }
 
     public int getRadius() {

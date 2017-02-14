@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/appsList"/>
+
+<ImageButton
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:id="@+id/addSubBubble"
+    android:src="@drawable/circle_plus"
+    android:background="#000"
+    android:scaleType="fitXY"
+    android:layout_marginTop="400dp"
+    android:layout_marginLeft="280dp"/>
+
+    <Button
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:text="Start Service"
+    android:onClick="startServive"
+    android:id="@+id/button"
+    android:layout_marginTop="470dp"/>
+
+</RelativeLayout>

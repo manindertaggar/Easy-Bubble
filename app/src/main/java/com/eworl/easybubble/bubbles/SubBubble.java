@@ -103,7 +103,7 @@ public class SubBubble {
     private void performeActionUp(MotionEvent motionEvent) {
         endTime = System.currentTimeMillis();
 
-        if (endTime - startTime < 200) {
+        if (endTime - startTime < 100) {
             fmSubBubbleViewOnClick();
         }
 //       staticSubBubbleCoordinates();
