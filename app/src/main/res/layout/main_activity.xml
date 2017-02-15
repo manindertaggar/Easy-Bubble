@@ -2,10 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/appsList"/>
+
+
+<android.support.v7.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:id="@+id/recyclerView">
+</android.support.v7.widget.RecyclerView>
+
 
 <ImageButton
     android:layout_width="50dp"
