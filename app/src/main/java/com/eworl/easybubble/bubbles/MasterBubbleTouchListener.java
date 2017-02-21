@@ -139,7 +139,7 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
             objectAnimator.start();
         } else {
             masterBubbleInRight();
-            ObjectAnimator objectAnimator = new ObjectAnimator();
+           ObjectAnimator objectAnimator = new ObjectAnimator();
             objectAnimator.setDuration(500);
             float initial = pointerX - radius - TEMP_RADIUS;
             float finalV = (float) (screenWidth - ((2 * TEMP_RADIUS)) - radius);
@@ -152,21 +152,23 @@ public class MasterBubbleTouchListener implements View.OnTouchListener {
                     float current = (int) value;
                     fmContentViewParams.x = (int) current;
                     fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius);
-                    if(pointerY<(2*TEMP_RADIUS)){
-                        fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius+(2*TEMP_RADIUS));
+                    if (pointerY < (2 * TEMP_RADIUS)) {
+                        fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius + (2 * TEMP_RADIUS));
                     }
-                    if(pointerY>(screenHeight-TEMP_RADIUS)){
-                        fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius-TEMP_RADIUS);
+                    if (pointerY > (screenHeight - TEMP_RADIUS)) {
+                        fmContentViewParams.y = (int) (pointerY - (STATUS_BAR_HEIGHT + TEMP_RADIUS) - radius - TEMP_RADIUS);
                     }
                     viewManager.updateViewLayout(fmContentViewLayout, fmContentViewParams);
 
                 }
             });
-
             objectAnimator.start();
-        }
 
+
+        }
     }
+
+
 
     private void masterBubbleInRight() {
         EventBus.getDefault().post(new MasterBubbleInRight());

@@ -11,16 +11,6 @@
 </android.support.v7.widget.RecyclerView>
 
 
-<ImageButton
-    android:layout_width="50dp"
-    android:layout_height="50dp"
-    android:id="@+id/addSubBubble"
-    android:src="@drawable/circle_plus"
-    android:background="#000"
-    android:scaleType="fitXY"
-    android:layout_marginTop="400dp"
-    android:layout_marginLeft="280dp"/>
-
     <Button
     android:layout_width="match_parent"
     android:layout_height="50dp"

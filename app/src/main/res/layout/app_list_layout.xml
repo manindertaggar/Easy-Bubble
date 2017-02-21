@@ -2,23 +2,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:gravity="left|center">
-    <ImageView
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_margin="5dp"
-        android:src="@drawable/grey_circle"
-        android:id="@+id/appIconIV" />
-    <TextView
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_gravity="right"
-        android:layout_marginLeft="80dp"
-        android:text="Pawan Dhankher"
-        android:gravity="center|left"
-        android:id="@+id/appNameTV" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
+
+        <ImageView
+            android:id="@+id/appIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/action_settings"
+            android:src="@drawable/three"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/country_name"
+            android:layout_width="240dp"
+            android:layout_height="60dp"
+            android:textSize="13sp"
+            android:text="@string/country_name"
+            android:textColor="#fff"
+            android:gravity="center|left"
+            android:layout_marginLeft="60dp"
+            android:paddingLeft="30dp" />
+
+        <ImageView
+            android:id="@+id/addIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/action_settings"
+            android:src="@drawable/add"
+            android:background="#2df113"
+            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:padding="15dp"/>
+
     </RelativeLayout>
+
+
 </RelativeLayout>

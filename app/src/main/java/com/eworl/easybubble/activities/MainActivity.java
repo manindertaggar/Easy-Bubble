@@ -16,13 +16,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.eworl.easybubble.Adapter.AdapterClass;
+import com.eworl.easybubble.eventBus.ItemListEvevt;
+import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.LayoutParamGenerator;
 import com.eworl.easybubble.PermissionManager;
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.Adapter.RecyclerViewAdapter;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.bubbles.MasterBubble;
 import com.eworl.easybubble.bubbles.SubBubble;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,11 +42,12 @@ public class MainActivity extends Activity {
     private ViewManager viewManager;
     private TextView appsListTV;
     private ImageView imageIcon;
-    private RecyclerView recyclerView;
-    private AdapterClass adapterClass;
-    ArrayList<String> appNames;
-    ArrayList<Bitmap> appIcons;
-
+    String appName;
+    Drawable appIcon;
+    int listCount;
+    private LinearLayoutManager lLayout;
+    List<ItemObject> allItems;
+    List<ItemObject> rowListItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +56,20 @@ public class MainActivity extends Activity {
 
         startServiceButton = (Button) findViewById(R.id.button);
 
-
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        appNames = new ArrayList<>();
-        appIcons = new ArrayList<>();
         getInstalledApplication(this);
+        rowListItem = getAllItemList();
+        lLayout = new LinearLayoutManager(this);
+
+        RecyclerView rView = (RecyclerView)findViewById(R.id.recyclerView);
+        rView.setHasFixedSize(true);
+        rView.setLayoutManager(lLayout);
+
+        RecyclerViewAdapter rcAdapter = new RecyclerViewAdapter(MainActivity.this, rowListItem);
+        rView.setAdapter(rcAdapter);
 
 
-        adapterClass = new AdapterClass(this,appIcons,appNames);
-        recyclerView.setAdapter(adapterClass);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
 
 
 
@@ -93,7 +102,7 @@ public class MainActivity extends Activity {
     }
 
 
-    public List<ApplicationInfo> getInstalledApplication(Context context) {
+    public void getInstalledApplication(Context context) {
         PackageManager packageManager = context.getPackageManager();
         List<ApplicationInfo> apps = packageManager.getInstalledApplications(0);
         List<ApplicationInfo> appInfoList = new ArrayList();
@@ -105,20 +114,29 @@ public class MainActivity extends Activity {
         }
         Collections.sort(appInfoList, new ApplicationInfo.DisplayNameComparator(packageManager));
         Log.d(TAG, "getInstalledApplication: " + appInfoList);
-        int count = appInfoList.size();
-        Log.d(TAG, "count: "+count);
-        for (int i = 0; i < count; i++) {
-            String label = (String) packageManager.getApplicationLabel(appInfoList.get(i));
-            appNames.add(label);
-            Drawable icon = packageManager.getApplicationIcon(appInfoList.get(i));
-            Bitmap myLogo = ((BitmapDrawable) icon).getBitmap();
-            appIcons.add(myLogo);
-//            imageIcon.setImageBitmap(myLogo);
+        int listCount = appInfoList.size();
+        Log.d(TAG, "count: "+listCount);
+         allItems = new ArrayList<ItemObject>();
+        for (int i = 0; i < listCount; i++) {
+            appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
+            appIcon = packageManager.getApplicationIcon(appInfoList.get(i));
+            Bitmap myLogo = ((BitmapDrawable) appIcon).getBitmap();
+
+            allItems.add(new ItemObject(appName, appIcon, R.drawable.plus));
+
             Log.d(TAG, "label: " + myLogo);
         }
-        return appInfoList;
+        EventBus.getDefault().post(new ItemListEvevt(allItems));
+
 
     }
+
+    public List<ItemObject> getAllItemList(){
+
+
+        return allItems;
+    }
+
 }
 
 
