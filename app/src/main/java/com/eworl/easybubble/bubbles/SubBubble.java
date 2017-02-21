@@ -1,6 +1,7 @@
 package com.eworl.easybubble.bubbles;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,7 +33,7 @@ public class SubBubble {
     private FrameLayout fmContentView, fmSubBubbleView;
     private ImageView ivIcon;
     private Context context;
-    private int iconId;
+    private Drawable iconId;
     private Coordinate coordinates;
     private float pointerDownY, pointerDownX;
     private ValueGenerator valueGenerator;
@@ -137,9 +138,9 @@ public class SubBubble {
     }
 
 
-    public void setIcon(int iconId) {
+    public void setIcon(Drawable iconId) {
         this.iconId = iconId;
-        ivIcon.setImageResource(iconId);
+        ivIcon.setImageDrawable(iconId);
     }
 
     public View getView() {

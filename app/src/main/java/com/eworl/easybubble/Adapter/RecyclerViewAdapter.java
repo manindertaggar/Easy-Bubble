@@ -1,6 +1,8 @@
 package com.eworl.easybubble.Adapter;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,11 +32,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         return rcv;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
         holder.appName.setText(itemList.get(position).getAppName());
         holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
-        holder.addIcon.setImageResource(itemList.get(position).getAddIcon());
+        holder.addIcon.setImageBitmap(itemList.get(position).getAddIcon());
+        holder.plusIcon.setImageBitmap(itemList.get(position).getPlusIcon());
     }
 
     @Override

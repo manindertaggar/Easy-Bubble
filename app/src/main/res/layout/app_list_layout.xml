@@ -6,7 +6,9 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/appIcon"
@@ -32,13 +34,21 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription="@string/action_settings"
-            android:src="@drawable/add"
             android:background="#2df113"
-            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/plus"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="8dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:padding="15dp"/>
+            android:id="@+id/plusIcon"
+            />
 
     </RelativeLayout>
 
