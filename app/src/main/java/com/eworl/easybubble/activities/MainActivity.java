@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,10 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.eworl.easybubble.eventBus.ItemListEvevt;
+import com.eworl.easybubble.ViewHolder.RecyclerViewHolders;
+import com.eworl.easybubble.eventBus.ItemListEvent;
 import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.LayoutParamGenerator;
 import com.eworl.easybubble.PermissionManager;
@@ -72,12 +69,12 @@ public class MainActivity extends Activity {
         rowListItem = getAllItemList();
         lLayout = new LinearLayoutManager(this);
 
-        RecyclerView rView = (RecyclerView)findViewById(R.id.recyclerView);
-        rView.setHasFixedSize(true);
-        rView.setLayoutManager(lLayout);
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(lLayout);
 
-        RecyclerViewAdapter rcAdapter = new RecyclerViewAdapter(MainActivity.this, rowListItem);
-        rView.setAdapter(rcAdapter);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, rowListItem);
+        recyclerView.setAdapter(recyclerViewAdapter);
 
 
         viewManager = ViewManager.init(this);
@@ -97,6 +94,7 @@ public class MainActivity extends Activity {
     }
 
     public void startServive(View view) {
+
         viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
 //        finish();
     }
@@ -121,18 +119,13 @@ public class MainActivity extends Activity {
             appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
             appIcon = packageManager.getApplicationIcon(appInfoList.get(i));
 //            Bitmap myLogo = ((BitmapDrawable) appIcon).getBitmap();
-
             allItems.add(new ItemObject(appName, appIcon,greenBitmap,plusBitmap));
-
-//            Log.d(TAG, "appName: " + appName);
+            Log.d(TAG, "appName: " + appName);
         }
-        EventBus.getDefault().post(new ItemListEvevt(allItems));
-
-
+        EventBus.getDefault().post(new ItemListEvent(allItems));
     }
 
     public List<ItemObject> getAllItemList(){
-
 
         return allItems;
     }

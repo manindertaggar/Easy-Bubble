@@ -24,4 +24,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.+'
     compile 'com.android.support:design:25.0.+'
     compile 'de.greenrobot:greendao:2.1.0'
-    compile 'de.greenrobot:greendao-generator:2.1.0'}
+    }
