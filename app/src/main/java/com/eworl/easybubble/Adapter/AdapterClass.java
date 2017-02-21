@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.activities.MainActivity;
 
