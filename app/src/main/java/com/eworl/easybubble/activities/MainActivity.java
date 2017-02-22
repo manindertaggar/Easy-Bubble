@@ -45,10 +45,6 @@ public class MainActivity extends Activity {
     private LinearLayoutManager lLayout;
     private List<ItemObject> allItems;
     private List<ItemObject> rowListItem;
-    private Bitmap greenBitmap;
-    private Bitmap plusBitmap;
-    private ImageView greenIcon;
-    private ImageView plusIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +52,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main_activity);
 
         startServiceButton = (Button) findViewById(R.id.button);
-
-        View layoutView = LayoutInflater.from(this).inflate(R.layout.app_list_layout, null);
-        ImageView greenIcon = (ImageView)layoutView.findViewById(R.id.addIcon);
-        greenIcon.buildDrawingCache();
-         greenBitmap = greenIcon.getDrawingCache();
-        ImageView plusIcon = (ImageView)layoutView.findViewById(R.id.plusIcon);
-        plusIcon.buildDrawingCache();
-        plusBitmap = plusIcon.getDrawingCache();
 
         getInstalledApplication(this);
         rowListItem = getAllItemList();
@@ -119,7 +107,7 @@ public class MainActivity extends Activity {
             appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
             appIcon = packageManager.getApplicationIcon(appInfoList.get(i));
 //            Bitmap myLogo = ((BitmapDrawable) appIcon).getBitmap();
-            allItems.add(new ItemObject(appName, appIcon,greenBitmap,plusBitmap));
+            allItems.add(new ItemObject(appName, appIcon,R.drawable.green_square,R.drawable.plus));
             Log.d(TAG, "appName: " + appName);
         }
         EventBus.getDefault().post(new ItemListEvent(allItems));

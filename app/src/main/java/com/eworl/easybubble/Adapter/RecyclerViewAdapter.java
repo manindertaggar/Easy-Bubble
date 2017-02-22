@@ -35,10 +35,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
+
+
         holder.appName.setText(itemList.get(position).getAppName());
         holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
-        holder.addIcon.setImageBitmap(itemList.get(position).getAddIcon());
-        holder.plusIcon.setImageBitmap(itemList.get(position).getPlusIcon());
+        holder.addIcon.setImageResource(itemList.get(position).getAddIcon());
+        holder.plusIcon.setImageResource(itemList.get(position).getPlusIcon());
     }
 
     @Override

@@ -2,6 +2,11 @@ package com.eworl.easybubble.ViewHolder;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +32,6 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View
     public ImageView addIcon;
     public ImageView plusIcon;
     List<ItemObject> itemList;
-    List<SelectedItemObject> selectedItemList;
     Context contaxt;
     private programDao programDao_object;
     private program program_object;
@@ -45,29 +49,26 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View
         appIcon = (ImageView) itemView.findViewById(R.id.appIcon);
         addIcon = (ImageView) itemView.findViewById(R.id.addIcon);
         plusIcon = (ImageView) itemView.findViewById(R.id.plusIcon);
+        insertDefaultList();
     }
+
+
+
 
 
     @Override
     public void onClick(View view) {
-        selectedItemList = new ArrayList<>();
-        selectedItemList.add(new SelectedItemObject("back", R.drawable.back));
-        selectedItemList.add(new SelectedItemObject("lock", R.drawable.locked));
-        selectedItemList.add(new SelectedItemObject("home", R.drawable.home));
-//        itemList.get(getAdapterPosition()).getAddIcon().setImageBitmap(R.drawable.add);//.setBackgroundColor(Color.RED);
-//        addIcon.setBackgroundColor(Color.RED);
 
-//        itemList.get(getAdapterPosition()).setAddIcon(R.drawable.facebook);
-//        addIcon.setImageResource(R.drawable.facebook);
-//        addIcon.setBackgroundColor(Color.RED);
-//        Toast.makeText(view.getContext(), "Clicked list Position = " + getPosition(), Toast.LENGTH_SHORT).show();
-        log_text = "pawan";
+        itemList.get(getAdapterPosition()).setAddIcon(R.drawable.red_square);
+        addIcon.setImageResource(R.drawable.red_square);
+      itemList.get(getAdapterPosition()).setPlusIcon(R.drawable.cross);
+        plusIcon.setImageResource(R.drawable.cross);
+        
         program_object = new program(null, itemList.get(getAdapterPosition()).getAppName(),null);// Class Object, Id is auto increment
         SaveToSQL(program_object);
 
-//        selectedItemList.add(new SelectedItemObject(itemList.get(getAdapterPosition()).getAppName(), Integer.parseInt(String.valueOf(itemList.get(getAdapterPosition()).getAppIcon()))));
         Toast.makeText(view.getContext(), itemList.get(getAdapterPosition()).getAppName() + "added to your list :-)", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "Count of selected items " + selectedItemList.size());
+        Log.d(TAG, "Count of selected items ");
     }
 
     private String getFromSQL() {
@@ -99,6 +100,12 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder implements View
         return masterSession.getProgramDao();
     }
 
+  public void insertDefaultList(){
+      programDao_object.insert(new program(null,"back", R.drawable.back));
+      programDao_object.insert(new program(null,"lock", R.drawable.locked));
+      programDao_object.insert(new program(null,"home", R.drawable.home));
+
+    }
 
 //    @Subscribe(threadMode = ThreadMode.MAIN)
 //    public void onMessageEvent(ItemListEvent evevt) {

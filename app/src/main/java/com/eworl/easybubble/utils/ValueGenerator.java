@@ -75,9 +75,9 @@ public class ValueGenerator {
     }
 
     private Double updatedAngleFor(int i) {
-
         angle = Math.toRadians((angleDifference * i)- diffY);
-        Log.d(TAG, "getAngleFor: " + " is " + angle);
+        Log.d(TAG, "getValueOfDiffY: " + diffY);
+
         return angle;
     }
 

@@ -10,10 +10,10 @@ public class ItemObject {
 
     private String appName;
     private Drawable appIcon;
-    private Bitmap addIcon;
-    private  Bitmap plusIcon;
+    private int addIcon;
+    private  int plusIcon;
 
-    public ItemObject(String appName, Drawable appIcon, Bitmap addIcon,Bitmap plusIcon) {
+    public ItemObject(String appName, Drawable appIcon, int addIcon, int plusIcon) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.addIcon = addIcon;
@@ -38,18 +38,18 @@ public class ItemObject {
         this.appIcon = appIcon;
     }
 
-    public Bitmap getAddIcon() {
+    public int getAddIcon() {
         return addIcon;
     }
 
-    public void setAddIcon(Bitmap addIcon) {
+    public void setAddIcon(int addIcon) {
         this.addIcon = addIcon;
     }
-    public Bitmap getPlusIcon() {
+    public int getPlusIcon() {
         return plusIcon;
     }
 
-    public void setPlusIcon(Bitmap plusIcon) {
+    public void setPlusIcon(int plusIcon) {
         this.plusIcon = plusIcon;
     }
 }
