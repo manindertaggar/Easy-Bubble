@@ -11,7 +11,10 @@ public class Main {
         Entity program = schema.addEntity("program");
         program.addIdProperty();
         program.addStringProperty("appName");
-        program.addIntProperty("appIcon");
+        program.addStringProperty("appIcon");
+        program.addIntProperty("greenIcon");
+        program.addIntProperty("plusIcon");
+        program.addStringProperty("packageName").unique();
         DaoGenerator dg = new DaoGenerator();
         dg.generateAll(schema,"./app/src/main/java");
     }

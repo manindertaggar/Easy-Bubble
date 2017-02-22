@@ -30,7 +30,7 @@
             android:paddingLeft="30dp" />
 
         <ImageView
-            android:id="@+id/addIcon"
+            android:id="@+id/greenIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription="@string/action_settings"

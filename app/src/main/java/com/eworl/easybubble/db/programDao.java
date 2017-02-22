@@ -25,7 +25,10 @@ public class programDao extends AbstractDao<program, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property AppName = new Property(1, String.class, "appName", false, "APP_NAME");
-        public final static Property AppIcon = new Property(2, Integer.class, "appIcon", false, "APP_ICON");
+        public final static Property AppIcon = new Property(2, String.class, "appIcon", false, "APP_ICON");
+        public final static Property GreenIcon = new Property(3, Integer.class, "greenIcon", false, "GREEN_ICON");
+        public final static Property PlusIcon = new Property(4, Integer.class, "plusIcon", false, "PLUS_ICON");
+        public final static Property PackageName = new Property(5, String.class, "packageName", false, "PACKAGE_NAME");
     };
 
 
@@ -43,7 +46,10 @@ public class programDao extends AbstractDao<program, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"PROGRAM\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"APP_NAME\" TEXT," + // 1: appName
-                "\"APP_ICON\" INTEGER);"); // 2: appIcon
+                "\"APP_ICON\" TEXT," + // 2: appIcon
+                "\"GREEN_ICON\" INTEGER," + // 3: greenIcon
+                "\"PLUS_ICON\" INTEGER," + // 4: plusIcon
+                "\"PACKAGE_NAME\" TEXT UNIQUE );"); // 5: packageName
     }
 
     /** Drops the underlying database table. */
@@ -67,9 +73,24 @@ public class programDao extends AbstractDao<program, Long> {
             stmt.bindString(2, appName);
         }
  
-        Integer appIcon = entity.getAppIcon();
+        String appIcon = entity.getAppIcon();
         if (appIcon != null) {
-            stmt.bindLong(3, appIcon);
+            stmt.bindString(3, appIcon);
+        }
+ 
+        Integer greenIcon = entity.getGreenIcon();
+        if (greenIcon != null) {
+            stmt.bindLong(4, greenIcon);
+        }
+ 
+        Integer plusIcon = entity.getPlusIcon();
+        if (plusIcon != null) {
+            stmt.bindLong(5, plusIcon);
+        }
+ 
+        String packageName = entity.getPackageName();
+        if (packageName != null) {
+            stmt.bindString(6, packageName);
         }
     }
 
@@ -85,7 +106,10 @@ public class programDao extends AbstractDao<program, Long> {
         program entity = new program( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // appName
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2) // appIcon
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // appIcon
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // greenIcon
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // plusIcon
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // packageName
         );
         return entity;
     }
@@ -95,7 +119,10 @@ public class programDao extends AbstractDao<program, Long> {
     public void readEntity(Cursor cursor, program entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setAppName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setAppIcon(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setAppIcon(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setGreenIcon(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setPlusIcon(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setPackageName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     /** @inheritdoc */

@@ -14,8 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-
-import com.eworl.easybubble.ViewHolder.RecyclerViewHolders;
 import com.eworl.easybubble.eventBus.ItemListEvent;
 import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.LayoutParamGenerator;
@@ -39,12 +37,13 @@ public class MainActivity extends Activity {
     private MasterBubble masterBubble;
     private Button startServiceButton;
     private ViewManager viewManager;
-    private String appName;
+    private String appName,packageName;
     private Drawable appIcon;
     private int listCount;
     private LinearLayoutManager lLayout;
     private List<ItemObject> allItems;
     private List<ItemObject> rowListItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +75,6 @@ public class MainActivity extends Activity {
             SubBubble subBubble = new SubBubble(this);
             subBubble.setIcon(allItems.get(i).getAppIcon());
             masterBubble.addSubBubble(subBubble);
-
         }
 
     }
@@ -106,8 +104,9 @@ public class MainActivity extends Activity {
         for (int i = 0; i < listCount; i++) {
             appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
             appIcon = packageManager.getApplicationIcon(appInfoList.get(i));
-//            Bitmap myLogo = ((BitmapDrawable) appIcon).getBitmap();
-            allItems.add(new ItemObject(appName, appIcon,R.drawable.green_square,R.drawable.plus));
+            packageName =appInfoList.get(i).packageName;
+            allItems.add(new ItemObject(appName, appIcon,R.drawable.green_square,R.drawable.plus,packageName));
+//            programDao_object.insert(new program(appName,,R.drawable.green_square,R.drawable.plus,packageName));
             Log.d(TAG, "appName: " + appName);
         }
         EventBus.getDefault().post(new ItemListEvent(allItems));

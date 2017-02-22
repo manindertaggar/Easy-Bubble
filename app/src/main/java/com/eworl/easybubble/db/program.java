@@ -8,7 +8,10 @@ public class program {
 
     private Long id;
     private String appName;
-    private Integer appIcon;
+    private String appIcon;
+    private Integer greenIcon;
+    private Integer plusIcon;
+    private String packageName;
 
     public program() {
     }
@@ -17,10 +20,13 @@ public class program {
         this.id = id;
     }
 
-    public program(Long id, String appName, Integer appIcon) {
+    public program(Long id, String appName, String appIcon, Integer greenIcon, Integer plusIcon, String packageName) {
         this.id = id;
         this.appName = appName;
         this.appIcon = appIcon;
+        this.greenIcon = greenIcon;
+        this.plusIcon = plusIcon;
+        this.packageName = packageName;
     }
 
     public Long getId() {
@@ -39,12 +45,36 @@ public class program {
         this.appName = appName;
     }
 
-    public Integer getAppIcon() {
+    public String getAppIcon() {
         return appIcon;
     }
 
-    public void setAppIcon(Integer appIcon) {
+    public void setAppIcon(String appIcon) {
         this.appIcon = appIcon;
+    }
+
+    public Integer getGreenIcon() {
+        return greenIcon;
+    }
+
+    public void setGreenIcon(Integer greenIcon) {
+        this.greenIcon = greenIcon;
+    }
+
+    public Integer getPlusIcon() {
+        return plusIcon;
+    }
+
+    public void setPlusIcon(Integer plusIcon) {
+        this.plusIcon = plusIcon;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
 }
