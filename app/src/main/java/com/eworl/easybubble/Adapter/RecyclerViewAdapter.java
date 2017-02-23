@@ -47,20 +47,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @Override
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
 
-        programDao programDao_object = holder.setupDb();
-        log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
-
-        for (int i =0;i<log_list.size();i++) {
-            log_list.get(i).getPackageName();
-            Log.d(TAG, "package namesssssss: "+(log_list.get(i).getPackageName()));
-        }
-
-      if((itemList.get(position).getPackagename()).equals(log_list.get(1).getPackageName())){
-          holder.appName.setText(itemList.get(position).getAppName());
-          holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
-          holder.addIcon.setImageResource(itemList.get(position).getRedIcon());
-          holder.plusIcon.setImageResource(itemList.get(position).getCrossIcon());
-      }else
+//        programDao programDao_object = holder.setupDb();
+//        log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
+//
+//        for (int i =0;i<log_list.size();i++) {
+//            log_list.get(i).getPackageName();
+//            Log.d(TAG, "package namesssssss: "+(log_list.get(i).getPackageName()));
+//        }
+//
+//      if((itemList.get(position).getPackagename()).equals(log_list.get(1).getPackageName())){
+//          holder.appName.setText(itemList.get(position).getAppName());
+//          holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
+//          holder.addIcon.setImageResource(itemList.get(position).getRedIcon());
+//          holder.plusIcon.setImageResource(itemList.get(position).getCrossIcon());
+//      }else
 
         holder.appName.setText(itemList.get(position).getAppName());
         holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
