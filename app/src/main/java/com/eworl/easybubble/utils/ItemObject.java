@@ -10,13 +10,17 @@ public class ItemObject {
     private int greenIcon;
     private  int plusIcon;
     private String packagename;
+    private int redIcon;
+    private int crossIcon;
 
-    public ItemObject(String appName, Drawable appIcon, int greenIcon, int plusIcon, String packagename) {
+    public ItemObject(String appName, Drawable appIcon, int greenIcon, int plusIcon, String packagename, int redIcon, int crossIcon) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.greenIcon = greenIcon;
         this.plusIcon = plusIcon;
         this.packagename = packagename;
+        this.redIcon = redIcon;
+        this.crossIcon = crossIcon;
     }
 
 
@@ -58,5 +62,21 @@ public class ItemObject {
 
     public void setPackagename(String packagename) {
         this.packagename = packagename;
+    }
+
+    public int getRedIcon() {
+        return redIcon;
+    }
+
+    public void setRedIcon(int redIcon) {
+        this.redIcon = redIcon;
+    }
+
+    public int getCrossIcon() {
+        return crossIcon;
+    }
+
+    public void setCrossIcon(int crossIcon) {
+        this.crossIcon = crossIcon;
     }
 }

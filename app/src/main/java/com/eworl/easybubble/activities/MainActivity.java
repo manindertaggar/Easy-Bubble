@@ -71,6 +71,7 @@ public class MainActivity extends Activity {
         masterBubble = new MasterBubble(this);
 
 
+
         for (int i = 0; i < 8; i++) {
             SubBubble subBubble = new SubBubble(this);
             subBubble.setIcon(allItems.get(i).getAppIcon());
@@ -105,9 +106,9 @@ public class MainActivity extends Activity {
             appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
             appIcon = packageManager.getApplicationIcon(appInfoList.get(i));
             packageName =appInfoList.get(i).packageName;
-            allItems.add(new ItemObject(appName, appIcon,R.drawable.green_square,R.drawable.plus,packageName));
-//            programDao_object.insert(new program(appName,,R.drawable.green_square,R.drawable.plus,packageName));
-            Log.d(TAG, "appName: " + appName);
+            allItems.add(new ItemObject(appName, appIcon,R.drawable.green_square,R.drawable.plus,packageName,R.drawable.red_square,R.drawable.cross));
+
+            Log.d(TAG, "packageName: " + packageName);
         }
         EventBus.getDefault().post(new ItemListEvent(allItems));
     }
