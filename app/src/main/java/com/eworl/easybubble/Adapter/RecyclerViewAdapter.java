@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.eworl.easybubble.ViewHolder.ViewClickListener;
 import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.db.programDao;
@@ -27,19 +28,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     private Context context;
     private List<program> log_list;
 
-    public RecyclerViewAdapter(Context context, List<ItemObject> itemList) {
+    public RecyclerViewAdapter(Context context, List<ItemObject> itemList, List<program> log_list) {
         this.itemList = itemList;
         this.context = context;
+        this.log_list = log_list;
     }
-
-
-
 
     @Override
     public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_list_layout, null);
-        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView,context,itemList);
+        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView, context, itemList);
         return rcv;
     }
 
@@ -47,15 +46,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @Override
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
 
-//        programDao programDao_object = holder.setupDb();
-//        log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
-//
-//        for (int i =0;i<log_list.size();i++) {
-//            log_list.get(i).getPackageName();
-//            Log.d(TAG, "package namesssssss: "+(log_list.get(i).getPackageName()));
-//        }
-//
+
+
+//        Log.d(TAG, "onBindViewHolder: "+log_list.get(1).getAppName());
+
 //      if((itemList.get(position).getPackagename()).equals(log_list.get(1).getPackageName())){
+//        if(position ==5){
 //          holder.appName.setText(itemList.get(position).getAppName());
 //          holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
 //          holder.addIcon.setImageResource(itemList.get(position).getRedIcon());

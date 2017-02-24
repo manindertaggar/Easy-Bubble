@@ -14,7 +14,7 @@
             android:id="@+id/ivIcon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="13dp" />
+            android:layout_margin="10dp" />
 
     </FrameLayout>
 

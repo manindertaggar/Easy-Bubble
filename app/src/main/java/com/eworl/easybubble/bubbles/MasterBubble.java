@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
+import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
 import com.eworl.easybubble.eventBus.StaticAngleDiff;
 import com.eworl.easybubble.eventBus.StaticSubBubbleCoordinatesEvent;
@@ -23,6 +24,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by root on 3/2/17.
@@ -50,10 +52,13 @@ public class MasterBubble {
     private ViewManager viewManager = ViewManager.getRunningInstance();
     private int index;
     double istSubBubbleX,istSubBubbleY;
+    List<program> log_list;
 
 
-    public MasterBubble(Context context) {
+
+    public MasterBubble(Context context, List<program> log_list) {
         this.context = context;
+        this.log_list = log_list;
 
         intializeValueGenerator();
         intializeViews();
@@ -67,7 +72,7 @@ public class MasterBubble {
     }
 
     public void intializeValueGenerator() {
-        valueGenerator = new ValueGenerator(context, 8);
+        valueGenerator = new ValueGenerator(context, log_list.size());
         fmContentViewRadius = valueGenerator.getRadius();
     }
 

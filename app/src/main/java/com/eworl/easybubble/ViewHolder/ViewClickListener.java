@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.eworl.easybubble.Adapter.RecyclerViewAdapter;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
@@ -46,8 +47,9 @@ public class ViewClickListener implements View.OnClickListener {
         programDao_object = setupDb();
         log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
         count = log_list.size();
-    }
+//        insertDefaultList();
 
+    }
 
     @Override
     public void onClick(View view) {

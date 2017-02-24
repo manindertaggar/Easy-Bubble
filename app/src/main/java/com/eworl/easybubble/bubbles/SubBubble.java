@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.eventBus.MasterBubbleInLeft;
 import com.eworl.easybubble.eventBus.MasterBubbleInRight;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
@@ -22,6 +23,8 @@ import com.eworl.easybubble.utils.ValueGenerator;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -43,10 +46,12 @@ public class SubBubble {
     private float diffY;
     private FrameLayout.LayoutParams fmContentViewParams;
     private boolean masterBubbleInRight = false;
+    private List<program> log_list;
 
-    public SubBubble(Context context) {
+    public SubBubble(Context context, List<program> log_list) {
         this.context = context;
-        masterBubble = new MasterBubble(context);
+        this.log_list = log_list;
+        masterBubble = new MasterBubble(context,log_list);
         valueGenerator = masterBubble.getValueGenerator();
         radius = valueGenerator.getRadius();
         EventBus.getDefault().register(this);

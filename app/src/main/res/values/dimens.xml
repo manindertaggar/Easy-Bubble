@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="master_bubble_size">50dp</dimen>
-    <dimen name="sub_bubble_size">45dp</dimen>
+    <dimen name="sub_bubble_size">48dp</dimen>
 </resources>

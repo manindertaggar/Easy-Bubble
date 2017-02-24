@@ -1,30 +1,15 @@
 package com.eworl.easybubble.ViewHolder;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.eworl.easybubble.db.DaoMaster;
-import com.eworl.easybubble.db.DaoSession;
-import com.eworl.easybubble.db.program;
-import com.eworl.easybubble.db.programDao;
 import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.R;
-
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-import de.greenrobot.dao.query.QueryBuilder;
-
-public class RecyclerViewHolders extends RecyclerView.ViewHolder /*implements View.OnClickListener */ {
+public class RecyclerViewHolders extends RecyclerView.ViewHolder {
     private static final String TAG = "RecyclerViewHolder";
     public TextView appName;
     public ImageView appIcon;
@@ -32,23 +17,12 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder /*implements Vi
     public ImageView plusIcon;
     private List<ItemObject> itemList;
     private Context contaxt;
-//    private programDao programDao_object;
-//    private program program_object;
-//    private List<program> log_list;
-//    String log_text;  //Entered text data is save in this variable
-//    private final String DB_NAME = "logs-db";  //Name of Db file in the Device
-//    private boolean onClick = false;
-//    private DaoSession masterSession;
-//    private static int count;
     private ViewClickListener clickListener;
 
     public RecyclerViewHolders(View itemView, Context context, List<ItemObject> itemList) {
         super(itemView);
         this.itemList = itemList;
         this.contaxt = context;
-//        programDao_object = setupDb();
-//        log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
-//        count = log_list.size();
 
         clickListener = new ViewClickListener(context,itemList,this);
         itemView.setOnClickListener(clickListener);
