@@ -1,6 +1,7 @@
 package com.eworl.easybubble.bubbles;
 
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -82,12 +83,14 @@ public class MasterBubble {
 
     private void intializeViews() {
         fmContentView = (FrameLayout) LayoutInflater.from(context).inflate(R.layout.layout_master_bubble, null);
+
         flSubBubbleContainer = (FrameLayout) fmContentView.findViewById(R.id.flSubBubbleContainer);
         fmMasterBubble = (FrameLayout) fmContentView.findViewById(R.id.fmMasterBubble);
         fmOpenView = (FrameLayout) fmMasterBubble.findViewById(R.id.fmOpenView);
         fmCloseView = (FrameLayout) fmMasterBubble.findViewById(R.id.fmCloseView);
         innerRing = fmMasterBubble.findViewById(R.id.innerRing);
 
+//        subBubble = (FrameLayout) LayoutInflater.from(context).inflate(R.layout.layout_sub_bubble, null);
 
         setSubBubbleContainerDimentions();
 
@@ -123,6 +126,17 @@ public class MasterBubble {
     void close() {
         fmOpenView.clearAnimation();
         fmCloseView.clearAnimation();
+//        for (int i = 0; i <= index; i++){
+//            SubBubble subBubble1st = subBubblesList.get(i);
+//            Coordinate coordinate1st = subBubble1st.getCoordinates();
+//            istSubBubbleX =flSubBubbleContainer.getX();
+//            istSubBubbleY =flSubBubbleContainer.getY();
+//            Log.d("istSubBubbleX: "+istSubBubbleX,"istSubBubbleY: "+istSubBubbleY);
+//            subBubble1st.getView().animate().x((float) istSubBubbleX).y((float) istSubBubbleY).setDuration(300);
+////            ObjectAnimator objectAnimator = new ObjectAnimator();
+////            objectAnimator.setDuration(300);
+//
+//        }
         flSubBubbleContainer.setVisibility(View.INVISIBLE);
         isAnimationOngoing = true;
         fmCloseView.animate()
@@ -158,7 +172,13 @@ public class MasterBubble {
     void open() {
         fmOpenView.clearAnimation();
         fmCloseView.clearAnimation();
-
+//        for (int i = 0; i <= index; i++){
+//            SubBubble subBubble1st = subBubblesList.get(i);
+//            Coordinate coordinate1st = subBubble1st.getCoordinates();
+//            istSubBubbleX =coordinate1st.getX();
+//            istSubBubbleY =coordinate1st.getY();
+//            subBubble1st.getView().animate().x((float) istSubBubbleX).y((float) istSubBubbleY).setDuration(300);
+//        }
         flSubBubbleContainer.setVisibility(View.VISIBLE);
         fmOpenView.setVisibility(View.VISIBLE);
         isAnimationOngoing = true;
@@ -208,6 +228,7 @@ public class MasterBubble {
         Coordinate coordinate1st = subBubble1st.getCoordinates();
         istSubBubbleX =coordinate1st.getX();
         istSubBubbleY =coordinate1st.getY();
+
         Log.d("istSubBubbleY: "+istSubBubbleY, "istSubBubbleX: "+istSubBubbleX);
     }
 

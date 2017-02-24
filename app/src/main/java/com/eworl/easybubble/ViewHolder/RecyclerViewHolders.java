@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.R;
 import java.util.List;
@@ -18,13 +20,17 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder {
     private List<ItemObject> itemList;
     private Context contaxt;
     private ViewClickListener clickListener;
+    private MainActivity mainActivity;
+    private View itemView;
 
-    public RecyclerViewHolders(View itemView, Context context, List<ItemObject> itemList) {
+    public RecyclerViewHolders(View itemView, Context context, List<ItemObject> itemList, MainActivity mainActivity) {
         super(itemView);
         this.itemList = itemList;
         this.contaxt = context;
+        this.mainActivity = mainActivity;
+        this.itemView = itemView;
 
-        clickListener = new ViewClickListener(context,itemList,this);
+        clickListener = new ViewClickListener(contaxt,itemList,this,mainActivity);
         itemView.setOnClickListener(clickListener);
         appName = (TextView) itemView.findViewById(R.id.country_name);
         appIcon = (ImageView) itemView.findViewById(R.id.appIcon);
@@ -32,6 +38,7 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder {
         plusIcon = (ImageView) itemView.findViewById(R.id.plusIcon);
 //        insertDefaultList();
     }
+
 
 
 //    @Override

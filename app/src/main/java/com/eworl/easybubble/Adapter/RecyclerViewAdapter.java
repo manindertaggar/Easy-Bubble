@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.eworl.easybubble.ViewHolder.ViewClickListener;
+import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.db.programDao;
@@ -27,18 +28,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     private List<ItemObject> itemList;
     private Context context;
     private List<program> log_list;
+    private MainActivity mainActivity;
 
-    public RecyclerViewAdapter(Context context, List<ItemObject> itemList, List<program> log_list) {
+    public RecyclerViewAdapter(Context context, List<ItemObject> itemList, List<program> log_list, MainActivity mainActivity) {
         this.itemList = itemList;
         this.context = context;
         this.log_list = log_list;
+        this.mainActivity = mainActivity;
     }
 
     @Override
     public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_list_layout, null);
-        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView, context, itemList);
+        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView, context, itemList,mainActivity);
         return rcv;
     }
 

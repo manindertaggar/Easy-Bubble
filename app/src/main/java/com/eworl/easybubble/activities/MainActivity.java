@@ -14,16 +14,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
-import com.eworl.easybubble.ViewHolder.ViewClickListener;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.db.programDao;
+import com.eworl.easybubble.eventBus.BubbleServiceIsRunning;
 import com.eworl.easybubble.eventBus.ItemListEvent;
 import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.LayoutParamGenerator;
@@ -36,6 +34,7 @@ import com.eworl.easybubble.bubbles.SubBubble;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -69,11 +68,12 @@ public class MainActivity extends Activity {
 
     public void startServive(View view) {
         if (onClick) {
-            viewManager.removeView(masterBubble.getView());
+            stopService();
             onClick = false;
         } else {
             loadActivity();
             viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
+            EventBus.getDefault().post(new BubbleServiceIsRunning());
             onClick = true;
         }
 
@@ -127,16 +127,34 @@ public class MainActivity extends Activity {
         programDao programDao_object = setupDb();
         List<program> log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
         Log.d(TAG, "onCreate: " + log_list.size());
+
         getInstalledApplication(this);
 //        ViewClickListener viewClickListener = new ViewClickListener();
         rowListItem = getAllItemList();
+
+        //default bubbles for initial list------
+        for(int i=0;i<5;i++) {
+        Bitmap img = ((BitmapDrawable) rowListItem.get(i).getAppIcon()).getBitmap();
+        Log.d(TAG, "bitmap: " + img);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] imageInByte = stream.toByteArray();
+            String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+
+            try {
+                programDao_object.insert(new program(null, rowListItem.get(i).getAppName(), image, rowListItem.get(i).getGreenIcon(), rowListItem.get(i).getPlusIcon(), rowListItem.get(i).getPackagename()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
         lLayout = new LinearLayoutManager(this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lLayout);
 
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, rowListItem, log_list);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, rowListItem, log_list, this);
         recyclerView.setAdapter(recyclerViewAdapter);
 
 
@@ -161,6 +179,14 @@ public class MainActivity extends Activity {
 
     }
 
+    public void stopService() {
+        viewManager.removeView(masterBubble.getView());
+    }
+
+    public void reStartService() {
+        loadActivity();
+        viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
+    }
 
 }
 

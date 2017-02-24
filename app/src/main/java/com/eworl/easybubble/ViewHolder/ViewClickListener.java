@@ -11,11 +11,18 @@ import android.widget.Toast;
 
 import com.eworl.easybubble.Adapter.RecyclerViewAdapter;
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.db.programDao;
+import com.eworl.easybubble.eventBus.BubbleServiceIsRunning;
+import com.eworl.easybubble.eventBus.MasterBubbleInLeft;
 import com.eworl.easybubble.utils.ItemObject;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -39,11 +46,15 @@ public class ViewClickListener implements View.OnClickListener {
     private DaoSession masterSession;
     private RecyclerViewHolders holder;
     private static int count;
+    private MainActivity mainActivity;
+    private boolean bubbleServiceIsRunning = false;
 
-    public ViewClickListener(Context context, List<ItemObject> itemList, RecyclerViewHolders holder){
+    public ViewClickListener(Context context, List<ItemObject> itemList, RecyclerViewHolders holder, MainActivity mainActivity) {
         this.context = context;
         this.itemList = itemList;
         this.holder = holder;
+        this.mainActivity = mainActivity;
+        EventBus.getDefault().register(this);
         programDao_object = setupDb();
         log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
         count = log_list.size();
@@ -62,9 +73,14 @@ public class ViewClickListener implements View.OnClickListener {
             String pak = itemList.get(holder.getAdapterPosition()).getPackagename();
             Log.d(TAG, "pak: " + pak);
             DeleteFromSQL(pak);
-
             count = count - 1;
             Log.d(TAG, "count after remove" + count);
+
+            if (bubbleServiceIsRunning) {
+                mainActivity.stopService();
+                mainActivity.reStartService();
+            }
+
             onClick = false;
         } else {
             if (count < 9) {
@@ -82,11 +98,16 @@ public class ViewClickListener implements View.OnClickListener {
                 Log.d(TAG, "string: " + image);
                 program_object = new program(null, itemList.get(holder.getAdapterPosition()).getAppName(), image, itemList.get(holder.getAdapterPosition()).getGreenIcon(), itemList.get(holder.getAdapterPosition()).getPlusIcon(), itemList.get(holder.getAdapterPosition()).getPackagename());// Class Object, Id is auto increment
                 SaveToSQL(program_object);
-
                 Toast.makeText(view.getContext(), itemList.get(holder.getAdapterPosition()).getAppName() + " added to your list :-)", Toast.LENGTH_SHORT).show();
                 getFromSQL();
                 count = count + 1;
                 Log.d(TAG, "count after adding" + count);
+
+                if (bubbleServiceIsRunning) {
+                    mainActivity.stopService();
+                    mainActivity.reStartService();
+                }
+
                 onClick = true;
             } else {
                 Toast.makeText(context, "You have already selected 8 bubbles", Toast.LENGTH_SHORT).show();
@@ -166,5 +187,10 @@ public class ViewClickListener implements View.OnClickListener {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(BubbleServiceIsRunning event) {
+        bubbleServiceIsRunning = true;
+
+    }
 
 }
