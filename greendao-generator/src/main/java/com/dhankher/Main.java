@@ -15,6 +15,7 @@ public class Main {
         program.addIntProperty("greenIcon");
         program.addIntProperty("plusIcon");
         program.addStringProperty("packageName").unique();
+        program.addBooleanProperty("isClicked");
         DaoGenerator dg = new DaoGenerator();
         dg.generateAll(schema,"./app/src/main/java");
     }

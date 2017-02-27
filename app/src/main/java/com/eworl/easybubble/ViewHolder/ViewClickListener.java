@@ -8,7 +8,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.eworl.easybubble.Adapter.RecyclerViewAdapter;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.activities.MainActivity;
@@ -83,7 +82,7 @@ public class ViewClickListener implements View.OnClickListener {
 
             onClick = false;
         } else {
-            if (count < 9) {
+            if (count<15) {
                 Log.d(TAG, "count before adding" + count);
                 itemList.get(holder.getAdapterPosition()).setGreenIcon(R.drawable.red_square);
                 holder.addIcon.setImageResource(R.drawable.red_square);
@@ -96,7 +95,7 @@ public class ViewClickListener implements View.OnClickListener {
                 byte[] imageInByte = stream.toByteArray();
                 String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
                 Log.d(TAG, "string: " + image);
-                program_object = new program(null, itemList.get(holder.getAdapterPosition()).getAppName(), image, itemList.get(holder.getAdapterPosition()).getGreenIcon(), itemList.get(holder.getAdapterPosition()).getPlusIcon(), itemList.get(holder.getAdapterPosition()).getPackagename());// Class Object, Id is auto increment
+                program_object = new program(null, itemList.get(holder.getAdapterPosition()).getAppName(), image, itemList.get(holder.getAdapterPosition()).getGreenIcon(), itemList.get(holder.getAdapterPosition()).getPlusIcon(), itemList.get(holder.getAdapterPosition()).getPackagename(),true);// Class Object, Id is auto increment
                 SaveToSQL(program_object);
                 Toast.makeText(view.getContext(), itemList.get(holder.getAdapterPosition()).getAppName() + " added to your list :-)", Toast.LENGTH_SHORT).show();
                 getFromSQL();
@@ -175,17 +174,7 @@ public class ViewClickListener implements View.OnClickListener {
         return masterSession.getProgramDao();
     }
 
-    public void insertDefaultList() {
-        try {
-            programDao_object.insert(new program(null, "back", null, R.drawable.back, null, "back"));
-            programDao_object.insert(new program(null, "lock", null, R.drawable.locked, null, "lock"));
-            programDao_object.insert(new program(null, "home", null, R.drawable.home, null, "home"));
 
-        } catch (Exception E) {
-            E.printStackTrace();
-        }
-
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(BubbleServiceIsRunning event) {

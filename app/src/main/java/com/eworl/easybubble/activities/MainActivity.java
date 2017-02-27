@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
             appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
             appIcon = packageManager.getApplicationIcon(appInfoList.get(i));
             packageName = appInfoList.get(i).packageName;
-            allItems.add(new ItemObject(appName, appIcon, R.drawable.green_square, R.drawable.plus, packageName, R.drawable.red_square, R.drawable.cross));
+            allItems.add(new ItemObject(appName, appIcon, R.drawable.green_square, R.drawable.plus, packageName, R.drawable.red_square, R.drawable.cross,false));
 
             Log.d(TAG, "packageName: " + packageName);
         }
@@ -135,6 +135,7 @@ public class MainActivity extends Activity {
         //default bubbles for initial list------
         for(int i=0;i<5;i++) {
         Bitmap img = ((BitmapDrawable) rowListItem.get(i).getAppIcon()).getBitmap();
+            rowListItem.get(i).setClicked(true);
         Log.d(TAG, "bitmap: " + img);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             img.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -142,11 +143,16 @@ public class MainActivity extends Activity {
             String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
             try {
-                programDao_object.insert(new program(null, rowListItem.get(i).getAppName(), image, rowListItem.get(i).getGreenIcon(), rowListItem.get(i).getPlusIcon(), rowListItem.get(i).getPackagename()));
+                programDao_object.insert(new program(null, rowListItem.get(i).getAppName(), image, rowListItem.get(i).getGreenIcon(), rowListItem.get(i).getPlusIcon(), rowListItem.get(i).getPackagename(),true));
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+        }
+
+        for (int i=0;i<rowListItem.size();i++) {
+            Log.d(TAG, "listItemBoolean: " + rowListItem.get(i).isClicked());
         }
         lLayout = new LinearLayoutManager(this);
 
@@ -165,7 +171,7 @@ public class MainActivity extends Activity {
         masterBubble = new MasterBubble(this, log_list);
 
         for (int i = 0; i < log_list.size(); i++) {
-            SubBubble subBubble = new SubBubble(this, log_list);
+            SubBubble subBubble = new SubBubble(this, log_list,masterBubble);
             String img = log_list.get(i).getAppIcon();
             Log.d(TAG, "img:" + img);
             byte[] bitmapdata = Base64.decode(img, Base64.DEFAULT);

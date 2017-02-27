@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.eworl.easybubble.R;
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -40,19 +42,21 @@ public class SubBubble {
     private Coordinate coordinates;
     private float pointerDownY, pointerDownX;
     private ValueGenerator valueGenerator;
-    private MasterBubble masterBubble;
+    private MasterBubble masterBubble2nd;
     private long startTime, endTime;
     private int radius;
     private float diffY;
     private FrameLayout.LayoutParams fmContentViewParams;
     private boolean masterBubbleInRight = false;
     private List<program> log_list;
+    private MasterBubble masterBubble;
 
-    public SubBubble(Context context, List<program> log_list) {
+    public SubBubble(Context context, List<program> log_list,MasterBubble masterBubble) {
         this.context = context;
         this.log_list = log_list;
-        masterBubble = new MasterBubble(context,log_list);
-        valueGenerator = masterBubble.getValueGenerator();
+        this.masterBubble = masterBubble;
+        masterBubble2nd = new MasterBubble(context, log_list);
+        valueGenerator = masterBubble2nd.getValueGenerator();
         radius = valueGenerator.getRadius();
         EventBus.getDefault().register(this);
 
@@ -96,7 +100,7 @@ public class SubBubble {
         float x = motionEvent.getRawX();
         float y = motionEvent.getRawY();
         diffY = pointerDownY - y;
-        if(masterBubbleInRight){
+        if (masterBubbleInRight) {
             diffY = -(pointerDownY - y);
         }
 
@@ -110,7 +114,7 @@ public class SubBubble {
         endTime = System.currentTimeMillis();
 
         if (endTime - startTime < 100) {
-            fmSubBubbleViewOnClick();
+            fmSubBubbleViewOnClick(motionEvent);
         }
 //       staticSubBubbleCoordinates();
     }
@@ -119,9 +123,9 @@ public class SubBubble {
         EventBus.getDefault().post(new StaticSubBubbleCoordinatesEvent());
     }
 
-    private void fmSubBubbleViewOnClick() {
+    private void fmSubBubbleViewOnClick(MotionEvent motionEvent) {
 
-        performAction();
+        performAction(motionEvent);
     }
 
     private void performeActionDown(MotionEvent motionEvent) {
@@ -132,12 +136,15 @@ public class SubBubble {
     }
 
     private void rotateSubBubble() {
-        EventBus.getDefault().post(new RotateSubBubbleEvent(context,diffY));
+        EventBus.getDefault().post(new RotateSubBubbleEvent(context, diffY));
 
     }
 
-    private void performAction() {
+    private void performAction(MotionEvent motionEvent) {
+        ArrayList<SubBubble> subBubbleList =  masterBubble.getSubBubbleList();
+        subBubbleList.size();
 
+        Log.d(TAG, "SubBubbleList size: " + subBubbleList.size());
         Toast.makeText(context, "Action Performed", Toast.LENGTH_SHORT).show();
 
     }
@@ -164,12 +171,13 @@ public class SubBubble {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MasterBubbleInRight event) {
-        masterBubbleInRight  = true;
+        masterBubbleInRight = true;
 
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MasterBubbleInLeft event) {
-        masterBubbleInRight  = false;
+        masterBubbleInRight = false;
 
     }
 

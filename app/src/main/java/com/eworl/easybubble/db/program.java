@@ -12,6 +12,7 @@ public class program {
     private Integer greenIcon;
     private Integer plusIcon;
     private String packageName;
+    private Boolean isClicked;
 
     public program() {
     }
@@ -20,13 +21,14 @@ public class program {
         this.id = id;
     }
 
-    public program(Long id, String appName, String appIcon, Integer greenIcon, Integer plusIcon, String packageName) {
+    public program(Long id, String appName, String appIcon, Integer greenIcon, Integer plusIcon, String packageName, Boolean isClicked) {
         this.id = id;
         this.appName = appName;
         this.appIcon = appIcon;
         this.greenIcon = greenIcon;
         this.plusIcon = plusIcon;
         this.packageName = packageName;
+        this.isClicked = isClicked;
     }
 
     public Long getId() {
@@ -75,6 +77,14 @@ public class program {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    public Boolean getIsClicked() {
+        return isClicked;
+    }
+
+    public void setIsClicked(Boolean isClicked) {
+        this.isClicked = isClicked;
     }
 
 }

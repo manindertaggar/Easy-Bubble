@@ -12,8 +12,9 @@ public class ItemObject {
     private String packagename;
     private int redIcon;
     private int crossIcon;
+    private boolean isClicked;
 
-    public ItemObject(String appName, Drawable appIcon, int greenIcon, int plusIcon, String packagename, int redIcon, int crossIcon) {
+    public ItemObject(String appName, Drawable appIcon, int greenIcon, int plusIcon, String packagename, int redIcon, int crossIcon,boolean isClicked) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.greenIcon = greenIcon;
@@ -21,6 +22,7 @@ public class ItemObject {
         this.packagename = packagename;
         this.redIcon = redIcon;
         this.crossIcon = crossIcon;
+        this.isClicked = isClicked;
     }
 
 
@@ -78,5 +80,13 @@ public class ItemObject {
 
     public void setCrossIcon(int crossIcon) {
         this.crossIcon = crossIcon;
+    }
+
+    public boolean isClicked() {
+        return isClicked;
+    }
+
+    public void setClicked(boolean isClicked) {
+        this.isClicked = isClicked;
     }
 }

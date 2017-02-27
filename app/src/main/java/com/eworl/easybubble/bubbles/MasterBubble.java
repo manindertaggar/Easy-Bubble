@@ -328,6 +328,9 @@ public class MasterBubble {
         int b = fmContentView.getWidth();
         Toast.makeText(context, "" + a + " " + b, Toast.LENGTH_SHORT).show();
     }
+    public ArrayList<SubBubble> getSubBubbleList(){
+        return subBubblesList;
+    }
 
 }
 

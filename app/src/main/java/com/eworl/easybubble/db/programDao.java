@@ -29,6 +29,7 @@ public class programDao extends AbstractDao<program, Long> {
         public final static Property GreenIcon = new Property(3, Integer.class, "greenIcon", false, "GREEN_ICON");
         public final static Property PlusIcon = new Property(4, Integer.class, "plusIcon", false, "PLUS_ICON");
         public final static Property PackageName = new Property(5, String.class, "packageName", false, "PACKAGE_NAME");
+        public final static Property IsClicked = new Property(6, Boolean.class, "isClicked", false, "IS_CLICKED");
     };
 
 
@@ -49,7 +50,8 @@ public class programDao extends AbstractDao<program, Long> {
                 "\"APP_ICON\" TEXT," + // 2: appIcon
                 "\"GREEN_ICON\" INTEGER," + // 3: greenIcon
                 "\"PLUS_ICON\" INTEGER," + // 4: plusIcon
-                "\"PACKAGE_NAME\" TEXT UNIQUE );"); // 5: packageName
+                "\"PACKAGE_NAME\" TEXT UNIQUE ," + // 5: packageName
+                "\"IS_CLICKED\" INTEGER);"); // 6: isClicked
     }
 
     /** Drops the underlying database table. */
@@ -92,6 +94,11 @@ public class programDao extends AbstractDao<program, Long> {
         if (packageName != null) {
             stmt.bindString(6, packageName);
         }
+ 
+        Boolean isClicked = entity.getIsClicked();
+        if (isClicked != null) {
+            stmt.bindLong(7, isClicked ? 1L: 0L);
+        }
     }
 
     /** @inheritdoc */
@@ -109,7 +116,8 @@ public class programDao extends AbstractDao<program, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // appIcon
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // greenIcon
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // plusIcon
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // packageName
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // packageName
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0 // isClicked
         );
         return entity;
     }
@@ -123,6 +131,7 @@ public class programDao extends AbstractDao<program, Long> {
         entity.setGreenIcon(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setPlusIcon(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setPackageName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setIsClicked(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
      }
     
     /** @inheritdoc */

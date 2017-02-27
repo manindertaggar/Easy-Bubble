@@ -41,7 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_list_layout, null);
-        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView, context, itemList,mainActivity);
+        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView, context, itemList,mainActivity,log_list);
         return rcv;
     }
 
@@ -50,11 +50,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
 
 
-
-//        Log.d(TAG, "onBindViewHolder: "+log_list.get(1).getAppName());
+        Log.d(TAG, "positionss: "+position);
+        for (int i=0;i<log_list.size();i++){
+        Log.d(TAG, "Packagename: "+log_list.get(i).getPackageName());
+        }
 
 //      if((itemList.get(position).getPackagename()).equals(log_list.get(1).getPackageName())){
-//        if(position ==5){
 //          holder.appName.setText(itemList.get(position).getAppName());
 //          holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
 //          holder.addIcon.setImageResource(itemList.get(position).getRedIcon());
