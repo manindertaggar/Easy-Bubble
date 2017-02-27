@@ -39,7 +39,6 @@ public class ViewClickListener implements View.OnClickListener {
     private programDao programDao_object;
     private program program_object;
     private List<program> log_list;
-    private boolean onClick = false;
     String log_text;  //Entered text data is save in this variable
     private final String DB_NAME = "logs-db";  //Name of Db file in the Device
     private DaoSession masterSession;
@@ -64,11 +63,12 @@ public class ViewClickListener implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         getFromSQL();
-        if (onClick) {
+        if (itemList.get(holder.getAdapterPosition()).isClicked()==true) {
             itemList.get(holder.getAdapterPosition()).setGreenIcon(R.drawable.green_square);
             holder.addIcon.setImageResource(R.drawable.green_square);
             itemList.get(holder.getAdapterPosition()).setPlusIcon(R.drawable.plus);
             holder.plusIcon.setImageResource(R.drawable.plus);
+            itemList.get(holder.getAdapterPosition()).setClicked(false);
             String pak = itemList.get(holder.getAdapterPosition()).getPackagename();
             Log.d(TAG, "pak: " + pak);
             DeleteFromSQL(pak);
@@ -80,14 +80,14 @@ public class ViewClickListener implements View.OnClickListener {
                 mainActivity.reStartService();
             }
 
-            onClick = false;
         } else {
-            if (count<15) {
+//            if (count<15) {
                 Log.d(TAG, "count before adding" + count);
                 itemList.get(holder.getAdapterPosition()).setGreenIcon(R.drawable.red_square);
                 holder.addIcon.setImageResource(R.drawable.red_square);
                 itemList.get(holder.getAdapterPosition()).setPlusIcon(R.drawable.cross);
                 holder.plusIcon.setImageResource(R.drawable.cross);
+            itemList.get(holder.getAdapterPosition()).setClicked(true);
                 Bitmap img = ((BitmapDrawable) itemList.get(holder.getAdapterPosition()).getAppIcon()).getBitmap();
                 Log.d(TAG, "bitmap: " + img);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -107,10 +107,10 @@ public class ViewClickListener implements View.OnClickListener {
                     mainActivity.reStartService();
                 }
 
-                onClick = true;
-            } else {
-                Toast.makeText(context, "You have already selected 8 bubbles", Toast.LENGTH_SHORT).show();
-            }
+
+//            } else {
+//                Toast.makeText(context, "You have already selected 8 bubbles", Toast.LENGTH_SHORT).show();
+//            }
 
         }
     }

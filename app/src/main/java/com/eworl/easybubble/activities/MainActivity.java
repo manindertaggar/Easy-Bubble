@@ -150,6 +150,16 @@ public class MainActivity extends Activity {
             }
 
         }
+        //already Added bubbles
+        for(int i=0;i<rowListItem.size();i++){
+        String pak = rowListItem.get(i).getPackagename();
+            for (int j=0;j<log_list.size();j++){
+           String pak1 = log_list.get(j).getPackageName();
+                if(pak.equals(pak1)){
+                    rowListItem.get(i).setClicked(true);
+                }
+            }
+        }
 
         for (int i=0;i<rowListItem.size();i++) {
             Log.d(TAG, "listItemBoolean: " + rowListItem.get(i).isClicked());

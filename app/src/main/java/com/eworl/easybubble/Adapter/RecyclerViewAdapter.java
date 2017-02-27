@@ -41,7 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_list_layout, null);
-        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView, context, itemList,mainActivity,log_list);
+        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView, context, itemList, mainActivity, log_list);
         return rcv;
     }
 
@@ -50,22 +50,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
 
 
-        Log.d(TAG, "positionss: "+position);
-        for (int i=0;i<log_list.size();i++){
-        Log.d(TAG, "Packagename: "+log_list.get(i).getPackageName());
+        Log.d(TAG, "positionss: " + position);
+        for (int i = 0; i < itemList.size(); i++) {
+            Log.d(TAG, "boolean: " + itemList.get(i).isClicked());
         }
 
-//      if((itemList.get(position).getPackagename()).equals(log_list.get(1).getPackageName())){
-//          holder.appName.setText(itemList.get(position).getAppName());
-//          holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
-//          holder.addIcon.setImageResource(itemList.get(position).getRedIcon());
-//          holder.plusIcon.setImageResource(itemList.get(position).getCrossIcon());
-//      }else
-
-        holder.appName.setText(itemList.get(position).getAppName());
-        holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
-        holder.addIcon.setImageResource(itemList.get(position).getGreenIcon());
-        holder.plusIcon.setImageResource(itemList.get(position).getPlusIcon());
+        if ((itemList.get(position).isClicked()) == true) {
+            holder.appName.setText(itemList.get(position).getAppName());
+            holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
+            holder.addIcon.setImageResource(R.drawable.red_square);
+            holder.plusIcon.setImageResource(R.drawable.cross);
+        } else {
+            holder.appName.setText(itemList.get(position).getAppName());
+            holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
+            holder.addIcon.setImageResource(itemList.get(position).getGreenIcon());
+            holder.plusIcon.setImageResource(itemList.get(position).getPlusIcon());
+        }
     }
 
     @Override
