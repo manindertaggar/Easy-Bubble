@@ -7,24 +7,15 @@ public class ItemObject {
 
     private String appName;
     private Drawable appIcon;
-    private int greenIcon;
-    private  int plusIcon;
     private String packagename;
-    private int redIcon;
-    private int crossIcon;
     private boolean isClicked;
 
-    public ItemObject(String appName, Drawable appIcon, int greenIcon, int plusIcon, String packagename, int redIcon, int crossIcon,boolean isClicked) {
+    public ItemObject(String appName, Drawable appIcon, String packagename, boolean isClicked) {
         this.appName = appName;
         this.appIcon = appIcon;
-        this.greenIcon = greenIcon;
-        this.plusIcon = plusIcon;
         this.packagename = packagename;
-        this.redIcon = redIcon;
-        this.crossIcon = crossIcon;
         this.isClicked = isClicked;
     }
-
 
 
     public String getAppName() {
@@ -43,43 +34,12 @@ public class ItemObject {
         this.appIcon = appIcon;
     }
 
-    public int getGreenIcon() {
-        return greenIcon;
-    }
-
-    public void setGreenIcon(int greenIcon) {
-        this.greenIcon = greenIcon;
-    }
-    public int getPlusIcon() {
-        return plusIcon;
-    }
-
-    public void setPlusIcon(int plusIcon) {
-        this.plusIcon = plusIcon;
-    }
-
     public String getPackagename() {
         return packagename;
     }
 
     public void setPackagename(String packagename) {
         this.packagename = packagename;
-    }
-
-    public int getRedIcon() {
-        return redIcon;
-    }
-
-    public void setRedIcon(int redIcon) {
-        this.redIcon = redIcon;
-    }
-
-    public int getCrossIcon() {
-        return crossIcon;
-    }
-
-    public void setCrossIcon(int crossIcon) {
-        this.crossIcon = crossIcon;
     }
 
     public boolean isClicked() {

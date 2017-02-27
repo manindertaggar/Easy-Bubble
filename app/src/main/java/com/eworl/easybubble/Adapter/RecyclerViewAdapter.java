@@ -58,13 +58,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         if ((itemList.get(position).isClicked()) == true) {
             holder.appName.setText(itemList.get(position).getAppName());
             holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
-            holder.addIcon.setImageResource(R.drawable.red_square);
-            holder.plusIcon.setImageResource(R.drawable.cross);
+
         } else {
             holder.appName.setText(itemList.get(position).getAppName());
             holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
-            holder.addIcon.setImageResource(itemList.get(position).getGreenIcon());
-            holder.plusIcon.setImageResource(itemList.get(position).getPlusIcon());
+
         }
     }
 

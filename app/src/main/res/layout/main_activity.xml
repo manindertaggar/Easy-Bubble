@@ -1,22 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-<android.support.v7.widget.RecyclerView
     android:layout_width="match_parent"
-    android:layout_height="450dp"
-    android:id="@+id/recyclerView">
-</android.support.v7.widget.RecyclerView>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Selected Apps"
+    android:textColor="#fff"
+    android:id="@+id/tv1"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvSelectedAppList"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tv1">
+    </android.support.v7.widget.RecyclerView>
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="All Apps"
+        android:textColor="#fff"
+        android:id="@+id/tv2"
+        android:layout_below="@id/rvSelectedAppList"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvAppList"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_below="@id/tv2"
+        android:layout_marginTop="10dp">
+    </android.support.v7.widget.RecyclerView>
     <Button
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:text="Start Service"
-    android:onClick="startServive"
-    android:id="@+id/button"
-    android:layout_marginTop="470dp"/>
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="470dp"
+        android:onClick="startServive"
+        android:text="Start Service" />
 
 </RelativeLayout>

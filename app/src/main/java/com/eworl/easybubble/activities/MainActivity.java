@@ -10,13 +10,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
@@ -31,7 +31,6 @@ import com.eworl.easybubble.Adapter.RecyclerViewAdapter;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.bubbles.MasterBubble;
 import com.eworl.easybubble.bubbles.SubBubble;
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayOutputStream;
@@ -43,13 +42,11 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends Activity {
 
-    private ArrayList<Integer> iconList = new ArrayList<>();
     private MasterBubble masterBubble;
     private Button startServiceButton;
     private ViewManager viewManager;
     private String appName, packageName;
     private Drawable appIcon;
-    private int listCount;
     private LinearLayoutManager lLayout;
     private List<ItemObject> allItems;
     private List<ItemObject> rowListItem;
@@ -101,7 +98,7 @@ public class MainActivity extends Activity {
             appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
             appIcon = packageManager.getApplicationIcon(appInfoList.get(i));
             packageName = appInfoList.get(i).packageName;
-            allItems.add(new ItemObject(appName, appIcon, R.drawable.green_square, R.drawable.plus, packageName, R.drawable.red_square, R.drawable.cross,false));
+            allItems.add(new ItemObject(appName, appIcon,packageName,false));
 
             Log.d(TAG, "packageName: " + packageName);
         }
@@ -143,7 +140,7 @@ public class MainActivity extends Activity {
             String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
             try {
-                programDao_object.insert(new program(null, rowListItem.get(i).getAppName(), image, rowListItem.get(i).getGreenIcon(), rowListItem.get(i).getPlusIcon(), rowListItem.get(i).getPackagename(),true));
+                programDao_object.insert(new program(null, rowListItem.get(i).getAppName(), image, rowListItem.get(i).getPackagename()));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -164,9 +161,9 @@ public class MainActivity extends Activity {
         for (int i=0;i<rowListItem.size();i++) {
             Log.d(TAG, "listItemBoolean: " + rowListItem.get(i).isClicked());
         }
-        lLayout = new LinearLayoutManager(this);
+        lLayout = new GridLayoutManager(this,4);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rvAppList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(lLayout);
 

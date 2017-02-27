@@ -64,14 +64,12 @@ public class ViewClickListener implements View.OnClickListener {
     public void onClick(View view) {
         getFromSQL();
         if (itemList.get(holder.getAdapterPosition()).isClicked()==true) {
-            itemList.get(holder.getAdapterPosition()).setGreenIcon(R.drawable.green_square);
-            holder.addIcon.setImageResource(R.drawable.green_square);
-            itemList.get(holder.getAdapterPosition()).setPlusIcon(R.drawable.plus);
-            holder.plusIcon.setImageResource(R.drawable.plus);
+
             itemList.get(holder.getAdapterPosition()).setClicked(false);
             String pak = itemList.get(holder.getAdapterPosition()).getPackagename();
             Log.d(TAG, "pak: " + pak);
             DeleteFromSQL(pak);
+            Toast.makeText(view.getContext(), itemList.get(holder.getAdapterPosition()).getAppName() + " removed from your list", Toast.LENGTH_SHORT).show();
             count = count - 1;
             Log.d(TAG, "count after remove" + count);
 
@@ -83,10 +81,7 @@ public class ViewClickListener implements View.OnClickListener {
         } else {
 //            if (count<15) {
                 Log.d(TAG, "count before adding" + count);
-                itemList.get(holder.getAdapterPosition()).setGreenIcon(R.drawable.red_square);
-                holder.addIcon.setImageResource(R.drawable.red_square);
-                itemList.get(holder.getAdapterPosition()).setPlusIcon(R.drawable.cross);
-                holder.plusIcon.setImageResource(R.drawable.cross);
+
             itemList.get(holder.getAdapterPosition()).setClicked(true);
                 Bitmap img = ((BitmapDrawable) itemList.get(holder.getAdapterPosition()).getAppIcon()).getBitmap();
                 Log.d(TAG, "bitmap: " + img);
@@ -95,9 +90,9 @@ public class ViewClickListener implements View.OnClickListener {
                 byte[] imageInByte = stream.toByteArray();
                 String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
                 Log.d(TAG, "string: " + image);
-                program_object = new program(null, itemList.get(holder.getAdapterPosition()).getAppName(), image, itemList.get(holder.getAdapterPosition()).getGreenIcon(), itemList.get(holder.getAdapterPosition()).getPlusIcon(), itemList.get(holder.getAdapterPosition()).getPackagename(),true);// Class Object, Id is auto increment
+                program_object = new program(null, itemList.get(holder.getAdapterPosition()).getAppName(), image, itemList.get(holder.getAdapterPosition()).getPackagename());// Class Object, Id is auto increment
                 SaveToSQL(program_object);
-                Toast.makeText(view.getContext(), itemList.get(holder.getAdapterPosition()).getAppName() + " added to your list :-)", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), itemList.get(holder.getAdapterPosition()).getAppName() + " added to your list", Toast.LENGTH_SHORT).show();
                 getFromSQL();
                 count = count + 1;
                 Log.d(TAG, "count after adding" + count);
