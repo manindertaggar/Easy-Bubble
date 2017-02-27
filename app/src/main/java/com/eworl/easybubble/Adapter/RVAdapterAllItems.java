@@ -9,28 +9,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.eworl.easybubble.ViewHolder.ViewClickListener;
 import com.eworl.easybubble.activities.MainActivity;
-import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
-import com.eworl.easybubble.db.programDao;
 import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.R;
-import com.eworl.easybubble.ViewHolder.RecyclerViewHolders;
+import com.eworl.easybubble.ViewHolder.RvHolderAllitems;
 
 import java.util.List;
 
-import de.greenrobot.dao.query.QueryBuilder;
+public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolderAllitems> {
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolders> {
-
-    private static final String TAG = "RecyclerViewAdapter";
+    private static final String TAG = "RvAdapterAllitems";
     private List<ItemObject> itemList;
     private Context context;
     private List<program> log_list;
     private MainActivity mainActivity;
 
-    public RecyclerViewAdapter(Context context, List<ItemObject> itemList, List<program> log_list, MainActivity mainActivity) {
+    public RvAdapterAllitems(Context context, List<ItemObject> itemList, List<program> log_list, MainActivity mainActivity) {
         this.itemList = itemList;
         this.context = context;
         this.log_list = log_list;
@@ -38,16 +33,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     }
 
     @Override
-    public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RvHolderAllitems onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_list_layout, null);
-        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView, context, itemList, mainActivity, log_list);
+        RvHolderAllitems rcv = new RvHolderAllitems(layoutView, context, itemList, mainActivity, log_list);
         return rcv;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void onBindViewHolder(RecyclerViewHolders holder, int position) {
+    public void onBindViewHolder(RvHolderAllitems holder, int position) {
 
 
         Log.d(TAG, "positionss: " + position);
@@ -55,15 +50,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
             Log.d(TAG, "boolean: " + itemList.get(i).isClicked());
         }
 
-        if ((itemList.get(position).isClicked()) == true) {
+//        if ((itemList.get(position).isClicked()) == true) {
+//            holder.appName.setText(itemList.get(position).getAppName());
+//            holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
+//
+//        } else {
             holder.appName.setText(itemList.get(position).getAppName());
             holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
 
-        } else {
-            holder.appName.setText(itemList.get(position).getAppName());
-            holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
-
-        }
+//        }
     }
 
     @Override

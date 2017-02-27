@@ -11,12 +11,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.eworl.easybubble.Adapter.RvAdapterAllitems;
+import com.eworl.easybubble.Adapter.RvAdapterSelectedItems;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
@@ -27,7 +29,6 @@ import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.LayoutParamGenerator;
 import com.eworl.easybubble.PermissionManager;
 import com.eworl.easybubble.R;
-import com.eworl.easybubble.Adapter.RecyclerViewAdapter;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.bubbles.MasterBubble;
 import com.eworl.easybubble.bubbles.SubBubble;
@@ -47,7 +48,8 @@ public class MainActivity extends Activity {
     private ViewManager viewManager;
     private String appName, packageName;
     private Drawable appIcon;
-    private LinearLayoutManager lLayout;
+    private GridLayoutManager glmAllApps;
+    private GridLayoutManager glmSelectedApps;
     private List<ItemObject> allItems;
     private List<ItemObject> rowListItem;
     private final String DB_NAME = "logs-db";
@@ -126,7 +128,7 @@ public class MainActivity extends Activity {
         Log.d(TAG, "onCreate: " + log_list.size());
 
         getInstalledApplication(this);
-//        ViewClickListener viewClickListener = new ViewClickListener();
+
         rowListItem = getAllItemList();
 
         //default bubbles for initial list------
@@ -161,14 +163,19 @@ public class MainActivity extends Activity {
         for (int i=0;i<rowListItem.size();i++) {
             Log.d(TAG, "listItemBoolean: " + rowListItem.get(i).isClicked());
         }
-        lLayout = new GridLayoutManager(this,4);
+        glmAllApps = new GridLayoutManager(this,4);
+        glmSelectedApps = new GridLayoutManager(this,4);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rvAppList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(lLayout);
+        RecyclerView rvAllApps = (RecyclerView) findViewById(R.id.rvAppList);
+        rvAllApps.setHasFixedSize(true);
+        rvAllApps.setLayoutManager(glmAllApps);
+        RvAdapterAllitems rvAllAppsAdapter = new RvAdapterAllitems(MainActivity.this, rowListItem, log_list, this);
+        rvAllApps.setAdapter(rvAllAppsAdapter);
 
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, rowListItem, log_list, this);
-        recyclerView.setAdapter(recyclerViewAdapter);
+        RecyclerView rvSelectedApps = (RecyclerView) findViewById(R.id.rvSelectedAppList);
+        rvSelectedApps.setLayoutManager(glmSelectedApps);
+        RvAdapterSelectedItems rvSelectedAppsAdapter = new RvAdapterSelectedItems(MainActivity.this, rowListItem, log_list, this);
+        rvSelectedApps.setAdapter(rvSelectedAppsAdapter);
 
 
         viewManager = ViewManager.init(this);
