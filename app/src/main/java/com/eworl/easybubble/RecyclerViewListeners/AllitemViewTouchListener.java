@@ -38,7 +38,7 @@ import de.greenrobot.dao.query.QueryBuilder;
  */
 
 public class AllitemViewTouchListener implements View.OnTouchListener {
-    private static final String TAG = "AllitemViewTouchListener";
+    private static final String TAG = "AllitemViewTouch";
     private Context context;
     private List<ItemObject> itemList;
     private programDao programDao_object;

@@ -33,7 +33,7 @@ import de.greenrobot.dao.query.QueryBuilder;
 
 public class SelectedItemViewClickListener implements View.OnClickListener {
 
-    private static final String TAG = "SelectedItemViewClickListener";
+    private static final String TAG = "SelectedViewListener";
     private Context context;
     private List<ItemObject> itemList;
     private programDao programDao_object;
@@ -62,13 +62,13 @@ public class SelectedItemViewClickListener implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        getFromSQL();
+//        getFromSQL();
         if (itemList.get(holder.getAdapterPosition()).isClicked()==true) {
 
-            itemList.get(holder.getAdapterPosition()).setClicked(false);
             String pak = itemList.get(holder.getAdapterPosition()).getPackagename();
             Log.d(TAG, "pak: " + pak);
             DeleteFromSQL(pak);
+            itemList.get(holder.getAdapterPosition()).setClicked(false);
             Toast.makeText(view.getContext(), itemList.get(holder.getAdapterPosition()).getAppName() + " removed from your list", Toast.LENGTH_SHORT).show();
             count = count - 1;
             Log.d(TAG, "count after remove" + count);
@@ -82,7 +82,6 @@ public class SelectedItemViewClickListener implements View.OnClickListener {
 //            if (count<15) {
             Log.d(TAG, "count before adding" + count);
 
-            itemList.get(holder.getAdapterPosition()).setClicked(true);
             Bitmap img = ((BitmapDrawable) itemList.get(holder.getAdapterPosition()).getAppIcon()).getBitmap();
             Log.d(TAG, "bitmap: " + img);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -92,8 +91,9 @@ public class SelectedItemViewClickListener implements View.OnClickListener {
             Log.d(TAG, "string: " + image);
             program_object = new program(null, itemList.get(holder.getAdapterPosition()).getAppName(), image, itemList.get(holder.getAdapterPosition()).getPackagename());// Class Object, Id is auto increment
             SaveToSQL(program_object);
+            itemList.get(holder.getAdapterPosition()).setClicked(true);
             Toast.makeText(view.getContext(), itemList.get(holder.getAdapterPosition()).getAppName() + " added to your list", Toast.LENGTH_SHORT).show();
-            getFromSQL();
+//            getFromSQL();
             count = count + 1;
             Log.d(TAG, "count after adding" + count);
 
