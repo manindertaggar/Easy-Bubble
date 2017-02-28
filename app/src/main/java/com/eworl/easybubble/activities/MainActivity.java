@@ -131,8 +131,9 @@ public class MainActivity extends Activity implements Listener {
     public programDao getProgramDaoInstance(){
         if(programDao_object != null){
             return programDao_object;
+        }else {
+            return setupDb();
         }
-        return setupDb();
     }
 
     private void loadActivity() {

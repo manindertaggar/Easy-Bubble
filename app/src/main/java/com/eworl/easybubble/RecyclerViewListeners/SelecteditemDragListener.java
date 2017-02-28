@@ -14,7 +14,9 @@ import android.view.View;
 import com.eworl.easybubble.Adapter.RvAdapterAllitems;
 import com.eworl.easybubble.Adapter.RvAdapterSelectedItems;
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.program;
+import com.eworl.easybubble.db.programDao;
 import com.eworl.easybubble.utils.ItemObject;
 
 import java.util.List;
@@ -29,9 +31,14 @@ public class SelecteditemDragListener implements View.OnDragListener {
     private Listener mListener;
     private boolean isDropped = false;
     private Context context;
-    public SelecteditemDragListener(Listener listener, Context context) {
+    private  MainActivity mainActivity;
+    private programDao programDaoObject;
+
+    public SelecteditemDragListener(Listener listener, Context context, MainActivity mainActivity) {
         this.mListener = listener;
         this.context = context;
+        this.mainActivity = mainActivity;
+        programDaoObject = mainActivity.getProgramDaoInstance();
 
     }
 

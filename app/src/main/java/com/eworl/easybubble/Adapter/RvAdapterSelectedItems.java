@@ -20,6 +20,7 @@ import com.eworl.easybubble.ViewHolder.RvHolderSelectedItems;
 import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.program;
+import com.eworl.easybubble.db.programDao;
 import com.eworl.easybubble.utils.ItemObject;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolderSelecte
     private List<program> log_list;
     private MainActivity mainActivity;
     private Listener mListener;
+
 
     public RvAdapterSelectedItems(Context context, List<ItemObject> itemList, List<program> log_list, MainActivity mainActivity,Listener listener) {
         this.itemList = itemList;

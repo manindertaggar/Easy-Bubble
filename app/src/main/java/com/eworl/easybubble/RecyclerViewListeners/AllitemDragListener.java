@@ -2,23 +2,21 @@ package com.eworl.easybubble.RecyclerViewListeners;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 
 import com.eworl.easybubble.Adapter.RvAdapterAllitems;
 import com.eworl.easybubble.Adapter.RvAdapterSelectedItems;
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.program;
+import com.eworl.easybubble.db.programDao;
 import com.eworl.easybubble.utils.ItemObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Dhankher on 2/28/2017.
@@ -26,9 +24,13 @@ import static android.content.ContentValues.TAG;
 public class AllitemDragListener implements View.OnDragListener {
     private Listener mListener;
     private boolean isDropped = false;
+    private MainActivity mainActivity;
+    private programDao programDaoObject;
 
-    public AllitemDragListener(Listener listener) {
+    public AllitemDragListener(Listener listener, MainActivity mainActivity) {
         this.mListener = listener;
+        this.mainActivity = mainActivity;
+        programDaoObject = mainActivity.getProgramDaoInstance();
     }
 
     @Override

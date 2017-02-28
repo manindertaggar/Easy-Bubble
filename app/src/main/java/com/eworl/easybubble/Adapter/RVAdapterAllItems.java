@@ -70,7 +70,7 @@ public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolderAllitems> {
                 return false;
             }
         });
-        holder.flRecycleViewItem.setOnDragListener(new AllitemDragListener(mListener));
+        holder.flRecycleViewItem.setOnDragListener(new AllitemDragListener(mListener,mainActivity));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolderAllitems> {
 
    public AllitemDragListener getDragInstance() {
         if (mListener != null) {
-            return new AllitemDragListener(mListener);
+            return new AllitemDragListener(mListener,mainActivity);
         } else {
             Log.e("ListAdapter", "Listener wasn't initialized!");
             return null;
