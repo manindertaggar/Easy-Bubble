@@ -3,6 +3,7 @@ package com.eworl.easybubble.ViewHolder;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class RvHolderSelectedItems extends RecyclerView.ViewHolder{
     private MainActivity mainActivity;
     private View itemView;
     private List<program> log_list;
+    public FrameLayout flRecycleViewItem;
 
     public RvHolderSelectedItems(View itemView, Context context, List<ItemObject> itemList, MainActivity mainActivity, List<program> log_list) {
         super(itemView);
@@ -41,6 +43,7 @@ public class RvHolderSelectedItems extends RecyclerView.ViewHolder{
         itemView.setOnClickListener(clickListener);
         appName = (TextView) itemView.findViewById(R.id.country_name);
         appIcon = (ImageView) itemView.findViewById(R.id.appIcon);
+        flRecycleViewItem = (FrameLayout) itemView.findViewById(R.id.flRecycleItem);
 
 
     }

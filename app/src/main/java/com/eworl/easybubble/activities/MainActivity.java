@@ -16,9 +16,11 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.eworl.easybubble.Adapter.RvAdapterAllitems;
 import com.eworl.easybubble.Adapter.RvAdapterSelectedItems;
+import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
@@ -41,7 +43,7 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Listener {
 
     private MasterBubble masterBubble;
     private Button startServiceButton;
@@ -54,11 +56,17 @@ public class MainActivity extends Activity {
     private List<ItemObject> rowListItem;
     private final String DB_NAME = "logs-db";
     private boolean onClick = false;
+    public TextView textEmptyListTop,textEmptyListBottom;
+    private RecyclerView rvSelectedApps,rvAllApps;
+    private programDao programDao_object;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        textEmptyListTop = (TextView) findViewById(R.id.TVSelectedItemListEmpty);
+        textEmptyListBottom = (TextView) findViewById(R.id.TVAllItemListEmpty);
 
         startServiceButton = (Button) findViewById(R.id.button);
         loadActivity();
@@ -120,10 +128,16 @@ public class MainActivity extends Activity {
 
         return masterSession.getProgramDao();
     }
+    public programDao getProgramDaoInstance(){
+        if(programDao_object != null){
+            return programDao_object;
+        }
+        return setupDb();
+    }
 
     private void loadActivity() {
 
-        programDao programDao_object = setupDb();
+       programDao_object = setupDb();
         List<program> log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
         Log.d(TAG, "onCreate: " + log_list.size());
 
@@ -132,10 +146,10 @@ public class MainActivity extends Activity {
         rowListItem = getAllItemList();
 
         //default bubbles for initial list------
-        for(int i=0;i<5;i++) {
-        Bitmap img = ((BitmapDrawable) rowListItem.get(i).getAppIcon()).getBitmap();
+        for (int i = 0; i < 5; i++) {
+            Bitmap img = ((BitmapDrawable) rowListItem.get(i).getAppIcon()).getBitmap();
             rowListItem.get(i).setClicked(true);
-        Log.d(TAG, "bitmap: " + img);
+            Log.d(TAG, "bitmap: " + img);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             img.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] imageInByte = stream.toByteArray();
@@ -150,33 +164,37 @@ public class MainActivity extends Activity {
 
         }
         //already Added bubbles
-        for(int i=0;i<rowListItem.size();i++){
-        String pak = rowListItem.get(i).getPackagename();
-            for (int j=0;j<log_list.size();j++){
-           String pak1 = log_list.get(j).getPackageName();
-                if(pak.equals(pak1)){
+        for (int i = 0; i < rowListItem.size(); i++) {
+            String pak = rowListItem.get(i).getPackagename();
+            for (int j = 0; j < log_list.size(); j++) {
+                String pak1 = log_list.get(j).getPackageName();
+                if (pak.equals(pak1)) {
                     rowListItem.get(i).setClicked(true);
                 }
             }
         }
 
-        for (int i=0;i<rowListItem.size();i++) {
+        for (int i = 0; i < rowListItem.size(); i++) {
             Log.d(TAG, "listItemBoolean: " + rowListItem.get(i).isClicked());
         }
-        glmAllApps = new GridLayoutManager(this,4);
-        glmSelectedApps = new GridLayoutManager(this,4);
+        glmAllApps = new GridLayoutManager(this, 4);
+        glmSelectedApps = new GridLayoutManager(this, 4);
 
-        RecyclerView rvAllApps = (RecyclerView) findViewById(R.id.rvAppList);
+        rvAllApps = (RecyclerView) findViewById(R.id.rvAppList);
         rvAllApps.setHasFixedSize(true);
         rvAllApps.setLayoutManager(glmAllApps);
-        RvAdapterAllitems rvAllAppsAdapter = new RvAdapterAllitems(MainActivity.this, rowListItem, log_list, this);
+        RvAdapterAllitems rvAllAppsAdapter = new RvAdapterAllitems(MainActivity.this, rowListItem, log_list, this,this);
         rvAllApps.setAdapter(rvAllAppsAdapter);
 
-        RecyclerView rvSelectedApps = (RecyclerView) findViewById(R.id.rvSelectedAppList);
+        rvSelectedApps = (RecyclerView) findViewById(R.id.rvSelectedAppList);
         rvSelectedApps.setLayoutManager(glmSelectedApps);
-        RvAdapterSelectedItems rvSelectedAppsAdapter = new RvAdapterSelectedItems(MainActivity.this, rowListItem, log_list, this);
+        RvAdapterSelectedItems rvSelectedAppsAdapter = new RvAdapterSelectedItems(MainActivity.this, rowListItem, log_list, this,this);
         rvSelectedApps.setAdapter(rvSelectedAppsAdapter);
 
+        textEmptyListTop.setOnDragListener(rvSelectedAppsAdapter.getDragInstance());
+        textEmptyListTop.setVisibility(View.GONE);
+        textEmptyListBottom.setOnDragListener(rvAllAppsAdapter.getDragInstance());
+        textEmptyListBottom.setVisibility(View.GONE);
 
         viewManager = ViewManager.init(this);
 
@@ -185,7 +203,7 @@ public class MainActivity extends Activity {
         masterBubble = new MasterBubble(this, log_list);
 
         for (int i = 0; i < log_list.size(); i++) {
-            SubBubble subBubble = new SubBubble(this, log_list,masterBubble);
+            SubBubble subBubble = new SubBubble(this, log_list, masterBubble);
             String img = log_list.get(i).getAppIcon();
             Log.d(TAG, "img:" + img);
             byte[] bitmapdata = Base64.decode(img, Base64.DEFAULT);
@@ -196,8 +214,19 @@ public class MainActivity extends Activity {
             masterBubble.addSubBubble(subBubble);
         }
 
-
     }
+    @Override
+    public void setEmptyListTop ( boolean visibility){
+        textEmptyListTop.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        rvSelectedApps.setVisibility(visibility ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    public void setEmptyListBottom ( boolean visibility){
+        textEmptyListBottom.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        rvAllApps.setVisibility(visibility ? View.GONE : View.VISIBLE);
+    }
+
 
     public void stopService() {
         viewManager.removeView(masterBubble.getView());

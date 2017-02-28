@@ -16,6 +16,15 @@
         android:layout_marginTop="10dp"
         android:layout_below="@+id/tv1">
     </android.support.v7.widget.RecyclerView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/TVSelectedItemListEmpty"
+        android:layout_marginTop="50dp"
+        android:text="Selected Items Are Empty"
+        android:textColor="#FFF"
+        android:gravity="center"
+        android:visibility="gone"/>
 
 
     <TextView
@@ -32,6 +41,17 @@
         android:layout_below="@id/tv2"
         android:layout_marginTop="10dp">
     </android.support.v7.widget.RecyclerView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/TVAllItemListEmpty"
+        android:layout_below="@+id/rvSelectedAppList"
+        android:layout_marginTop="50dp"
+        android:text="Selected Items Are Empty"
+        android:textColor="#FFF"
+        android:gravity="center"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"

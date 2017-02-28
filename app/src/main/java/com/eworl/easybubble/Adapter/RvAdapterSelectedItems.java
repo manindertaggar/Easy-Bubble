@@ -1,29 +1,28 @@
 package com.eworl.easybubble.Adapter;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.eworl.easybubble.R;
-import com.eworl.easybubble.ViewHolder.RvHolderAllitems;
+import com.eworl.easybubble.RecyclerViewListeners.SelecteditemDragListener;
 import com.eworl.easybubble.ViewHolder.RvHolderSelectedItems;
+import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.utils.ItemObject;
 
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Dhankher on 2/27/2017.
@@ -37,12 +36,14 @@ public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolderSelecte
     private Context context;
     private List<program> log_list;
     private MainActivity mainActivity;
+    private Listener mListener;
 
-    public RvAdapterSelectedItems(Context context, List<ItemObject> itemList, List<program> log_list, MainActivity mainActivity) {
+    public RvAdapterSelectedItems(Context context, List<ItemObject> itemList, List<program> log_list, MainActivity mainActivity,Listener listener) {
         this.itemList = itemList;
         this.context = context;
         this.log_list = log_list;
         this.mainActivity = mainActivity;
+        this.mListener = listener;
     }
 
     @Override
@@ -69,10 +70,48 @@ public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolderSelecte
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
         holder.appIcon.setImageBitmap(bitmap);
 
+        holder.flRecycleViewItem.setTag(position);
+        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch(motionEvent.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+                        } else {
+                            view.startDrag(data, shadowBuilder, view, 0);
+                        }
+                        return true;
+                }
+                return false;
+            }
+        });
+        holder.flRecycleViewItem.setOnDragListener(new SelecteditemDragListener(mListener,context));
     }
+
+
 
     @Override
     public int getItemCount() {
         return this.log_list.size();
+    }
+
+   public SelecteditemDragListener getDragInstance() {
+        if (mListener != null) {
+            return new SelecteditemDragListener(mListener,context);
+        } else {
+            Log.e("ListAdapter", "Listener wasn't initialized!");
+            return null;
+        }
+    }
+
+   public List<program> getList() {
+        return log_list;
+    }
+
+   public void updateList(List<program> list) {
+        log_list = list;
     }
 }
