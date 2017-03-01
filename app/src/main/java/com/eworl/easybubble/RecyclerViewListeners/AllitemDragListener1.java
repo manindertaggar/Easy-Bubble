@@ -22,17 +22,17 @@ import java.util.List;
 /**
  * Created by Dhankher on 2/28/2017.
  */
-public class AllitemDragListener implements View.OnDragListener {
+public class AllitemDragListener1 implements View.OnDragListener {
     private Listener mListener;
     private boolean isDropped = false;
     private MainActivity mainActivity;
     private programDao programDaoObject;
     private Context context;
 
-    public AllitemDragListener(Listener listener,Context context, MainActivity mainActivity) {
+    public AllitemDragListener1(Listener listener, Context context, MainActivity mainActivity) {
         this.mListener = listener;
-        this.context = context;
         this.mainActivity = mainActivity;
+        this.context = context;
         programDaoObject = mainActivity.getProgramDaoInstance();
     }
 

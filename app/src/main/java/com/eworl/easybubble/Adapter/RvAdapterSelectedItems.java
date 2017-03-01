@@ -15,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener;
+import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener1;
 import com.eworl.easybubble.RecyclerViewListeners.SelecteditemDragListener;
-import com.eworl.easybubble.ViewHolder.RvHolderSelectedItems;
+import com.eworl.easybubble.ViewHolder.RvHolder;
 import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.program;
@@ -29,7 +31,7 @@ import java.util.List;
  * Created by Dhankher on 2/27/2017.
  */
 
-public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolderSelectedItems> {
+public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolder> {
 
 
     private static final String TAG = "RvAdapterSelectedItems";
@@ -49,22 +51,17 @@ public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolderSelecte
     }
 
     @Override
-    public RvHolderSelectedItems onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RvHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_list_layout, null);
-        RvHolderSelectedItems rcv = new RvHolderSelectedItems(layoutView, context, itemList, mainActivity, log_list);
+        RvHolder rcv = new RvHolder(layoutView, context, itemList, mainActivity, log_list,mListener);
         return rcv;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void onBindViewHolder(RvHolderSelectedItems holder, int position) {
+    public void onBindViewHolder(RvHolder holder, int position) {
 
-
-        Log.d(TAG, "positionss: " + position);
-        for (int i = 0; i < itemList.size(); i++) {
-            Log.d(TAG, "boolean: " + itemList.get(i).isClicked());
-        }
 
         holder.appName.setText(log_list.get(position).getAppName());
         String img = log_list.get(position).getAppIcon();
@@ -73,24 +70,24 @@ public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolderSelecte
         holder.appIcon.setImageBitmap(bitmap);
 
         holder.flRecycleViewItem.setTag(position);
-        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch(motionEvent.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        ClipData data = ClipData.newPlainText("", "");
-                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            view.startDragAndDrop(data, shadowBuilder, view, 0);
-                        } else {
-                            view.startDrag(data, shadowBuilder, view, 0);
-                        }
-                        return true;
-                }
-                return false;
-            }
-        });
-        holder.flRecycleViewItem.setOnDragListener(new SelecteditemDragListener(mListener,context));
+//        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                switch(motionEvent.getAction()){
+//                    case MotionEvent.ACTION_DOWN:
+//                        ClipData data = ClipData.newPlainText("", "");
+//                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+//                        } else {
+//                            view.startDrag(data, shadowBuilder, view, 0);
+//                        }
+//                        return true;
+//                }
+//                return false;
+//            }
+//        });
+//        holder.flRecycleViewItem.setOnDragListener(new AllitemDragListener1(mListener,context,mainActivity));
     }
 
 
@@ -102,7 +99,7 @@ public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolderSelecte
 
    public SelecteditemDragListener getDragInstance() {
         if (mListener != null) {
-            return new SelecteditemDragListener(mListener,context);
+            return new SelecteditemDragListener(mListener,context,mainActivity);
         } else {
             Log.e("ListAdapter", "Listener wasn't initialized!");
             return null;

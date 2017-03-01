@@ -181,16 +181,18 @@ public class MainActivity extends Activity implements Listener {
         glmAllApps = new GridLayoutManager(this, 4);
         glmSelectedApps = new GridLayoutManager(this, 4);
 
+        rvSelectedApps = (RecyclerView) findViewById(R.id.rvSelectedAppList);
+        rvSelectedApps.setLayoutManager(glmSelectedApps);
+        RvAdapterSelectedItems rvSelectedAppsAdapter = new RvAdapterSelectedItems(MainActivity.this, rowListItem, log_list, this,this);
+        rvSelectedApps.setAdapter(rvSelectedAppsAdapter);
+
+
         rvAllApps = (RecyclerView) findViewById(R.id.rvAppList);
         rvAllApps.setHasFixedSize(true);
         rvAllApps.setLayoutManager(glmAllApps);
         RvAdapterAllitems rvAllAppsAdapter = new RvAdapterAllitems(MainActivity.this, rowListItem, log_list, this,this);
         rvAllApps.setAdapter(rvAllAppsAdapter);
 
-        rvSelectedApps = (RecyclerView) findViewById(R.id.rvSelectedAppList);
-        rvSelectedApps.setLayoutManager(glmSelectedApps);
-        RvAdapterSelectedItems rvSelectedAppsAdapter = new RvAdapterSelectedItems(MainActivity.this, rowListItem, log_list, this,this);
-        rvSelectedApps.setAdapter(rvSelectedAppsAdapter);
 
         textEmptyListTop.setOnDragListener(rvSelectedAppsAdapter.getDragInstance());
         textEmptyListTop.setVisibility(View.GONE);

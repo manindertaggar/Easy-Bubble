@@ -19,6 +19,7 @@ import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.db.programDao;
 import com.eworl.easybubble.utils.ItemObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -57,6 +58,7 @@ public class SelecteditemDragListener implements View.OnDragListener {
 
                 View viewSource = (View) dragEvent.getLocalState();
 
+
                 if (view.getId() == R.id.flRecycleItem || view.getId() == R.id.TVAllItemListEmpty
                         || view.getId() == R.id.TVSelectedItemListEmpty) {
                     RecyclerView target;
@@ -73,34 +75,102 @@ public class SelecteditemDragListener implements View.OnDragListener {
                     }
 
                     RecyclerView source = (RecyclerView) viewSource.getParent();
-
-                    RvAdapterSelectedItems adapterSource = (RvAdapterSelectedItems) source.getAdapter();
+                    Log.d(TAG, "sourceeeee: "+source);
+                    RvAdapterAllitems adapterSource = (RvAdapterAllitems) source.getAdapter();
                     int positionSource = (int) viewSource.getTag();
+///////////////////////////////////
 
-                    program list = adapterSource.getList().get(positionSource);
-                    Log.d(TAG, "onDrag: "+list.getAppName());
-                    List<program> log_list = adapterSource.getList();
+//                    program selectedListItem = adapterSource.getList().get(positionSource);
+//                    Log.d(TAG, "onDrag: "+selectedListItem.getAppName());
+//                    List<program> log_list = adapterSource.getList();
+//                    log_list.remove(positionSource);
+//                    adapterSource.updateList(log_list);
+//                    adapterSource.notifyDataSetChanged();
 
-                    log_list.remove(positionSource);
-                    adapterSource.updateList(log_list);
+//                    Log.d(TAG, "list size before deleting: "+log_list.size());
+//                    programDaoObject.delete(selectedListItem);
+//                    Log.d(TAG, "list size after deleting: "+log_list.size());
+//                    adapterSource.updateList(log_list);
+//                    adapterSource.notifyDataSetChanged();
+//
+//
+//
+//                    RvAdapterAllitems adapterTarget = (RvAdapterAllitems) target.getAdapter();
+//                    List<ItemObject> itemList = adapterTarget.getList();
+//                    if (positionTarget >= 0) {
+//                        String img = selectedListItem.getAppIcon();
+//                        byte[] bitmapdata = Base64.decode(img, Base64.DEFAULT);
+//                        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+//                        Drawable appIcon = new BitmapDrawable(context.getResources(), bitmap);
+//                        itemList.add(positionTarget, new ItemObject(selectedListItem.getAppName(),appIcon,selectedListItem.getAppIcon(),true));
+//                    } else {
+//                        String img = selectedListItem.getAppIcon();
+//                        byte[] bitmapdata = Base64.decode(img, Base64.DEFAULT);
+//                        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+//                        Drawable appIcon = new BitmapDrawable(context.getResources(), bitmap);
+//                        itemList.add(new ItemObject(selectedListItem.getAppName(),appIcon,selectedListItem.getAppIcon(),true));
+//                    }
+//                    adapterTarget.updateList(itemList);
+//                    adapterTarget.notifyDataSetChanged();
+//                    view.setVisibility(View.VISIBLE);
+//
+//                    if (source.getId() == R.id.rvAppList
+//                            && adapterSource.getItemCount() < 1) {
+//                        mListener.setEmptyListBottom(true);
+//                    }
+//
+//                    if (view.getId() == R.id.TVAllItemListEmpty) {
+//                        mListener.setEmptyListBottom(false);
+//                    }
+//
+//                    if (source.getId() == R.id.rvSelectedAppList
+//                            && adapterSource.getItemCount() < 1) {
+//                        mListener.setEmptyListTop(true);
+//                    }
+//
+//                    if (view.getId() == R.id.TVSelectedItemListEmpty) {
+//                        mListener.setEmptyListTop(false);
+//                    }
+//                }
+//                break;
+//        }
+//
+//        if (!isDropped) {
+//            ((View) dragEvent.getLocalState()).setVisibility(View.VISIBLE);
+//        }
+//
+//        return true;
+//    }
+//}
+                    ItemObject allAppsListItem = adapterSource.getList().get(positionSource);
+                    List<ItemObject> itemList = adapterSource.getList();
+
+                    itemList.remove(positionSource);
+                    adapterSource.updateList(itemList);
                     adapterSource.notifyDataSetChanged();
 
-                    RvAdapterAllitems adapterTarget = (RvAdapterAllitems) target.getAdapter();
-                    List<ItemObject> itemList = adapterTarget.getList();
+                    RvAdapterSelectedItems adapterTarget = (RvAdapterSelectedItems) target.getAdapter();
+                    List<program> log_list = adapterTarget.getList();
+
                     if (positionTarget >= 0) {
-                        String img = list.getAppIcon();
-                        byte[] bitmapdata = Base64.decode(img, Base64.DEFAULT);
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
-                        Drawable appIcon = new BitmapDrawable(context.getResources(), bitmap);
-                        itemList.add(positionTarget, new ItemObject(list.getAppName(),appIcon,list.getAppIcon(),true));
+
+                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] imageInByte = stream.toByteArray();
+                        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+
+                        log_list.add(positionTarget, new program(null,allAppsListItem.getAppName(),image,allAppsListItem.getPackagename()));
+
                     } else {
-                        String img = list.getAppIcon();
-                        byte[] bitmapdata = Base64.decode(img, Base64.DEFAULT);
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
-                        Drawable appIcon = new BitmapDrawable(context.getResources(), bitmap);
-                        itemList.add(new ItemObject(list.getAppName(),appIcon,list.getAppIcon(),true));
+                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] imageInByte = stream.toByteArray();
+                        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+                        log_list.add(new program(null,allAppsListItem.getAppName(),image,allAppsListItem.getPackagename()));
                     }
-                    adapterTarget.updateList(itemList);
+                    adapterTarget.updateList(log_list);
                     adapterTarget.notifyDataSetChanged();
                     view.setVisibility(View.VISIBLE);
 

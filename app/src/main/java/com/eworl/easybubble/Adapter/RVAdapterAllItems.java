@@ -12,16 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener;
+import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener1;
 import com.eworl.easybubble.RecyclerViewListeners.Listener;
+import com.eworl.easybubble.RecyclerViewListeners.SelecteditemDragListener;
+import com.eworl.easybubble.ViewHolder.RvHolder;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.R;
-import com.eworl.easybubble.ViewHolder.RvHolderAllitems;
+
 
 import java.util.List;
 
-public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolderAllitems> {
+public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolder> {
 
     private static final String TAG = "RvAdapterAllitems";
     private List<ItemObject> itemList;
@@ -39,38 +42,39 @@ public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolderAllitems> {
     }
 
     @Override
-    public RvHolderAllitems onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RvHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_list_layout, null);
-        RvHolderAllitems rcv = new RvHolderAllitems(layoutView, context, itemList, mainActivity, log_list);
+        RvHolder rcv = new RvHolder(layoutView, context, itemList, mainActivity, log_list,mListener);
         return rcv;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void onBindViewHolder(RvHolderAllitems holder, int position) {
+    public void onBindViewHolder(RvHolder holder, int position) {
             holder.appName.setText(itemList.get(position).getAppName());
             holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
 
         holder.flRecycleViewItem.setTag(position);
-        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch(motionEvent.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        ClipData data = ClipData.newPlainText("", "");
-                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            view.startDragAndDrop(data, shadowBuilder, view, 0);
-                        } else {
-                            view.startDrag(data, shadowBuilder, view, 0);
-                        }
-                        return true;
-                }
-                return false;
-            }
-        });
-        holder.flRecycleViewItem.setOnDragListener(new AllitemDragListener(mListener,mainActivity));
+//        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                switch(motionEvent.getAction()){
+//                    case MotionEvent.ACTION_DOWN:
+//                        ClipData data = ClipData.newPlainText("", "");
+//                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+//                        } else {
+//                            view.startDrag(data, shadowBuilder, view, 0);
+//                        }
+//                        return true;
+//                }
+//                return false;
+//            }
+//        });
+//
+//        holder.flRecycleViewItem.setOnDragListener(new AllitemDragListener1(mListener,context,mainActivity));
     }
 
     @Override
@@ -80,7 +84,7 @@ public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolderAllitems> {
 
    public AllitemDragListener getDragInstance() {
         if (mListener != null) {
-            return new AllitemDragListener(mListener,mainActivity);
+            return new AllitemDragListener(mListener,context,mainActivity);
         } else {
             Log.e("ListAdapter", "Listener wasn't initialized!");
             return null;
