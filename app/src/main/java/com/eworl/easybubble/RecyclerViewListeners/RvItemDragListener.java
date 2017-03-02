@@ -2,33 +2,28 @@ package com.eworl.easybubble.RecyclerViewListeners;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
-
-import com.eworl.easybubble.Adapter.RvAdapterAllitems;
-import com.eworl.easybubble.Adapter.RvAdapterSelectedItems;
+import android.widget.ListAdapter;
+import com.eworl.easybubble.Adapter.RvAdapter;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.Program;
-import com.eworl.easybubble.db.ProgramDao;
 
 import java.util.List;
 
-/**
- * Created by Dhankher on 2/28/2017.
- */
-public class AllitemDragListener implements View.OnDragListener {
-    private Listener mListener;
+public class RvItemDragListener implements View.OnDragListener {
+    private static final String TAG = "DragListener";
     private boolean isDropped = false;
+    private Listener mListener;
+    private  Context context;
     private MainActivity mainActivity;
-    private ProgramDao programDaoObject;
-    private Context context;
 
-    public AllitemDragListener(Listener listener,Context context, MainActivity mainActivity) {
+    public RvItemDragListener(Listener listener, Context context, MainActivity mainActivity) {
         this.mListener = listener;
         this.context = context;
         this.mainActivity = mainActivity;
-        programDaoObject = mainActivity.getProgramDaoInstance();
     }
 
     @Override
@@ -45,7 +40,7 @@ public class AllitemDragListener implements View.OnDragListener {
                 int positionTarget = -1;
 
                 View viewSource = (View) dragEvent.getLocalState();
-
+                Log.d(TAG, "onDrag: "+view);
                 if (view.getId() == R.id.flRecycleItem || view.getId() == R.id.TVAllItemListEmpty
                         || view.getId() == R.id.TVSelectedItemListEmpty) {
                     RecyclerView target;
@@ -63,38 +58,26 @@ public class AllitemDragListener implements View.OnDragListener {
 
                     RecyclerView source = (RecyclerView) viewSource.getParent();
 
-                    RvAdapterAllitems adapterSource = (RvAdapterAllitems) source.getAdapter();
+                    RvAdapter adapterSource = (RvAdapter) source.getAdapter();
                     int positionSource = (int) viewSource.getTag();
 
-                    ItemObject allAppsListItem = adapterSource.getList().get(positionSource);
-                    List<ItemObject> itemList = adapterSource.getList();
+                    Program listItem = adapterSource.getList().get(positionSource);
+                    Log.d(TAG, "item App Name: "+listItem.getAppName());
+                    // here i hane to check item already exist into selected items list or not
+                    List<Program> listSource = adapterSource.getList();
 
-                    itemList.remove(positionSource);
-                    adapterSource.updateList(itemList);
+                    listSource.remove(positionSource);
+                    adapterSource.updateList(listSource);
                     adapterSource.notifyDataSetChanged();
 
-                    RvAdapterSelectedItems adapterTarget = (RvAdapterSelectedItems) target.getAdapter();
-                    List<Program> log_list = adapterTarget.getList();
-
+                    RvAdapter adapterTarget = (RvAdapter) target.getAdapter();
+                    List<Program> customListTarget = adapterTarget.getList();
                     if (positionTarget >= 0) {
-
-//                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
-//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                        byte[] imageInByte = stream.toByteArray();
-//                       String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
-
-                        log_list.add(positionTarget, new Program(allAppsListItem.getAppName(),allAppsListItem.getAppIcon(),allAppsListItem.getPackagename(),false));
-
+                        customListTarget.add(positionTarget, listItem);
                     } else {
-//                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
-//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                        byte[] imageInByte = stream.toByteArray();
-//                        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
-                        log_list.add(new Program(allAppsListItem.getAppName(),allAppsListItem.getAppIcon(),allAppsListItem.getPackagename(),false));
+                        customListTarget.add(listItem);
                     }
-                    adapterTarget.updateList(log_list);
+                    adapterTarget.updateList(customListTarget);
                     adapterTarget.notifyDataSetChanged();
                     view.setVisibility(View.VISIBLE);
 

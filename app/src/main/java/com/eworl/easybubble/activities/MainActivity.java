@@ -18,8 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.eworl.easybubble.Adapter.RvAdapterAllitems;
-import com.eworl.easybubble.Adapter.RvAdapterSelectedItems;
+import com.eworl.easybubble.Adapter.RvAdapter;
 import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
@@ -32,6 +31,7 @@ import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.bubbles.MasterBubble;
 import com.eworl.easybubble.bubbles.SubBubble;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayOutputStream;
@@ -54,8 +54,8 @@ public class MainActivity extends Activity implements Listener {
     private List<Program> rowListItem;
     private final String DB_NAME = "logs-db";
     private boolean onClick = false;
-    public TextView textEmptyListTop,textEmptyListBottom;
-    public RecyclerView rvSelectedApps,rvAllApps;
+    public TextView textEmptyListTop, textEmptyListBottom;
+    public RecyclerView rvSelectedApps, rvAllApps;
     private ProgramDao programDao_object;
 
     @Override
@@ -114,7 +114,7 @@ public class MainActivity extends Activity implements Listener {
             String appIcon = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
             packageName = appInfoList.get(i).packageName;
-            allItems.add(new Program(appName, appIcon,packageName,false));
+            allItems.add(new Program(appName, appIcon, packageName, false));
 
             Log.d(TAG, "packageName: " + packageName);
         }
@@ -134,17 +134,18 @@ public class MainActivity extends Activity implements Listener {
 
         return masterSession.getProgramDao();
     }
-    public ProgramDao getProgramDaoInstance(){
-        if(programDao_object != null){
+
+    public ProgramDao getProgramDaoInstance() {
+        if (programDao_object != null) {
             return programDao_object;
-        }else {
+        } else {
             return setupDb();
         }
     }
 
     private void loadActivity() {
 
-       programDao_object = setupDb();
+        programDao_object = setupDb();
         List<Program> log_list = programDao_object.queryBuilder()/*.orderDesc(programDao.Properties.Id)*/.build().list();
         Log.d(TAG, "onCreate: " + log_list.size());
 
@@ -157,8 +158,8 @@ public class MainActivity extends Activity implements Listener {
 
             rowListItem.get(i).setIsSelected(true);
             try {
-                programDao_object.insert(new Program(rowListItem.get(i).getAppName(), rowListItem.get(i).getAppIcon(), rowListItem.get(i).getPackageName(),true));
-
+                programDao_object.insert(new Program(rowListItem.get(i).getAppName(), rowListItem.get(i).getAppIcon(), rowListItem.get(i).getPackageName(), true));
+                rowListItem.remove(i);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -183,20 +184,20 @@ public class MainActivity extends Activity implements Listener {
 
         rvSelectedApps = (RecyclerView) findViewById(R.id.rvSelectedAppList);
         rvSelectedApps.setLayoutManager(glmSelectedApps);
-        RvAdapterSelectedItems rvSelectedAppsAdapter = new RvAdapterSelectedItems(MainActivity.this, rowListItem, log_list, this,this);
-        rvSelectedApps.setAdapter(rvSelectedAppsAdapter);
+        RvAdapter rvAdapter1 = new RvAdapter(MainActivity.this, log_list, this, this);
+        rvSelectedApps.setAdapter(rvAdapter1);
 
 
         rvAllApps = (RecyclerView) findViewById(R.id.rvAppList);
         rvAllApps.setHasFixedSize(true);
         rvAllApps.setLayoutManager(glmAllApps);
-        RvAdapterAllitems rvAllAppsAdapter = new RvAdapterAllitems(MainActivity.this, rowListItem, log_list, this,this);
-        rvAllApps.setAdapter(rvAllAppsAdapter);
+        RvAdapter rvAdapter2 = new RvAdapter(MainActivity.this, rowListItem, this, this);
+        rvAllApps.setAdapter(rvAdapter2);
 
 
-        textEmptyListTop.setOnDragListener(rvSelectedAppsAdapter.getDragInstance());
+        textEmptyListTop.setOnDragListener(rvAdapter1.getDragInstance());
         textEmptyListTop.setVisibility(View.GONE);
-        textEmptyListBottom.setOnDragListener(rvAllAppsAdapter.getDragInstance());
+        textEmptyListBottom.setOnDragListener(rvAdapter2.getDragInstance());
         textEmptyListBottom.setVisibility(View.GONE);
 
         viewManager = ViewManager.init(this);
@@ -218,14 +219,15 @@ public class MainActivity extends Activity implements Listener {
         }
 
     }
+
     @Override
-    public void setEmptyListTop ( boolean visibility){
+    public void setEmptyListTop(boolean visibility) {
         textEmptyListTop.setVisibility(visibility ? View.VISIBLE : View.GONE);
         rvSelectedApps.setVisibility(visibility ? View.GONE : View.VISIBLE);
     }
 
     @Override
-    public void setEmptyListBottom ( boolean visibility){
+    public void setEmptyListBottom(boolean visibility) {
         textEmptyListBottom.setVisibility(visibility ? View.VISIBLE : View.GONE);
         rvAllApps.setVisibility(visibility ? View.GONE : View.VISIBLE);
     }

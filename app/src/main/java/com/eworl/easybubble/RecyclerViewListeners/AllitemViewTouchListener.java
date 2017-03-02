@@ -5,15 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
-import com.eworl.easybubble.ViewHolder.RvHolderAllitems;
+import com.eworl.easybubble.ViewHolder.RvHolder;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
-import com.eworl.easybubble.db.program;
-import com.eworl.easybubble.db.programDao;
+import com.eworl.easybubble.db.Program;
+import com.eworl.easybubble.db.ProgramDao;
 import com.eworl.easybubble.eventBus.BubbleServiceIsRunning;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -29,26 +27,26 @@ import de.greenrobot.dao.query.QueryBuilder;
 public class AllitemViewTouchListener implements View.OnTouchListener {
     private static final String TAG = "AllitemViewTouch";
     private Context context;
-    private List<ItemObject> itemList;
-    private programDao programDao_object;
-    private program program_object;
-    private List<program> log_list;
+    private List<Program> itemList;
+    private ProgramDao programDao_object;
+    private Program program_object;
+    private List<Program> log_list;
     String log_text;  //Entered text data is save in this variable
     private final String DB_NAME = "logs-db";  //Name of Db file in the Device
     private DaoSession masterSession;
-    private RvHolderAllitems holder;
+    private RvHolder holder;
     private static int count;
     private MainActivity mainActivity;
     private boolean bubbleServiceIsRunning = false;
 
-    public AllitemViewTouchListener(Context context, List<ItemObject> itemList, RvHolderAllitems holder, MainActivity mainActivity) {
+    public AllitemViewTouchListener(Context context, List<Program> itemList, RvHolder holder, MainActivity mainActivity) {
         this.context = context;
         this.itemList = itemList;
         this.holder = holder;
         this.mainActivity = mainActivity;
         EventBus.getDefault().register(this);
         programDao_object = setupDb();
-        log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
+        log_list = programDao_object.queryBuilder()/*.orderDesc(ProgramDao.Properties.Id)*/.build().list();
         count = log_list.size();
 //        insertDefaultList();
 
@@ -90,7 +88,7 @@ public class AllitemViewTouchListener implements View.OnTouchListener {
         return "";
     }
 
-    private void SaveToSQL(program temp_log_object) {
+    private void SaveToSQL(Program temp_log_object) {
         try {
             programDao_object.insert(temp_log_object);
         } catch (Exception e) {
@@ -103,11 +101,11 @@ public class AllitemViewTouchListener implements View.OnTouchListener {
     private void DeleteFromSQL(String pak) {
 
         //starts here
-        QueryBuilder<program> qb = masterSession.getProgramDao().queryBuilder().where(
-                programDao.Properties.PackageName.eq(pak)
+        QueryBuilder<Program> qb = masterSession.getProgramDao().queryBuilder().where(
+                ProgramDao.Properties.PackageName.eq(pak)
         );
 
-        List<program> list = qb.list();
+        List<Program> list = qb.list();
         if (list.isEmpty()) {
             Log.e(TAG, "setupDb: no app found with this");
         } else {
@@ -121,7 +119,7 @@ public class AllitemViewTouchListener implements View.OnTouchListener {
 
     }
 
-    public programDao setupDb() {
+    public ProgramDao setupDb() {
         DaoMaster.DevOpenHelper masterHelper = new DaoMaster.DevOpenHelper(context, DB_NAME, null); //create database db file if not exist
         SQLiteDatabase db = masterHelper.getWritableDatabase();  //get the created database db file
         DaoMaster master = new DaoMaster(db);//create masterDao
