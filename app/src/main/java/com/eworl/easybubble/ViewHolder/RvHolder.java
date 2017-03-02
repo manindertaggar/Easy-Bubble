@@ -40,7 +40,7 @@ public class RvHolder extends RecyclerView.ViewHolder {
         appIcon = (ImageView) itemView.findViewById(R.id.appIcon);
         flRecycleViewItem = (FrameLayout) itemView.findViewById(R.id.flRecycleItem);
     }
-    
+
     private void itemViewonClick() {
         Toast.makeText(context, "onclick", Toast.LENGTH_SHORT).show();
 //        clickListener = new AllitemViewTouchListener(context, itemList, this, mainActivity);

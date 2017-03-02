@@ -147,25 +147,26 @@ public class MainActivity extends Activity implements Listener {
 
         programDao_object = setupDb();
         List<Program> log_list = programDao_object.queryBuilder()/*.orderDesc(programDao.Properties.Id)*/.build().list();
-        Log.d(TAG, "onCreate: " + log_list.size());
+        Log.d(TAG, "log_list size: " + log_list.size());
 
         getInstalledApplication(this);
 
         rowListItem = getAllItemList();
+        Log.d(TAG, "rowListItem size before deleting: " + rowListItem.size());
 
-        //default bubbles for initial list------
+//default bubbles for initial list -----
         for (int i = 0; i < 5; i++) {
-
             rowListItem.get(i).setIsSelected(true);
+            Log.d(TAG, "item name list to be selected: " + rowListItem.get(i).getAppName() + " : " + rowListItem.get(i).getIsSelected());
+
             try {
                 programDao_object.insert(new Program(rowListItem.get(i).getAppName(), rowListItem.get(i).getAppIcon(), rowListItem.get(i).getPackageName(), true));
-                rowListItem.remove(i);
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "item name" + e.toString());
             }
-
         }
-        //already Added bubbles
+
+//already Added bubbles ----
         for (int i = 0; i < rowListItem.size(); i++) {
             String pak = rowListItem.get(i).getPackageName();
             for (int j = 0; j < log_list.size(); j++) {
@@ -173,6 +174,18 @@ public class MainActivity extends Activity implements Listener {
                 if (pak.equals(pak1)) {
                     rowListItem.get(i).setIsSelected(true);
                 }
+            }
+        }
+
+//removing added apps from All Apps list -----
+        for (int i = 0; i < rowListItem.size(); i++) {
+
+            boolean isSelected = rowListItem.get(i).getIsSelected();
+            Log.d(TAG, "isSelected: " + rowListItem.get(i).getAppName() + " : " + isSelected);
+            if (isSelected) {
+                rowListItem.remove(i);
+                Log.d(TAG, "item name list to be removed: " + rowListItem.get(i).getAppName());
+                i--;
             }
         }
 
@@ -200,11 +213,11 @@ public class MainActivity extends Activity implements Listener {
         textEmptyListBottom.setOnDragListener(rvAdapter2.getDragInstance());
         textEmptyListBottom.setVisibility(View.GONE);
 
-        viewManager = ViewManager.init(this);
-
         PermissionManager.checkForOverlayPermission(this);
 
+        viewManager = ViewManager.init(this);
         masterBubble = new MasterBubble(this, log_list);
+
 
         for (int i = 0; i < log_list.size(); i++) {
             SubBubble subBubble = new SubBubble(this, log_list, masterBubble);
@@ -217,6 +230,8 @@ public class MainActivity extends Activity implements Listener {
             subBubble.setIcon(icon);
             masterBubble.addSubBubble(subBubble);
         }
+
+        masterBubble = new MasterBubble(this, log_list);
 
     }
 

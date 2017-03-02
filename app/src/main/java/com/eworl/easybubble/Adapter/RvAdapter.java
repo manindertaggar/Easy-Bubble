@@ -63,21 +63,18 @@ public class RvAdapter extends RecyclerView.Adapter<RvHolder> {
         holder.appIcon.setImageBitmap(appIcon);
 
         holder.flRecycleViewItem.setTag(position);
-        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
+        holder.flRecycleViewItem.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        ClipData data = ClipData.newPlainText("", "");
-                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            view.startDragAndDrop(data, shadowBuilder, view, 0);
-                        } else {
-                            view.startDrag(data, shadowBuilder, view, 0);
-                        }
-                        return true;
+            public boolean onLongClick(View view) {
+                ClipData data = ClipData.newPlainText("", "");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    view.startDragAndDrop(data, shadowBuilder, view, 0);
+                } else {
+                    view.startDrag(data, shadowBuilder, view, 0);
                 }
-                return false;
+                return true;
+//                return false;
             }
         });
 

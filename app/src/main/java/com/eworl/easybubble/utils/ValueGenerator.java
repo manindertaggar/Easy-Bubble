@@ -30,7 +30,9 @@ public class ValueGenerator {
     public ValueGenerator(Context context, int count) {
         this.context = context;
         this.count = count;
-        angleDifference = 360 / count;
+
+            angleDifference = 360 / count;
+
         calculateRadius();
         EventBus.getDefault().register(this);
     }
