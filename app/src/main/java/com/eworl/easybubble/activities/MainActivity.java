@@ -23,11 +23,9 @@ import com.eworl.easybubble.Adapter.RvAdapterSelectedItems;
 import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
-import com.eworl.easybubble.db.program;
-import com.eworl.easybubble.db.programDao;
+import com.eworl.easybubble.db.Program;
+import com.eworl.easybubble.db.ProgramDao;
 import com.eworl.easybubble.eventBus.BubbleServiceIsRunning;
-import com.eworl.easybubble.eventBus.ItemListEvent;
-import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.LayoutParamGenerator;
 import com.eworl.easybubble.PermissionManager;
 import com.eworl.easybubble.R;
@@ -49,16 +47,16 @@ public class MainActivity extends Activity implements Listener {
     private Button startServiceButton;
     private ViewManager viewManager;
     private String appName, packageName;
-    private Drawable appIcon;
+    private Drawable icon;
     private GridLayoutManager glmAllApps;
     private GridLayoutManager glmSelectedApps;
-    private List<ItemObject> allItems;
-    private List<ItemObject> rowListItem;
+    private List<Program> allItems;
+    private List<Program> rowListItem;
     private final String DB_NAME = "logs-db";
     private boolean onClick = false;
     public TextView textEmptyListTop,textEmptyListBottom;
-    private RecyclerView rvSelectedApps,rvAllApps;
-    private programDao programDao_object;
+    public RecyclerView rvSelectedApps,rvAllApps;
+    private ProgramDao programDao_object;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,24 +101,32 @@ public class MainActivity extends Activity implements Listener {
         Log.d(TAG, "getInstalledApplication: " + appInfoList);
         int listCount = appInfoList.size();
         Log.d(TAG, "count: " + listCount);
-        allItems = new ArrayList<ItemObject>();
+        allItems = new ArrayList<Program>();
         for (int i = 0; i < listCount; i++) {
             appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
-            appIcon = packageManager.getApplicationIcon(appInfoList.get(i));
+            icon = packageManager.getApplicationIcon(appInfoList.get(i));
+
+            Bitmap img = ((BitmapDrawable) icon).getBitmap();
+            Log.d(TAG, "bitmap: " + img);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] imageInByte = stream.toByteArray();
+            String appIcon = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+
             packageName = appInfoList.get(i).packageName;
-            allItems.add(new ItemObject(appName, appIcon,packageName,false));
+            allItems.add(new Program(appName, appIcon,packageName,false));
 
             Log.d(TAG, "packageName: " + packageName);
         }
-        EventBus.getDefault().post(new ItemListEvent(allItems));
+
     }
 
-    public List<ItemObject> getAllItemList() {
+    public List<Program> getAllItemList() {
 
         return allItems;
     }
 
-    public programDao setupDb() {
+    public ProgramDao setupDb() {
         DaoMaster.DevOpenHelper masterHelper = new DaoMaster.DevOpenHelper(this, DB_NAME, null); //create database db file if not exist
         SQLiteDatabase db = masterHelper.getWritableDatabase();  //get the created database db file
         DaoMaster master = new DaoMaster(db);//create masterDao
@@ -128,7 +134,7 @@ public class MainActivity extends Activity implements Listener {
 
         return masterSession.getProgramDao();
     }
-    public programDao getProgramDaoInstance(){
+    public ProgramDao getProgramDaoInstance(){
         if(programDao_object != null){
             return programDao_object;
         }else {
@@ -139,7 +145,7 @@ public class MainActivity extends Activity implements Listener {
     private void loadActivity() {
 
        programDao_object = setupDb();
-        List<program> log_list = programDao_object.queryBuilder().orderDesc(programDao.Properties.Id).build().list();
+        List<Program> log_list = programDao_object.queryBuilder()/*.orderDesc(programDao.Properties.Id)*/.build().list();
         Log.d(TAG, "onCreate: " + log_list.size());
 
         getInstalledApplication(this);
@@ -148,16 +154,10 @@ public class MainActivity extends Activity implements Listener {
 
         //default bubbles for initial list------
         for (int i = 0; i < 5; i++) {
-            Bitmap img = ((BitmapDrawable) rowListItem.get(i).getAppIcon()).getBitmap();
-            rowListItem.get(i).setClicked(true);
-            Log.d(TAG, "bitmap: " + img);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            img.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] imageInByte = stream.toByteArray();
-            String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
+            rowListItem.get(i).setIsSelected(true);
             try {
-                programDao_object.insert(new program(null, rowListItem.get(i).getAppName(), image, rowListItem.get(i).getPackagename()));
+                programDao_object.insert(new Program(rowListItem.get(i).getAppName(), rowListItem.get(i).getAppIcon(), rowListItem.get(i).getPackageName(),true));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -166,17 +166,17 @@ public class MainActivity extends Activity implements Listener {
         }
         //already Added bubbles
         for (int i = 0; i < rowListItem.size(); i++) {
-            String pak = rowListItem.get(i).getPackagename();
+            String pak = rowListItem.get(i).getPackageName();
             for (int j = 0; j < log_list.size(); j++) {
                 String pak1 = log_list.get(j).getPackageName();
                 if (pak.equals(pak1)) {
-                    rowListItem.get(i).setClicked(true);
+                    rowListItem.get(i).setIsSelected(true);
                 }
             }
         }
 
         for (int i = 0; i < rowListItem.size(); i++) {
-            Log.d(TAG, "listItemBoolean: " + rowListItem.get(i).isClicked());
+            Log.d(TAG, "listItemBoolean: " + rowListItem.get(i).getIsSelected());
         }
         glmAllApps = new GridLayoutManager(this, 4);
         glmSelectedApps = new GridLayoutManager(this, 4);

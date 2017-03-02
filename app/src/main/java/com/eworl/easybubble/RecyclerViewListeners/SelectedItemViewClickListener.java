@@ -2,9 +2,6 @@ package com.eworl.easybubble.RecyclerViewListeners;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -16,13 +13,11 @@ import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.db.programDao;
 import com.eworl.easybubble.eventBus.BubbleServiceIsRunning;
-import com.eworl.easybubble.utils.ItemObject;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
@@ -82,14 +77,14 @@ public class SelectedItemViewClickListener implements View.OnClickListener {
 //            if (count<15) {
             Log.d(TAG, "count before adding" + count);
 
-            Bitmap img = ((BitmapDrawable) itemList.get(holder.getAdapterPosition()).getAppIcon()).getBitmap();
-            Log.d(TAG, "bitmap: " + img);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            img.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] imageInByte = stream.toByteArray();
-            String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
-            Log.d(TAG, "string: " + image);
-            program_object = new program(null, itemList.get(holder.getAdapterPosition()).getAppName(), image, itemList.get(holder.getAdapterPosition()).getPackagename());// Class Object, Id is auto increment
+//            Bitmap img = ((BitmapDrawable) itemList.get(holder.getAdapterPosition()).getAppIcon()).getBitmap();
+//            Log.d(TAG, "bitmap: " + img);
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//            byte[] imageInByte = stream.toByteArray();
+//            String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+            Log.d(TAG, "string: " + itemList.get(holder.getAdapterPosition()).getAppIcon());
+            program_object = new program(null, itemList.get(holder.getAdapterPosition()).getAppName(),  itemList.get(holder.getAdapterPosition()).getAppIcon(), itemList.get(holder.getAdapterPosition()).getPackagename());// Class Object, Id is auto increment
             SaveToSQL(program_object);
             itemList.get(holder.getAdapterPosition()).setClicked(true);
             Toast.makeText(view.getContext(), itemList.get(holder.getAdapterPosition()).getAppName() + " added to your list", Toast.LENGTH_SHORT).show();

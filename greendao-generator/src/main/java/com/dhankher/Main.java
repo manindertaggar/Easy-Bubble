@@ -8,11 +8,12 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1,"com.eworl.easybubble.db");
-        Entity program = schema.addEntity("program");
-        program.addIdProperty();
+        Entity program = schema.addEntity("Program");
+
         program.addStringProperty("appName");
         program.addStringProperty("appIcon");
         program.addStringProperty("packageName").unique();
+        program.addBooleanProperty("isSelected");
         DaoGenerator dg = new DaoGenerator();
         dg.generateAll(schema,"./app/src/main/java");
     }

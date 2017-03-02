@@ -1,28 +1,25 @@
 package com.eworl.easybubble.Adapter;
 
-import android.content.ClipData;
-import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener;
-import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener1;
-import com.eworl.easybubble.RecyclerViewListeners.Listener;
-import com.eworl.easybubble.RecyclerViewListeners.SelecteditemDragListener;
-import com.eworl.easybubble.ViewHolder.RvHolder;
-import com.eworl.easybubble.activities.MainActivity;
-import com.eworl.easybubble.db.program;
-import com.eworl.easybubble.utils.ItemObject;
-import com.eworl.easybubble.R;
-
-
-import java.util.List;
+        import android.content.ClipData;
+        import android.content.Context;
+        import android.graphics.Bitmap;
+        import android.graphics.BitmapFactory;
+        import android.os.Build;
+        import android.support.annotation.RequiresApi;
+        import android.support.v7.widget.RecyclerView;
+        import android.util.Base64;
+        import android.util.Log;
+        import android.view.LayoutInflater;
+        import android.view.MotionEvent;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener;
+        import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener1;
+        import com.eworl.easybubble.RecyclerViewListeners.Listener;
+        import com.eworl.easybubble.ViewHolder.RvHolder;
+        import com.eworl.easybubble.activities.MainActivity;
+        import com.eworl.easybubble.R;
+        import java.util.List;
 
 public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolder> {
 
@@ -52,29 +49,32 @@ public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolder> {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(RvHolder holder, int position) {
-            holder.appName.setText(itemList.get(position).getAppName());
-            holder.appIcon.setImageDrawable(itemList.get(position).getAppIcon());
+        holder.appName.setText(itemList.get(position).getAppName());
+        String img = itemList.get(position).getAppIcon();
+        byte[] bitmapdata = Base64.decode(img, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+        holder.appIcon.setImageBitmap(bitmap);
 
         holder.flRecycleViewItem.setTag(position);
-//        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                switch(motionEvent.getAction()){
-//                    case MotionEvent.ACTION_DOWN:
-//                        ClipData data = ClipData.newPlainText("", "");
-//                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                            view.startDragAndDrop(data, shadowBuilder, view, 0);
-//                        } else {
-//                            view.startDrag(data, shadowBuilder, view, 0);
-//                        }
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
-//
-//        holder.flRecycleViewItem.setOnDragListener(new AllitemDragListener1(mListener,context,mainActivity));
+        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch(motionEvent.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+                        } else {
+                            view.startDrag(data, shadowBuilder, view, 0);
+                        }
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        holder.flRecycleViewItem.setOnDragListener(new AllitemDragListener1(mListener,context,mainActivity));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolder> {
         return this.itemList.size();
     }
 
-   public AllitemDragListener getDragInstance() {
+    public AllitemDragListener getDragInstance() {
         if (mListener != null) {
             return new AllitemDragListener(mListener,context,mainActivity);
         } else {
@@ -91,11 +91,11 @@ public class RvAdapterAllitems extends RecyclerView.Adapter<RvHolder> {
         }
     }
 
-   public List<ItemObject> getList() {
+    public List<ItemObject> getList() {
         return itemList;
     }
 
-   public void updateList(List<ItemObject> list) {
+    public void updateList(List<ItemObject> list) {
         itemList = list;
     }
 

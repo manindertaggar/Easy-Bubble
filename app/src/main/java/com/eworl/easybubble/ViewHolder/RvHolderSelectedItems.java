@@ -11,7 +11,6 @@ import com.eworl.easybubble.R;
 import com.eworl.easybubble.RecyclerViewListeners.SelectedItemViewClickListener;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.program;
-import com.eworl.easybubble.utils.ItemObject;
 
 import java.util.List;
 

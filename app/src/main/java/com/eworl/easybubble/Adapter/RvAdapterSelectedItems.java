@@ -15,15 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.eworl.easybubble.R;
-import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener;
-import com.eworl.easybubble.RecyclerViewListeners.AllitemDragListener1;
 import com.eworl.easybubble.RecyclerViewListeners.SelecteditemDragListener;
 import com.eworl.easybubble.ViewHolder.RvHolder;
 import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.activities.MainActivity;
-import com.eworl.easybubble.db.program;
-import com.eworl.easybubble.db.programDao;
-import com.eworl.easybubble.utils.ItemObject;
+import com.eworl.easybubble.db.Program;
 
 import java.util.List;
 
@@ -37,12 +33,12 @@ public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolder> {
     private static final String TAG = "RvAdapterSelectedItems";
     private List<ItemObject> itemList;
     private Context context;
-    private List<program> log_list;
+    private List<Program> log_list;
     private MainActivity mainActivity;
     private Listener mListener;
 
 
-    public RvAdapterSelectedItems(Context context, List<ItemObject> itemList, List<program> log_list, MainActivity mainActivity,Listener listener) {
+    public RvAdapterSelectedItems(Context context, List<ItemObject> itemList, List<Program> log_list, MainActivity mainActivity,Listener listener) {
         this.itemList = itemList;
         this.context = context;
         this.log_list = log_list;
@@ -70,26 +66,25 @@ public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolder> {
         holder.appIcon.setImageBitmap(bitmap);
 
         holder.flRecycleViewItem.setTag(position);
-//        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                switch(motionEvent.getAction()){
-//                    case MotionEvent.ACTION_DOWN:
-//                        ClipData data = ClipData.newPlainText("", "");
-//                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                            view.startDragAndDrop(data, shadowBuilder, view, 0);
-//                        } else {
-//                            view.startDrag(data, shadowBuilder, view, 0);
-//                        }
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
+        holder.flRecycleViewItem.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch(motionEvent.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+                        } else {
+                            view.startDrag(data, shadowBuilder, view, 0);
+                        }
+                        return true;
+                }
+                return false;
+            }
+        });
 //        holder.flRecycleViewItem.setOnDragListener(new AllitemDragListener1(mListener,context,mainActivity));
     }
-
 
 
     @Override
@@ -106,11 +101,11 @@ public class RvAdapterSelectedItems extends RecyclerView.Adapter<RvHolder> {
         }
     }
 
-   public List<program> getList() {
+   public List<Program> getList() {
         return log_list;
     }
 
-   public void updateList(List<program> list) {
+   public void updateList(List<Program> list) {
         log_list = list;
     }
 }

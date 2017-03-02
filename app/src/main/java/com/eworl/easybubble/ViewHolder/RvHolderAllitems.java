@@ -12,7 +12,6 @@ import com.eworl.easybubble.RecyclerViewListeners.AllitemViewTouchListener;
 import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.program;
-import com.eworl.easybubble.utils.ItemObject;
 import com.eworl.easybubble.R;
 
 import java.util.List;

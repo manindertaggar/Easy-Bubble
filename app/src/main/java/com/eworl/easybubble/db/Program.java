@@ -4,33 +4,21 @@ package com.eworl.easybubble.db;
 /**
  * Entity mapped to table "PROGRAM".
  */
-public class program {
+public class Program {
 
-    private Long id;
     private String appName;
     private String appIcon;
     private String packageName;
+    private Boolean isSelected;
 
-    public program() {
+    public Program() {
     }
 
-    public program(Long id) {
-        this.id = id;
-    }
-
-    public program(Long id, String appName, String appIcon, String packageName) {
-        this.id = id;
+    public Program(String appName, String appIcon, String packageName, Boolean isSelected) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.packageName = packageName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.isSelected = isSelected;
     }
 
     public String getAppName() {
@@ -55,6 +43,14 @@ public class program {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+
+    public Boolean getIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(Boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
 }

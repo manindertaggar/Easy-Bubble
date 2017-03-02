@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
+import com.eworl.easybubble.db.Program;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
 import com.eworl.easybubble.eventBus.StaticAngleDiff;
@@ -53,11 +54,11 @@ public class MasterBubble {
     private ViewManager viewManager = ViewManager.getRunningInstance();
     private int index;
     double istSubBubbleX,istSubBubbleY;
-    List<program> log_list;
+    List<Program> log_list;
 
 
 
-    public MasterBubble(Context context, List<program> log_list) {
+    public MasterBubble(Context context, List<Program> log_list) {
         this.context = context;
         this.log_list = log_list;
 

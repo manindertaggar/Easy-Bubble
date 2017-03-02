@@ -1,10 +1,7 @@
 package com.eworl.easybubble.RecyclerViewListeners;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.view.DragEvent;
 import android.view.View;
 
@@ -12,11 +9,9 @@ import com.eworl.easybubble.Adapter.RvAdapterAllitems;
 import com.eworl.easybubble.Adapter.RvAdapterSelectedItems;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.activities.MainActivity;
-import com.eworl.easybubble.db.program;
-import com.eworl.easybubble.db.programDao;
-import com.eworl.easybubble.utils.ItemObject;
+import com.eworl.easybubble.db.Program;
+import com.eworl.easybubble.db.ProgramDao;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -26,7 +21,7 @@ public class AllitemDragListener implements View.OnDragListener {
     private Listener mListener;
     private boolean isDropped = false;
     private MainActivity mainActivity;
-    private programDao programDaoObject;
+    private ProgramDao programDaoObject;
     private Context context;
 
     public AllitemDragListener(Listener listener,Context context, MainActivity mainActivity) {
@@ -79,25 +74,25 @@ public class AllitemDragListener implements View.OnDragListener {
                     adapterSource.notifyDataSetChanged();
 
                     RvAdapterSelectedItems adapterTarget = (RvAdapterSelectedItems) target.getAdapter();
-                    List<program> log_list = adapterTarget.getList();
+                    List<Program> log_list = adapterTarget.getList();
 
                     if (positionTarget >= 0) {
 
-                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] imageInByte = stream.toByteArray();
-                       String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+//                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
+//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                        byte[] imageInByte = stream.toByteArray();
+//                       String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
-                        log_list.add(positionTarget, new program(null,allAppsListItem.getAppName(),image,allAppsListItem.getPackagename()));
+                        log_list.add(positionTarget, new Program(allAppsListItem.getAppName(),allAppsListItem.getAppIcon(),allAppsListItem.getPackagename(),false));
 
                     } else {
-                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] imageInByte = stream.toByteArray();
-                        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
-                        log_list.add(new program(null,allAppsListItem.getAppName(),image,allAppsListItem.getPackagename()));
+//                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
+//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                        byte[] imageInByte = stream.toByteArray();
+//                        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+                        log_list.add(new Program(allAppsListItem.getAppName(),allAppsListItem.getAppIcon(),allAppsListItem.getPackagename(),false));
                     }
                     adapterTarget.updateList(log_list);
                     adapterTarget.notifyDataSetChanged();

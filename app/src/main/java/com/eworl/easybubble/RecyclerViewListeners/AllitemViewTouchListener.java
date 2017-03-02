@@ -2,33 +2,22 @@ package com.eworl.easybubble.RecyclerViewListeners;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.eworl.easybubble.ViewHolder.RvHolderAllitems;
-import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.db.programDao;
 import com.eworl.easybubble.eventBus.BubbleServiceIsRunning;
-import com.eworl.easybubble.utils.ItemObject;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;

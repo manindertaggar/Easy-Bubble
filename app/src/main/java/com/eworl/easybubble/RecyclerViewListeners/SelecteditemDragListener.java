@@ -1,12 +1,7 @@
 package com.eworl.easybubble.RecyclerViewListeners;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
@@ -17,9 +12,7 @@ import com.eworl.easybubble.R;
 import com.eworl.easybubble.activities.MainActivity;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.db.programDao;
-import com.eworl.easybubble.utils.ItemObject;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -154,21 +147,21 @@ public class SelecteditemDragListener implements View.OnDragListener {
 
                     if (positionTarget >= 0) {
 
-                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] imageInByte = stream.toByteArray();
-                        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+//                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
+//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                        byte[] imageInByte = stream.toByteArray();
+//                        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
-                        log_list.add(positionTarget, new program(null,allAppsListItem.getAppName(),image,allAppsListItem.getPackagename()));
+                        log_list.add(positionTarget, new program(null,allAppsListItem.getAppName(), allAppsListItem.getAppIcon(),allAppsListItem.getPackagename()));
 
                     } else {
-                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] imageInByte = stream.toByteArray();
-                        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
-                        log_list.add(new program(null,allAppsListItem.getAppName(),image,allAppsListItem.getPackagename()));
+//                        Bitmap img = ((BitmapDrawable) allAppsListItem.getAppIcon()).getBitmap();
+//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                        byte[] imageInByte = stream.toByteArray();
+//                        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+                        log_list.add(new program(null,allAppsListItem.getAppName(),allAppsListItem.getAppIcon(),allAppsListItem.getPackagename()));
                     }
                     adapterTarget.updateList(log_list);
                     adapterTarget.notifyDataSetChanged();

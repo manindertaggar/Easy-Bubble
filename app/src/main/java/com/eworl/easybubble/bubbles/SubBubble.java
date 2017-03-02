@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.db.Program;
 import com.eworl.easybubble.db.program;
 import com.eworl.easybubble.eventBus.MasterBubbleInLeft;
 import com.eworl.easybubble.eventBus.MasterBubbleInRight;
@@ -48,10 +49,10 @@ public class SubBubble {
     private float diffY;
     private FrameLayout.LayoutParams fmContentViewParams;
     private boolean masterBubbleInRight = false;
-    private List<program> log_list;
+    private List<Program> log_list;
     private MasterBubble masterBubble;
 
-    public SubBubble(Context context, List<program> log_list,MasterBubble masterBubble) {
+    public SubBubble(Context context, List<Program> log_list, MasterBubble masterBubble) {
         this.context = context;
         this.log_list = log_list;
         this.masterBubble = masterBubble;
