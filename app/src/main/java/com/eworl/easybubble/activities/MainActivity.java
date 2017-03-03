@@ -1,6 +1,7 @@
 package com.eworl.easybubble.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -57,6 +58,9 @@ public class MainActivity extends Activity implements Listener {
     public TextView textEmptyListTop, textEmptyListBottom;
     public RecyclerView rvSelectedApps, rvAllApps;
     private ProgramDao programDao_object;
+    private List<Program> log_list;
+    public ProgressDialog progress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +69,14 @@ public class MainActivity extends Activity implements Listener {
 
         textEmptyListTop = (TextView) findViewById(R.id.TVSelectedItemListEmpty);
         textEmptyListBottom = (TextView) findViewById(R.id.TVAllItemListEmpty);
-
         startServiceButton = (Button) findViewById(R.id.button);
+
+        progress = new ProgressDialog(this);
+        progress.setMessage("Uploading List of Apps :) ");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+
+
         loadActivity();
 
     }
@@ -87,7 +97,12 @@ public class MainActivity extends Activity implements Listener {
     }
 
 
+
+
     public void getInstalledApplication(Context context) {
+
+
+
         PackageManager packageManager = context.getPackageManager();
         List<ApplicationInfo> apps = packageManager.getInstalledApplications(0);
         List<ApplicationInfo> appInfoList = new ArrayList();
@@ -114,7 +129,7 @@ public class MainActivity extends Activity implements Listener {
             String appIcon = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
             packageName = appInfoList.get(i).packageName;
-            allItems.add(new Program(appName, appIcon, packageName, false));
+            allItems.add(new Program((long) i, appName, appIcon, packageName, false));
 
             Log.d(TAG, "packageName: " + packageName);
         }
@@ -146,10 +161,14 @@ public class MainActivity extends Activity implements Listener {
     private void loadActivity() {
 
         programDao_object = setupDb();
-        List<Program> log_list = programDao_object.queryBuilder()/*.orderDesc(programDao.Properties.Id)*/.build().list();
+        log_list = programDao_object.queryBuilder().orderDesc(ProgramDao.Properties.Id).build().list();
         Log.d(TAG, "log_list size: " + log_list.size());
 
+//        new Thread(new FetchingAppsTask(progress)).start();
+
+        Log.d(TAG, "before loadActivity: "+System.currentTimeMillis());
         getInstalledApplication(this);
+        Log.d(TAG, "after loadActivity: "+System.currentTimeMillis());
 
         rowListItem = getAllItemList();
         Log.d(TAG, "rowListItem size before deleting: " + rowListItem.size());
@@ -160,7 +179,7 @@ public class MainActivity extends Activity implements Listener {
             Log.d(TAG, "item name list to be selected: " + rowListItem.get(i).getAppName() + " : " + rowListItem.get(i).getIsSelected());
 
             try {
-                programDao_object.insert(new Program(rowListItem.get(i).getAppName(), rowListItem.get(i).getAppIcon(), rowListItem.get(i).getPackageName(), true));
+                programDao_object.insert(new Program(null, rowListItem.get(i).getAppName(), rowListItem.get(i).getAppIcon(), rowListItem.get(i).getPackageName(), true));
             } catch (Exception e) {
                 Log.e(TAG, "item name" + e.toString());
             }
@@ -189,9 +208,7 @@ public class MainActivity extends Activity implements Listener {
             }
         }
 
-        for (int i = 0; i < rowListItem.size(); i++) {
-            Log.d(TAG, "listItemBoolean: " + rowListItem.get(i).getIsSelected());
-        }
+
         glmAllApps = new GridLayoutManager(this, 4);
         glmSelectedApps = new GridLayoutManager(this, 4);
 
@@ -216,6 +233,7 @@ public class MainActivity extends Activity implements Listener {
         PermissionManager.checkForOverlayPermission(this);
 
         viewManager = ViewManager.init(this);
+
         masterBubble = new MasterBubble(this, log_list);
 
 
@@ -231,7 +249,6 @@ public class MainActivity extends Activity implements Listener {
             masterBubble.addSubBubble(subBubble);
         }
 
-        masterBubble = new MasterBubble(this, log_list);
 
     }
 
@@ -255,6 +272,18 @@ public class MainActivity extends Activity implements Listener {
     public void reStartService() {
         loadActivity();
         viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
+    }
+
+    public int getRvAllAppsId() {
+        return rvAllApps.getId();
+    }
+
+    public int getrvSelectedAppsId() {
+        return rvSelectedApps.getId();
+    }
+
+    public List<Program> getLog_List() {
+        return log_list;
     }
 
 }

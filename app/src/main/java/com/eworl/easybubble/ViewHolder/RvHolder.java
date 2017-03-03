@@ -1,8 +1,6 @@
 package com.eworl.easybubble.ViewHolder;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -11,13 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eworl.easybubble.R;
-import com.eworl.easybubble.RecyclerViewListeners.AllitemViewTouchListener;
-import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.RecyclerViewListeners.RvItemDragListener;
-import com.eworl.easybubble.activities.MainActivity;
-import com.eworl.easybubble.db.Program;
-
-import java.util.List;
 
 /**
  * Created by Dhankher on 3/1/2017.

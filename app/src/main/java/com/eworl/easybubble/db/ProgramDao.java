@@ -14,7 +14,7 @@ import com.eworl.easybubble.db.Program;
 /** 
  * DAO for table "PROGRAM".
 */
-public class ProgramDao extends AbstractDao<Program, Void> {
+public class ProgramDao extends AbstractDao<Program, Long> {
 
     public static final String TABLENAME = "PROGRAM";
 
@@ -23,10 +23,11 @@ public class ProgramDao extends AbstractDao<Program, Void> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property AppName = new Property(0, String.class, "appName", false, "APP_NAME");
-        public final static Property AppIcon = new Property(1, String.class, "appIcon", false, "APP_ICON");
-        public final static Property PackageName = new Property(2, String.class, "packageName", false, "PACKAGE_NAME");
-        public final static Property IsSelected = new Property(3, Boolean.class, "isSelected", false, "IS_SELECTED");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property AppName = new Property(1, String.class, "appName", false, "APP_NAME");
+        public final static Property AppIcon = new Property(2, String.class, "appIcon", false, "APP_ICON");
+        public final static Property PackageName = new Property(3, String.class, "packageName", false, "PACKAGE_NAME");
+        public final static Property IsSelected = new Property(4, Boolean.class, "isSelected", false, "IS_SELECTED");
     };
 
 
@@ -42,10 +43,11 @@ public class ProgramDao extends AbstractDao<Program, Void> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PROGRAM\" (" + //
-                "\"APP_NAME\" TEXT," + // 0: appName
-                "\"APP_ICON\" TEXT," + // 1: appIcon
-                "\"PACKAGE_NAME\" TEXT UNIQUE ," + // 2: packageName
-                "\"IS_SELECTED\" INTEGER);"); // 3: isSelected
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"APP_NAME\" TEXT," + // 1: appName
+                "\"APP_ICON\" TEXT," + // 2: appIcon
+                "\"PACKAGE_NAME\" TEXT UNIQUE ," + // 3: packageName
+                "\"IS_SELECTED\" INTEGER);"); // 4: isSelected
     }
 
     /** Drops the underlying database table. */
@@ -59,41 +61,47 @@ public class ProgramDao extends AbstractDao<Program, Void> {
     protected void bindValues(SQLiteStatement stmt, Program entity) {
         stmt.clearBindings();
  
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
         String appName = entity.getAppName();
         if (appName != null) {
-            stmt.bindString(1, appName);
+            stmt.bindString(2, appName);
         }
  
         String appIcon = entity.getAppIcon();
         if (appIcon != null) {
-            stmt.bindString(2, appIcon);
+            stmt.bindString(3, appIcon);
         }
  
         String packageName = entity.getPackageName();
         if (packageName != null) {
-            stmt.bindString(3, packageName);
+            stmt.bindString(4, packageName);
         }
  
         Boolean isSelected = entity.getIsSelected();
         if (isSelected != null) {
-            stmt.bindLong(4, isSelected ? 1L: 0L);
+            stmt.bindLong(5, isSelected ? 1L: 0L);
         }
     }
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public Program readEntity(Cursor cursor, int offset) {
         Program entity = new Program( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // appName
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // appIcon
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // packageName
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0 // isSelected
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // appName
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // appIcon
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // packageName
+            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0 // isSelected
         );
         return entity;
     }
@@ -101,23 +109,28 @@ public class ProgramDao extends AbstractDao<Program, Void> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Program entity, int offset) {
-        entity.setAppName(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setAppIcon(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setPackageName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setIsSelected(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setAppName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setAppIcon(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setPackageName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setIsSelected(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
      }
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(Program entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected Long updateKeyAfterInsert(Program entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(Program entity) {
-        return null;
+    public Long getKey(Program entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

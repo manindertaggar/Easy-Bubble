@@ -54,6 +54,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvHolder> {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(RvHolder holder, int position) {
+
         holder.appName.setText(rvItemList.get(position).getAppName());
 
         String img = rvItemList.get(position).getAppIcon();

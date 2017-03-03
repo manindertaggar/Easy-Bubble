@@ -5,7 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListAdapter;
+import android.widget.Toast;
+
 import com.eworl.easybubble.Adapter.RvAdapter;
 import com.eworl.easybubble.R;
 import com.eworl.easybubble.activities.MainActivity;
@@ -19,6 +22,7 @@ public class RvItemDragListener implements View.OnDragListener {
     private Listener mListener;
     private  Context context;
     private MainActivity mainActivity;
+    private Program sourceListItem;
 
     public RvItemDragListener(Listener listener, Context context, MainActivity mainActivity) {
         this.mListener = listener;
@@ -57,12 +61,11 @@ public class RvItemDragListener implements View.OnDragListener {
                     }
 
                     RecyclerView source = (RecyclerView) viewSource.getParent();
-
                     RvAdapter adapterSource = (RvAdapter) source.getAdapter();
                     int positionSource = (int) viewSource.getTag();
 
-                    Program listItem = adapterSource.getList().get(positionSource);
-                    Log.d(TAG, "item App Name: "+listItem.getAppName());
+                    sourceListItem = adapterSource.getList().get(positionSource);
+                    Log.d(TAG, "item App Name: "+sourceListItem.getAppName());
                     // here i hane to check item already exist into selected items list or not
                     List<Program> listSource = adapterSource.getList();
 
@@ -73,12 +76,22 @@ public class RvItemDragListener implements View.OnDragListener {
                     RvAdapter adapterTarget = (RvAdapter) target.getAdapter();
                     List<Program> customListTarget = adapterTarget.getList();
                     if (positionTarget >= 0) {
-                        customListTarget.add(positionTarget, listItem);
+                        customListTarget.add(positionTarget, sourceListItem);
                     } else {
-                        customListTarget.add(listItem);
+                        customListTarget.add(sourceListItem);
                     }
                     adapterTarget.updateList(customListTarget);
                     adapterTarget.notifyDataSetChanged();
+
+                  if(source.getId()== mainActivity.getRvAllAppsId() && target.getId() == mainActivity.getrvSelectedAppsId()){
+                      mainActivity.getProgramDaoInstance().insert(new Program(null,sourceListItem.getAppName(),sourceListItem.getAppIcon(),sourceListItem.getPackageName(),true));
+                      Toast.makeText(context, sourceListItem.getAppName()+" added to list", Toast.LENGTH_SHORT).show();
+                  }
+                    if(source.getId()== mainActivity.getrvSelectedAppsId()  && target.getId() == mainActivity.getRvAllAppsId()){
+                        mainActivity.getProgramDaoInstance().delete(new Program(sourceListItem.getId(),sourceListItem.getAppName(),sourceListItem.getAppIcon(),sourceListItem.getPackageName(),true));
+                        Toast.makeText(context, sourceListItem.getAppName()+" removed from list", Toast.LENGTH_SHORT).show();
+                    }
+
                     view.setVisibility(View.VISIBLE);
 
                     if (source.getId() == R.id.rvAppList

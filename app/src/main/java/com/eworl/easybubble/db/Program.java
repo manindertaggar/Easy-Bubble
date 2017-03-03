@@ -6,6 +6,7 @@ package com.eworl.easybubble.db;
  */
 public class Program {
 
+    private Long id;
     private String appName;
     private String appIcon;
     private String packageName;
@@ -14,11 +15,24 @@ public class Program {
     public Program() {
     }
 
-    public Program(String appName, String appIcon, String packageName, Boolean isSelected) {
+    public Program(Long id) {
+        this.id = id;
+    }
+
+    public Program(Long id, String appName, String appIcon, String packageName, Boolean isSelected) {
+        this.id = id;
         this.appName = appName;
         this.appIcon = appIcon;
         this.packageName = packageName;
         this.isSelected = isSelected;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getAppName() {
