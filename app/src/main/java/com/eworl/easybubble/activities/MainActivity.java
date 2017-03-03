@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.eworl.easybubble.Adapter.RvAdapter;
 import com.eworl.easybubble.RecyclerViewListeners.Listener;
 import com.eworl.easybubble.db.DaoMaster;
@@ -47,7 +46,7 @@ public class MainActivity extends Activity implements Listener {
     private MasterBubble masterBubble;
     private Button startServiceButton;
     private ViewManager viewManager;
-    private String appName, packageName;
+    private String appName,packageName;
     private Drawable icon;
     private GridLayoutManager glmAllApps;
     private GridLayoutManager glmSelectedApps;
@@ -71,10 +70,8 @@ public class MainActivity extends Activity implements Listener {
         textEmptyListBottom = (TextView) findViewById(R.id.TVAllItemListEmpty);
         startServiceButton = (Button) findViewById(R.id.button);
 
-        progress = new ProgressDialog(this);
-        progress.setMessage("Uploading List of Apps :) ");
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setIndeterminate(true);
+
+//        new Thread(new FetchingAppsTask(this, allItems)).start();
 
 
         loadActivity();
@@ -97,11 +94,7 @@ public class MainActivity extends Activity implements Listener {
     }
 
 
-
-
     public void getInstalledApplication(Context context) {
-
-
 
         PackageManager packageManager = context.getPackageManager();
         List<ApplicationInfo> apps = packageManager.getInstalledApplications(0);
@@ -166,9 +159,9 @@ public class MainActivity extends Activity implements Listener {
 
 //        new Thread(new FetchingAppsTask(progress)).start();
 
-        Log.d(TAG, "before loadActivity: "+System.currentTimeMillis());
+        Log.d(TAG, "before loadActivity: " + System.currentTimeMillis());
         getInstalledApplication(this);
-        Log.d(TAG, "after loadActivity: "+System.currentTimeMillis());
+        Log.d(TAG, "after loadActivity: " + System.currentTimeMillis());
 
         rowListItem = getAllItemList();
         Log.d(TAG, "rowListItem size before deleting: " + rowListItem.size());
