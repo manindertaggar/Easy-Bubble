@@ -49,7 +49,7 @@
         android:id="@+id/TVAllItemListEmpty"
         android:layout_below="@+id/rvSelectedAppList"
         android:layout_marginTop="50dp"
-        android:text="Selected Items Are Empty"
+        android:text="Selectable Items Are Empty"
         android:textColor="#FFF"
         android:gravity="center"
         android:visibility="gone"/>

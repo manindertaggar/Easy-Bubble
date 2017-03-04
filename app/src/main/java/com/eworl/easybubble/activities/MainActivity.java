@@ -34,14 +34,10 @@ import com.eworl.easybubble.bubbles.SubBubble;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
 import static android.content.ContentValues.TAG;
 
-public class MainActivity extends Activity implements Listener {
+public class MainActivity extends Activity implements Listener,CallBack {
 
     private MasterBubble masterBubble;
     private Button startServiceButton;
@@ -60,7 +56,6 @@ public class MainActivity extends Activity implements Listener {
     private List<Program> log_list;
     public ProgressDialog progress;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +65,13 @@ public class MainActivity extends Activity implements Listener {
         textEmptyListBottom = (TextView) findViewById(R.id.TVAllItemListEmpty);
         startServiceButton = (Button) findViewById(R.id.button);
 
+        new Thread(new FetchingAppsTask(this, allItems,this)).start();
 
-//        new Thread(new FetchingAppsTask(this, allItems)).start();
-
-
-        loadActivity();
+         progress = new ProgressDialog(this);
+        progress.setMessage("Uploading ☺");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.show();
 
     }
 
@@ -83,51 +80,13 @@ public class MainActivity extends Activity implements Listener {
             stopService();
             onClick = false;
         } else {
-            loadActivity();
+            loadActivity(allItems);
             viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
             EventBus.getDefault().post(new BubbleServiceIsRunning());
             onClick = true;
         }
-
-//        finish();
-
     }
 
-
-    public void getInstalledApplication(Context context) {
-
-        PackageManager packageManager = context.getPackageManager();
-        List<ApplicationInfo> apps = packageManager.getInstalledApplications(0);
-        List<ApplicationInfo> appInfoList = new ArrayList();
-        for (ApplicationInfo info : apps) {
-            if (packageManager.getLaunchIntentForPackage(info.packageName) != null) {
-                appInfoList.add(info);
-
-            }
-        }
-        Collections.sort(appInfoList, new ApplicationInfo.DisplayNameComparator(packageManager));
-        Log.d(TAG, "getInstalledApplication: " + appInfoList);
-        int listCount = appInfoList.size();
-        Log.d(TAG, "count: " + listCount);
-        allItems = new ArrayList<Program>();
-        for (int i = 0; i < listCount; i++) {
-            appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
-            icon = packageManager.getApplicationIcon(appInfoList.get(i));
-
-            Bitmap img = ((BitmapDrawable) icon).getBitmap();
-            Log.d(TAG, "bitmap: " + img);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            img.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] imageInByte = stream.toByteArray();
-            String appIcon = Base64.encodeToString(imageInByte, Base64.DEFAULT);
-
-            packageName = appInfoList.get(i).packageName;
-            allItems.add(new Program((long) i, appName, appIcon, packageName, false));
-
-            Log.d(TAG, "packageName: " + packageName);
-        }
-
-    }
 
     public List<Program> getAllItemList() {
 
@@ -151,20 +110,15 @@ public class MainActivity extends Activity implements Listener {
         }
     }
 
-    private void loadActivity() {
-
+    private void loadActivity(List<Program> allItems) {
+        Log.d(TAG, "allItems size: "+allItems.size());
         programDao_object = setupDb();
         log_list = programDao_object.queryBuilder().orderDesc(ProgramDao.Properties.Id).build().list();
         Log.d(TAG, "log_list size: " + log_list.size());
 
-//        new Thread(new FetchingAppsTask(progress)).start();
+//        getInstalledApplication(this);
 
-        Log.d(TAG, "before loadActivity: " + System.currentTimeMillis());
-        getInstalledApplication(this);
-        Log.d(TAG, "after loadActivity: " + System.currentTimeMillis());
-
-        rowListItem = getAllItemList();
-        Log.d(TAG, "rowListItem size before deleting: " + rowListItem.size());
+            rowListItem = allItems;
 
 //default bubbles for initial list -----
         for (int i = 0; i < 5; i++) {
@@ -177,6 +131,7 @@ public class MainActivity extends Activity implements Listener {
                 Log.e(TAG, "item name" + e.toString());
             }
         }
+        Log.d(TAG, "log_list size: " + log_list.size());
 
 //already Added bubbles ----
         for (int i = 0; i < rowListItem.size(); i++) {
@@ -196,10 +151,11 @@ public class MainActivity extends Activity implements Listener {
             Log.d(TAG, "isSelected: " + rowListItem.get(i).getAppName() + " : " + isSelected);
             if (isSelected) {
                 rowListItem.remove(i);
-                Log.d(TAG, "item name list to be removed: " + rowListItem.get(i).getAppName());
                 i--;
             }
         }
+        Log.d(TAG, "allItems size: "+allItems.size());
+
 
 
         glmAllApps = new GridLayoutManager(this, 4);
@@ -263,7 +219,7 @@ public class MainActivity extends Activity implements Listener {
     }
 
     public void reStartService() {
-        loadActivity();
+        loadActivity(allItems);
         viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
     }
 
@@ -277,6 +233,21 @@ public class MainActivity extends Activity implements Listener {
 
     public List<Program> getLog_List() {
         return log_list;
+    }
+
+
+    @Override
+    public void onWorkComplited(final List<Program> allItems) {
+        this.allItems = allItems;
+        progress.dismiss();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadActivity(allItems);
+            }
+        });
+
+
     }
 
 }

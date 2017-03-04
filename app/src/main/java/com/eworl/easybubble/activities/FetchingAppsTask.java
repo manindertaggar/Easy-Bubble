@@ -11,6 +11,9 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.eworl.easybubble.db.Program;
+import com.eworl.easybubble.eventBus.StaticSubBubbleCoordinatesEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -23,12 +26,14 @@ import static android.content.ContentValues.TAG;
  * Created by Dhankher on 3/3/2017.
  */
 public class FetchingAppsTask implements Runnable {
+    CallBack callBack;
     Context context;
     List<Program> allItems;
 
-    public FetchingAppsTask(Context context, List<Program> allItems) {
-        this.context = context;
+    public FetchingAppsTask(CallBack callBack, List<Program> allItems, Context context) {
+        this.callBack = callBack;
         this.allItems = allItems;
+        this.context = context;
     }
 
     @Override
@@ -49,8 +54,8 @@ public class FetchingAppsTask implements Runnable {
         Log.d(TAG, "count: " + listCount);
         allItems = new ArrayList<Program>();
         for (int i = 0; i < listCount; i++) {
-          String  appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
-           Drawable icon = packageManager.getApplicationIcon(appInfoList.get(i));
+            String appName = (String) packageManager.getApplicationLabel(appInfoList.get(i));
+            Drawable icon = packageManager.getApplicationIcon(appInfoList.get(i));
 
             Bitmap img = ((BitmapDrawable) icon).getBitmap();
             Log.d(TAG, "bitmap: " + img);
@@ -59,11 +64,12 @@ public class FetchingAppsTask implements Runnable {
             byte[] imageInByte = stream.toByteArray();
             String appIcon = Base64.encodeToString(imageInByte, Base64.DEFAULT);
 
-          String  packageName = appInfoList.get(i).packageName;
+            String packageName = appInfoList.get(i).packageName;
             allItems.add(new Program((long) i, appName, appIcon, packageName, false));
-
             Log.d(TAG, "packageName: " + packageName);
+
         }
+        callBack.onWorkComplited(allItems);
 
     }
 }
