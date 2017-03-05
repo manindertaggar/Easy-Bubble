@@ -14,7 +14,7 @@ public class RotateSubBubbleEvent {
     public RotateSubBubbleEvent(Context context,float diffY) {
         this.context = context;
         this.diffY = diffY;
-        diffY();
+//        diffY();
 
     }
 

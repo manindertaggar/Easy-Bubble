@@ -191,6 +191,7 @@ public class MainActivity extends Activity implements Listener, CallBack {
             Drawable icon = new BitmapDrawable(getResources(), bitmap);
             Log.d(TAG, "onCreate: " + icon);
             subBubble.setIcon(icon);
+            subBubble.setId(i);
             masterBubble.addSubBubble(subBubble);
         }
 

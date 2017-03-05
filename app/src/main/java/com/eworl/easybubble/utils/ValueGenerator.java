@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.eworl.easybubble.R;
+import com.eworl.easybubble.eventBus.PointerYDiffEvent;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
-import com.eworl.easybubble.eventBus.StaticAngleDiff;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,9 +24,9 @@ public class ValueGenerator {
     private Context context;
     private float SEPRATION_FRACTION = 1.2f;
     private int masterBubbleWidth;
-    public Double angle;
+    public Double angle,angle1;
     private  float diffY;
-    private double updatedAngle;
+    private double pointerYdiff;
     public ValueGenerator(Context context, int count) {
         this.context = context;
         this.count = count;
@@ -68,11 +68,12 @@ public class ValueGenerator {
     }
 
     private Double updatedAngleFor(int i) {
-        float lastDiff = 20;
-        angle = Math.toRadians((angleDifference * i)- (diffY/2));
+        Log.d("pointerYDiff  "+pointerYdiff, "diff "+diffY);
+        angle1 = Math.toRadians((angleDifference * i)- (diffY/2));
+
         Log.d(TAG, "getValueOfDiffY: " + diffY);
 
-        return angle;
+        return angle1;
     }
 
 
@@ -81,15 +82,15 @@ public class ValueGenerator {
       diffY =   event.diffY();
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(StaticAngleDiff event) {
-        updatedAngle =  event.angleDiff();
+    public void onMessageEvent(PointerYDiffEvent event) {
+        pointerYdiff =  event.getPointerYDiff();
     }
 
 
 //    private Double rotationAngleFor(int i) {
-//        updatedAngle = Math.toRadians((angleDifference*i)+subBubble.getDiffY());
-//        Log.d(TAG, "getAngleFor: " + " is " + updatedAngle);
-//        return updatedAngle;
+//        pointerYdiff = Math.toRadians((angleDifference*i)+subBubble.getDiffY());
+//        Log.d(TAG, "getAngleFor: " + " is " + pointerYdiff);
+//        return pointerYdiff;
 //    }
 
     public int getRadius() {

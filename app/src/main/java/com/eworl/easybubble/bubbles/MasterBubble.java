@@ -13,8 +13,6 @@ import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.db.Program;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
-import com.eworl.easybubble.eventBus.StaticAngleDiff;
-import com.eworl.easybubble.eventBus.StaticSubBubbleCoordinatesEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
 import org.greenrobot.eventbus.EventBus;
@@ -209,42 +207,14 @@ public class MasterBubble {
             SubBubble subBubble = subBubblesList.get(i);
             subBubble.setCoordinates(coordinate);
         }
-
         }
-//    public void staticSubBubbleCoordinates() {
-//        SubBubble subBubble1st = subBubblesList.get(0);
-//        Coordinate coordinate1st = subBubble1st.getCoordinates();
-//        double x2 =coordinate1st.getX();
-//        double y2 =coordinate1st.getY();
-//        Log.d("coordinateX "+x2,"coordinateY "+y2);
-//        double angle =1 / Math.tan(Math.toRadians(y2-istSubBubbleY)/(x2-istSubBubbleX));
-//        staticAngleDiff(angle);
-//        Log.d(TAG, "angleeeeee "+angle);
-//
-//        for (int i = 0; i <=index; i++) {
-//            int listSize = subBubblesList.size();
-//            Log.d(TAG, "listSize: " + listSize);
-//            Log.d(TAG, "value of i: " + i);
-//            Coordinate coordinate = valueGenerator.getStaticSubBubbleCoordinatesFor(i);
-//            Log.d(TAG, "coordinate: " + coordinate);
-//            SubBubble  subBubble = subBubblesList.get(i);
-//            subBubble.setCoordinates(coordinate);
-//        }
-//    }
 
-    private void staticAngleDiff(double angle) {
-        EventBus.getDefault().post(new StaticAngleDiff(context,angle));
-    }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(RotateSubBubbleEvent event) {
 
         updateSubBubble();
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(StaticSubBubbleCoordinatesEvent event) {
-
-//        staticSubBubbleCoordinates();
     }
 
     public Context getContext() {

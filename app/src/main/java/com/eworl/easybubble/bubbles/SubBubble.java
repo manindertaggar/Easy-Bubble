@@ -1,7 +1,10 @@
 package com.eworl.easybubble.bubbles;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,7 +18,7 @@ import com.eworl.easybubble.db.Program;
 import com.eworl.easybubble.eventBus.MasterBubbleInLeft;
 import com.eworl.easybubble.eventBus.MasterBubbleInRight;
 import com.eworl.easybubble.eventBus.RotateSubBubbleEvent;
-import com.eworl.easybubble.eventBus.StaticSubBubbleCoordinatesEvent;
+import com.eworl.easybubble.eventBus.PointerYDiffEvent;
 import com.eworl.easybubble.utils.Coordinate;
 import com.eworl.easybubble.utils.ValueGenerator;
 import org.greenrobot.eventbus.EventBus;
@@ -36,13 +39,14 @@ public class SubBubble {
     private ImageView ivIcon;
     private Context context;
     private Drawable iconId;
+    private int id;
     private Coordinate coordinates;
-    private float pointerDownY, pointerDownX;
+    private float pointerDownY, pointerDownX,pointerUpY;
     private ValueGenerator valueGenerator;
     private MasterBubble masterBubble2nd;
     private long startTime, endTime;
     private int radius;
-    private float diffY;
+    private float diffY,pointerYdiff,moveY;
     private FrameLayout.LayoutParams fmContentViewParams;
     private boolean masterBubbleInRight = false;
     private List<Program> log_list;
@@ -94,14 +98,14 @@ public class SubBubble {
     }
 
     private void performeActionMove(MotionEvent motionEvent) {
-        float x = motionEvent.getRawX();
-        float y = motionEvent.getRawY();
-        diffY = pointerDownY - y;
+
+         moveY = motionEvent.getRawY();
+        diffY = pointerDownY - moveY;
         if (masterBubbleInRight) {
-            diffY = -(pointerDownY - y);
+            diffY = -(pointerDownY - moveY);
         }
 
-        rotateSubBubble();
+//        rotateSubBubble();
         Log.d(TAG, "diffX: " + diffY / 10);
 
     }
@@ -110,14 +114,22 @@ public class SubBubble {
     private void performeActionUp(MotionEvent motionEvent) {
         endTime = System.currentTimeMillis();
 
+
+//
+//        pointerUpY = pointerDownY - moveY;
+//        if (masterBubbleInRight) {
+//            pointerUpY = -(pointerDownY - moveY);
+//        }
+        pointerYDiff();
+
         if (endTime - startTime < 100) {
             fmSubBubbleViewOnClick(motionEvent);
         }
-//       staticSubBubbleCoordinates();
     }
 
-    private void staticSubBubbleCoordinates() {
-        EventBus.getDefault().post(new StaticSubBubbleCoordinatesEvent());
+
+    private void pointerYDiff() {
+        EventBus.getDefault().post(new PointerYDiffEvent(diffY));
     }
 
     private void fmSubBubbleViewOnClick(MotionEvent motionEvent) {
@@ -136,13 +148,41 @@ public class SubBubble {
         EventBus.getDefault().post(new RotateSubBubbleEvent(context, diffY));
     }
 
-
     private void performAction(MotionEvent motionEvent) {
-        ArrayList<SubBubble> subBubbleList =  masterBubble.getSubBubbleList();
-        subBubbleList.size();
 
-        Log.d(TAG, "SubBubbleList size: " + subBubbleList.size());
-        Toast.makeText(context, "Action Performed", Toast.LENGTH_SHORT).show();
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (log_list.get(this.getId()).getPackageName().equals("com.home")) {
+
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            context.startActivity(startMain);
+
+        }else if(log_list.get(this.getId()).getPackageName().equals("com.lock")){
+
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My Tag");
+            wl.acquire();
+//            wl.release();
+
+        }else if(log_list.get(this.getId()).getPackageName().equals("com.back")){
+
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            context.startActivity(startMain);
+        }else {
+            Intent i;
+            PackageManager manager = context.getPackageManager();
+            try {
+                i = manager.getLaunchIntentForPackage(log_list.get(this.getId()).getPackageName());
+
+                if (i == null)
+                    throw new PackageManager.NameNotFoundException();
+                i.addCategory(Intent.CATEGORY_LAUNCHER);
+                context.startActivity(i);
+            } catch (PackageManager.NameNotFoundException e) {
+
+            }
+        }
+        Toast.makeText(context,log_list.get(this.getId()).getAppName()+" clicked",Toast.LENGTH_SHORT).show();
     }
 
 
@@ -188,4 +228,11 @@ public class SubBubble {
     }
 
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
