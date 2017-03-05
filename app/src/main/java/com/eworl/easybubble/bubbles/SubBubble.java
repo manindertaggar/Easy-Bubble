@@ -1,11 +1,15 @@
 package com.eworl.easybubble.bubbles;
 
+import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.PowerManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -105,8 +109,8 @@ public class SubBubble {
             diffY = -(pointerDownY - moveY);
         }
 
-//        rotateSubBubble();
-        Log.d(TAG, "diffX: " + diffY / 10);
+        rotateSubBubble();
+
 
     }
 
@@ -122,7 +126,7 @@ public class SubBubble {
 //        }
         pointerYDiff();
 
-        if (endTime - startTime < 100) {
+        if (endTime - startTime < 200) {
             fmSubBubbleViewOnClick(motionEvent);
         }
     }
@@ -159,15 +163,19 @@ public class SubBubble {
 
         }else if(log_list.get(this.getId()).getPackageName().equals("com.lock")){
 
-            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "My Tag");
-            wl.acquire();
-//            wl.release();
+
+         DevicePolicyManager deviceManger = (DevicePolicyManager)context.getSystemService(
+                    Context.DEVICE_POLICY_SERVICE);
+//            ActivityManager  activityManager = (ActivityManager)context.getSystemService(
+//                    Context.ACTIVITY_SERVICE);
+//            ComponentName compName = new ComponentName(context, SubBubble.class);
+            deviceManger.lockNow();
 
         }else if(log_list.get(this.getId()).getPackageName().equals("com.back")){
 
             startMain.addCategory(Intent.CATEGORY_HOME);
             context.startActivity(startMain);
+
         }else {
             Intent i;
             PackageManager manager = context.getPackageManager();

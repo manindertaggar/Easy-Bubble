@@ -67,6 +67,7 @@ public class MainActivity extends Activity implements Listener, CallBack {
         progress.setMessage("Uploading ☺");
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
+        progress.setCancelable(false);
         progress.show();
 
     }
