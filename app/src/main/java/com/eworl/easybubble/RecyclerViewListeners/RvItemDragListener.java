@@ -66,7 +66,7 @@ public class RvItemDragListener implements View.OnDragListener {
 
                     sourceListItem = adapterSource.getList().get(positionSource);
                     Log.d(TAG, "item App Name: "+sourceListItem.getAppName());
-                    // here i hane to check item already exist into selected items list or not
+// here i have to check item already exist into selected items list or not
                     List<Program> listSource = adapterSource.getList();
 
                     listSource.remove(positionSource);
@@ -78,14 +78,20 @@ public class RvItemDragListener implements View.OnDragListener {
                     if (positionTarget >= 0) {
                         customListTarget.add(positionTarget, sourceListItem);
                     } else {
+                        Log.d(TAG, "customListTarget.size(): "+customListTarget.size());
                         customListTarget.add(sourceListItem);
                     }
                     adapterTarget.updateList(customListTarget);
                     adapterTarget.notifyDataSetChanged();
+                    Log.d(TAG, "customListTarget.size(): "+customListTarget.size());
 
                   if(source.getId()== mainActivity.getRvAllAppsId() && target.getId() == mainActivity.getrvSelectedAppsId()){
-                      mainActivity.getProgramDaoInstance().insert(new Program(null,sourceListItem.getAppName(),sourceListItem.getAppIcon(),sourceListItem.getPackageName(),true));
-                      Toast.makeText(context, sourceListItem.getAppName()+" added to list", Toast.LENGTH_SHORT).show();
+                      try {
+                          mainActivity.getProgramDaoInstance().insert(new Program(null, sourceListItem.getAppName(), sourceListItem.getAppIcon(), sourceListItem.getPackageName(), true));
+                      }catch (Exception E){
+                          E.printStackTrace();
+                      }
+                          Toast.makeText(context, sourceListItem.getAppName()+" added to list", Toast.LENGTH_SHORT).show();
                   }
                     if(source.getId()== mainActivity.getrvSelectedAppsId()  && target.getId() == mainActivity.getRvAllAppsId()){
                         mainActivity.getProgramDaoInstance().delete(new Program(sourceListItem.getId(),sourceListItem.getAppName(),sourceListItem.getAppIcon(),sourceListItem.getPackageName(),true));

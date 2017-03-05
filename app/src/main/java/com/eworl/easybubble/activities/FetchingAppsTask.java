@@ -1,6 +1,6 @@
 package com.eworl.easybubble.activities;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -9,17 +9,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import android.util.Log;
-
 import com.eworl.easybubble.db.Program;
-import com.eworl.easybubble.eventBus.StaticSubBubbleCoordinatesEvent;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import static android.content.ContentValues.TAG;
 
 /**

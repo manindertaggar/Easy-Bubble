@@ -7,7 +7,7 @@
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Selected Apps"
+    android:text="Selected Apps:-"
     android:textColor="#fff"
     android:id="@+id/tv1"/>
     <android.support.v7.widget.RecyclerView
@@ -17,6 +17,7 @@
         android:layout_marginTop="10dp"
         android:layout_below="@+id/tv1">
     </android.support.v7.widget.RecyclerView>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -26,13 +27,18 @@
         android:textColor="#FFF"
         android:gravity="center"
         android:visibility="gone"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#7c7979"
+        android:layout_below="@+id/rvSelectedAppList"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="230dp"
-        android:text="All Apps"
+        android:layout_marginTop="250dp"
+        android:text="All Apps :-"
         android:textColor="#fff"
         android:id="@+id/tv2"
         />
@@ -58,7 +64,7 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="470dp"
+        android:layout_marginTop="500dp"
         android:onClick="startServive"
         android:text="Start Service" />
 

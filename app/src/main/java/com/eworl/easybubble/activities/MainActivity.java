@@ -2,9 +2,6 @@ package com.eworl.easybubble.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,19 +28,18 @@ import com.eworl.easybubble.R;
 import com.eworl.easybubble.ViewManager;
 import com.eworl.easybubble.bubbles.MasterBubble;
 import com.eworl.easybubble.bubbles.SubBubble;
-
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+
 import static android.content.ContentValues.TAG;
 
-public class MainActivity extends Activity implements Listener,CallBack {
+public class MainActivity extends Activity implements Listener, CallBack {
 
     private MasterBubble masterBubble;
     private Button startServiceButton;
     private ViewManager viewManager;
-    private String appName,packageName;
-    private Drawable icon;
     private GridLayoutManager glmAllApps;
     private GridLayoutManager glmSelectedApps;
     private List<Program> allItems;
@@ -65,9 +61,9 @@ public class MainActivity extends Activity implements Listener,CallBack {
         textEmptyListBottom = (TextView) findViewById(R.id.TVAllItemListEmpty);
         startServiceButton = (Button) findViewById(R.id.button);
 
-        new Thread(new FetchingAppsTask(this, allItems,this)).start();
+        new Thread(new FetchingAppsTask(this, allItems, this)).start();
 
-         progress = new ProgressDialog(this);
+        progress = new ProgressDialog(this);
         progress.setMessage("Uploading ☺");
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
@@ -111,26 +107,26 @@ public class MainActivity extends Activity implements Listener,CallBack {
     }
 
     private void loadActivity(List<Program> allItems) {
-        Log.d(TAG, "allItems size: "+allItems.size());
+        Log.d(TAG, "allItems size: " + allItems.size());
         programDao_object = setupDb();
         log_list = programDao_object.queryBuilder().orderDesc(ProgramDao.Properties.Id).build().list();
         Log.d(TAG, "log_list size: " + log_list.size());
 
-//        getInstalledApplication(this);
 
-            rowListItem = allItems;
+        rowListItem = allItems;
+        for (int i = 0; i < 5; i++) {
+            Log.d(TAG, "rowListItems Apps Names: " + allItems.get(i).getAppName());
+        }
+
 
 //default bubbles for initial list -----
-        for (int i = 0; i < 5; i++) {
-            rowListItem.get(i).setIsSelected(true);
-            Log.d(TAG, "item name list to be selected: " + rowListItem.get(i).getAppName() + " : " + rowListItem.get(i).getIsSelected());
+        int backIcon = R.drawable.back;
+        int homeIcon = R.drawable.home;
+        int lockIcon = R.drawable.locked;
 
-            try {
-                programDao_object.insert(new Program(null, rowListItem.get(i).getAppName(), rowListItem.get(i).getAppIcon(), rowListItem.get(i).getPackageName(), true));
-            } catch (Exception e) {
-                Log.e(TAG, "item name" + e.toString());
-            }
-        }
+        insertIntoLog_List("back", backIcon,"com.back");
+        insertIntoLog_List("home", homeIcon,"com.home");
+        insertIntoLog_List("lock", lockIcon,"com.lock");
         Log.d(TAG, "log_list size: " + log_list.size());
 
 //already Added bubbles ----
@@ -145,6 +141,7 @@ public class MainActivity extends Activity implements Listener,CallBack {
         }
 
 //removing added apps from All Apps list -----
+        Log.d(TAG, "loglistsizeeee: "+log_list.size());
         for (int i = 0; i < rowListItem.size(); i++) {
 
             boolean isSelected = rowListItem.get(i).getIsSelected();
@@ -154,8 +151,7 @@ public class MainActivity extends Activity implements Listener,CallBack {
                 i--;
             }
         }
-        Log.d(TAG, "allItems size: "+allItems.size());
-
+        Log.d(TAG, "allItems size: " + allItems.size());
 
 
         glmAllApps = new GridLayoutManager(this, 4);
@@ -233,6 +229,22 @@ public class MainActivity extends Activity implements Listener,CallBack {
 
     public List<Program> getLog_List() {
         return log_list;
+    }
+
+    private void insertIntoLog_List(String name, int icon,String packageName) {
+
+        Bitmap img = BitmapFactory.decodeResource(getResources(), icon);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] imageInByte = stream.toByteArray();
+        String image = Base64.encodeToString(imageInByte, Base64.DEFAULT);
+
+        try {
+            programDao_object.insert(new Program(null, name, image, packageName, true));
+
+        } catch (Exception e) {
+            Log.e(TAG, "item name" + e.toString());
+        }
     }
 
 

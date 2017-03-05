@@ -60,15 +60,6 @@ public class ValueGenerator {
         return coordinate;
     }
 
-    public Coordinate getStaticSubBubbleCoordinatesFor(int i) {
-        Coordinate coordinate = new Coordinate();
-        double x = radius + radius * Math.cos(staticAngleFor(i));
-        double y = radius + radius * Math.sin(staticAngleFor(i));
-        Log.d("double updatedx"+x, "double updatedy "+y);
-        coordinate.set(x, y);
-        return coordinate;
-    }
-
 
     private Double getAngleFor(int index) {
          angle = Math.toRadians((angleDifference * index));
@@ -77,20 +68,13 @@ public class ValueGenerator {
     }
 
     private Double updatedAngleFor(int i) {
+        float lastDiff = 20;
         angle = Math.toRadians((angleDifference * i)- (diffY/2));
         Log.d(TAG, "getValueOfDiffY: " + diffY);
 
         return angle;
     }
 
-    private Double staticAngleFor(int i) {
-        double count = (int) ((updatedAngle /angleDifference));
-        Log.d(TAG, "staticAngleFor: "+count);
-//        int newAngle = count*45;
-//        angle = Math.toRadians((angleDifference*i)-diffY+newAngle);
-        Log.d(TAG, "getAngleFor: " + " is " + angle);
-        return angle;
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(RotateSubBubbleEvent event) {
