@@ -71,8 +71,6 @@ public class ValueGenerator {
         Log.d("pointerYDiff  "+pointerYdiff, "diff "+diffY);
         angle1 = Math.toRadians((angleDifference * i)- (diffY/2));
 
-        Log.d(TAG, "getValueOfDiffY: " + diffY);
-
         return angle1;
     }
 

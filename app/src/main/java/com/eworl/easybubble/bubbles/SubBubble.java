@@ -164,7 +164,7 @@ public class SubBubble {
         }else if(log_list.get(this.getId()).getPackageName().equals("com.lock")){
 
 
-         DevicePolicyManager deviceManger = (DevicePolicyManager)context.getSystemService(
+            DevicePolicyManager deviceManger = (DevicePolicyManager)context.getSystemService(
                     Context.DEVICE_POLICY_SERVICE);
 //            ActivityManager  activityManager = (ActivityManager)context.getSystemService(
 //                    Context.ACTIVITY_SERVICE);
@@ -193,7 +193,6 @@ public class SubBubble {
         Toast.makeText(context,log_list.get(this.getId()).getAppName()+" clicked",Toast.LENGTH_SHORT).show();
     }
 
-
     public void setIcon(Drawable iconId) {
         this.iconId = iconId;
         ivIcon.setImageDrawable(iconId);
@@ -206,7 +205,6 @@ public class SubBubble {
     public FrameLayout getLayout() {
         return fmContentView;
     }
-
 
     public ViewGroup.LayoutParams getParams() {
         return fmContentViewParams;

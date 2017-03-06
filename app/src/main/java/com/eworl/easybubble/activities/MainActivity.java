@@ -2,12 +2,18 @@ package com.eworl.easybubble.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.Service;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
@@ -170,7 +176,6 @@ public class MainActivity extends Activity implements Listener, CallBack {
         RvAdapter rvAdapter2 = new RvAdapter(MainActivity.this, rowListItem, this, this);
         rvAllApps.setAdapter(rvAdapter2);
 
-
         textEmptyListTop.setOnDragListener(rvAdapter1.getDragInstance());
         textEmptyListTop.setVisibility(View.GONE);
         textEmptyListBottom.setOnDragListener(rvAdapter2.getDragInstance());
@@ -252,17 +257,27 @@ public class MainActivity extends Activity implements Listener, CallBack {
 
     @Override
     public void onWorkComplited(final List<Program> allItems) {
+       handler.postDelayed(runnable,500);
         this.allItems = allItems;
-        progress.dismiss();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 loadActivity(allItems);
             }
+
         });
 
 
     }
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            progress.dismiss();
+        }
+    };
+
+
 
 }
 
