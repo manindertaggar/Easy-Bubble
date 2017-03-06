@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.eworl.easybubble.Adapter.RvAdapter;
 import com.eworl.easybubble.RecyclerViewListeners.Listener;
+import com.eworl.easybubble.Service.BubbleService;
 import com.eworl.easybubble.db.DaoMaster;
 import com.eworl.easybubble.db.DaoSession;
 import com.eworl.easybubble.db.Program;
@@ -86,6 +87,8 @@ public class MainActivity extends Activity implements Listener, CallBack {
             loadActivity(allItems);
             viewManager.addView(masterBubble.getView(), LayoutParamGenerator.getNewLayoutParams());
             EventBus.getDefault().post(new BubbleServiceIsRunning());
+//            Intent intent = new Intent(this, BubbleService.class);
+//            startService(intent);
             onClick = true;
         }
     }
@@ -276,7 +279,6 @@ public class MainActivity extends Activity implements Listener, CallBack {
             progress.dismiss();
         }
     };
-
 
 
 }

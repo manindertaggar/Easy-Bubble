@@ -1,6 +1,7 @@
 package com.eworl.easybubble.bubbles;
 
 import android.app.ActivityManager;
+import android.app.admin.DeviceAdminReceiver;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -55,6 +56,8 @@ public class SubBubble {
     private boolean masterBubbleInRight = false;
     private List<Program> log_list;
     private MasterBubble masterBubble;
+    private DevicePolicyManager mDPM;
+    private ComponentName mDeviceAdminSample;
 
     public SubBubble(Context context, List<Program> log_list, MasterBubble masterBubble) {
         this.context = context;
@@ -64,6 +67,9 @@ public class SubBubble {
         valueGenerator = masterBubble2nd.getValueGenerator();
         radius = valueGenerator.getRadius();
         EventBus.getDefault().register(this);
+
+//        mDPM = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+//        mDeviceAdminSample = new ComponentName(Potter.this,SubBubble.class);
 
 //        fmContentViewParams = (FrameLayout.LayoutParams) fmContentView.getLayoutParams();
         intializeViews();
@@ -163,13 +169,16 @@ public class SubBubble {
 
         }else if(log_list.get(this.getId()).getPackageName().equals("com.lock")){
 
+            DevicePolicyManager    dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+            try {
+                dpm.lockNow();
 
-            DevicePolicyManager deviceManger = (DevicePolicyManager)context.getSystemService(
-                    Context.DEVICE_POLICY_SERVICE);
-//            ActivityManager  activityManager = (ActivityManager)context.getSystemService(
-//                    Context.ACTIVITY_SERVICE);
-//            ComponentName compName = new ComponentName(context, SubBubble.class);
-            deviceManger.lockNow();
+            } catch (SecurityException e) {
+                e.printStackTrace();
+                Intent it = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                it.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, new ComponentName(context, DeviceAdminReceiver.class));
+//                startActivityForResult(it, 0);
+            }
 
         }else if(log_list.get(this.getId()).getPackageName().equals("com.back")){
 
@@ -191,6 +200,7 @@ public class SubBubble {
             }
         }
         Toast.makeText(context,log_list.get(this.getId()).getAppName()+" clicked",Toast.LENGTH_SHORT).show();
+        masterBubble.toggle();
     }
 
     public void setIcon(Drawable iconId) {
